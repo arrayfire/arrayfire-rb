@@ -1,1 +1,1 @@
-require 'arrayfire/arrayfire.rb'
+require_relative 'arrayfire/arrayfire.rb'
