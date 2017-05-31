@@ -10,12 +10,29 @@ CPUs, GPUs, and other hardware acceleration devices.
 
 Ruby bindings are a work in progress and are not production ready yet.
 
-## Build from source
+## Installation
+
 ```sh
 git clone https://github.com/arrayfire/arrayfire-rb
+cd arrayfire/
+gem install bundler
 bundle install
 rake compile
+rspec
 ```
+
+If you want to try out the code without installing:
+
+```sh
+rake pry
+```
+
+To install:
+
+```sh
+rake install
+```
+
 # LICENSE
 
 This software is distributed under the [BSD 3-Clause License](LICENSE).
