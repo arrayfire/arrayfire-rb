@@ -4,9 +4,11 @@
 
 VALUE ArrayFire = Qnil;
 VALUE Af_Array = Qnil;
-VALUE Device = Qnil;
 VALUE Blas = Qnil;
+VALUE Cuda = Qnil;
+VALUE Device = Qnil;
 VALUE Lapack = Qnil;
+VALUE OpenCL = Qnil;
 
 
 // prototypes
@@ -20,6 +22,22 @@ static VALUE dimension(VALUE self);
 static VALUE array(VALUE self);
 static void array2(VALUE self);
 static VALUE get_info(VALUE self);
+
+
+static VALUE arf_get_stream(VALUE self);
+static VALUE arf_get_native_id(VALUE self);
+static VALUE arf_set_native_id(VALUE self);
+
+static VALUE arf_get_context(VALUE self);
+static VALUE arf_get_queue(VALUE self);
+static VALUE arf_get_device_id(VALUE self);
+static VALUE arf_set_device_id(VALUE self);
+static VALUE arf_add_device_context(VALUE self);
+static VALUE arf_set_device_context(VALUE self);
+static VALUE arf_delete_device_context(VALUE self);
+static VALUE arf_get_device_type(VALUE self);
+static VALUE arf_get_platform(VALUE self);
+
 
 static size_t*  interpret_shape(VALUE arg, size_t* dim);
 
@@ -71,8 +89,25 @@ void Init_arrayfire() {
   Blas = rb_define_class_under(ArrayFire, "BLAS", rb_cObject);
   rb_define_singleton_method(Blas, "matmul", (METHOD)arf_matmul, 2);
 
+  Cuda = rb_define_class_under(ArrayFire, "CUDA", rb_cObject);
+  rb_define_singleton_method(Cuda, "get_stream", (METHOD)arf_get_stream, 0);
+  rb_define_singleton_method(Cuda, "get_native_id", (METHOD)arf_get_native_id, 0);
+  rb_define_singleton_method(Cuda, "set_native_id", (METHOD)arf_set_native_id, 0);
+
   Lapack = rb_define_class_under(ArrayFire, "LAPACK", rb_cObject);
   rb_define_singleton_method(Lapack, "cholesky", (METHOD)arf_cholesky, 1);
+
+  OpenCL = rb_define_class_under(ArrayFire, "OpenCL", rb_cObject);
+  rb_define_singleton_method(OpenCL, "get_context", (METHOD)arf_get_context, 0);
+  rb_define_singleton_method(OpenCL, "get_queue", (METHOD)arf_get_queue, 0);
+  rb_define_singleton_method(OpenCL, "get_device_id", (METHOD)arf_get_device_id, 0);
+  rb_define_singleton_method(OpenCL, "set_device_id", (METHOD)arf_set_device_id, 0);
+  rb_define_singleton_method(OpenCL, "add_device_context", (METHOD)arf_add_device_context, 0);
+  rb_define_singleton_method(OpenCL, "set_device_context", (METHOD)arf_set_device_context, 0);
+  rb_define_singleton_method(OpenCL, "delete_device_context", (METHOD)arf_delete_device_context, 0);
+  rb_define_singleton_method(OpenCL, "get_device_type", (METHOD)arf_get_device_type, 0);
+  rb_define_singleton_method(OpenCL, "get_platform", (METHOD)arf_get_platform, 0);
+
 }
 
 VALUE test1(VALUE self) {
@@ -301,4 +336,52 @@ static VALUE arf_norm(VALUE self){
 
 
   return DBL2NUM(norm);
+}
+
+static VALUE arf_get_stream(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_native_id(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_set_native_id(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_context(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_queue(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_device_id(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_set_device_id(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_add_device_context(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_set_device_context(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_delete_device_context(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_device_type(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_platform(VALUE self){
+  return Qnil;
 }
