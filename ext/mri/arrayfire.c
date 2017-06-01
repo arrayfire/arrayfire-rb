@@ -65,6 +65,22 @@ static VALUE arf_replace(VALUE self);
 static VALUE arf_replace_scalar(VALUE self);
 
 
+static VALUE arf_svd(VALUE self);
+static VALUE arf_svd_inplace(VALUE self);
+static VALUE arf_lu(VALUE self);
+static VALUE arf_lu_inplace(VALUE self);
+static VALUE arf_qr(VALUE self);
+static VALUE arf_qr_inplace(VALUE self);
+static VALUE arf_cholesky(VALUE self, VALUE val);
+static VALUE arf_cholesky_inplace(VALUE self);
+static VALUE arf_solve(VALUE self);
+static VALUE arf_solve_lu(VALUE self);
+static VALUE arf_inverse(VALUE self);
+static VALUE arf_rank(VALUE self);
+static VALUE arf_det(VALUE self, VALUE val);
+static VALUE arf_norm(VALUE self, VALUE val);
+static VALUE arf_is_lapack_available(VALUE self);
+
 static size_t*  interpret_shape(VALUE arg, size_t* dim);
 
 #define DEF_ELEMENTWISE_RUBY_ACCESSOR(oper, name)                 \
@@ -87,10 +103,6 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val);
 
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
-static VALUE arf_cholesky(VALUE self, VALUE val);
-static VALUE arf_det(VALUE self);
-static VALUE arf_inverse(VALUE self);
-static VALUE arf_norm(VALUE self);
 
 void Init_arrayfire() {
   ArrayFire = rb_define_module("ArrayFire");
@@ -105,9 +117,7 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "array2", (METHOD)array2, 0);
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
-  rb_define_method(Af_Array, "det",(METHOD)arf_det,0);
   rb_define_method(Af_Array, "inverse",(METHOD)arf_inverse,0);
-  rb_define_method(Af_Array, "norm",(METHOD)arf_norm,0);
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
   rb_define_method(Device, "getInfo", (METHOD)get_info, 0);
@@ -119,9 +129,6 @@ void Init_arrayfire() {
   rb_define_singleton_method(Cuda, "get_stream", (METHOD)arf_get_stream, 0);
   rb_define_singleton_method(Cuda, "get_native_id", (METHOD)arf_get_native_id, 0);
   rb_define_singleton_method(Cuda, "set_native_id", (METHOD)arf_set_native_id, 0);
-
-  Lapack = rb_define_class_under(ArrayFire, "LAPACK", rb_cObject);
-  rb_define_singleton_method(Lapack, "cholesky", (METHOD)arf_cholesky, 1);
 
   OpenCL = rb_define_class_under(ArrayFire, "OpenCL", rb_cObject);
   rb_define_singleton_method(OpenCL, "get_context", (METHOD)arf_get_context, 0);
@@ -159,6 +166,23 @@ void Init_arrayfire() {
   rb_define_singleton_method(Data, "select_scalar_l", (METHOD)arf_select_scalar_l, 0);
   rb_define_singleton_method(Data, "replace", (METHOD)arf_replace, 0);
   rb_define_singleton_method(Data, "replace_scalar", (METHOD)arf_replace_scalar, 0);
+
+  Lapack = rb_define_class_under(ArrayFire, "LAPACK", rb_cObject);
+  rb_define_singleton_method(Lapack, "svd", (METHOD)arf_svd, 0);
+  rb_define_singleton_method(Lapack, "svd_inplace", (METHOD)arf_svd_inplace, 0);
+  rb_define_singleton_method(Lapack, "lu", (METHOD)arf_lu, 0);
+  rb_define_singleton_method(Lapack, "lu_inplace", (METHOD)arf_lu_inplace, 0);
+  rb_define_singleton_method(Lapack, "qr", (METHOD)arf_qr, 0);
+  rb_define_singleton_method(Lapack, "qr_inplace", (METHOD)arf_qr_inplace, 0);
+  rb_define_singleton_method(Lapack, "cholesky", (METHOD)arf_cholesky, 1);
+  rb_define_singleton_method(Lapack, "cholesky_inplace", (METHOD)arf_cholesky_inplace, 0);
+  rb_define_singleton_method(Lapack, "solve", (METHOD)arf_solve, 0);
+  rb_define_singleton_method(Lapack, "solve_lu", (METHOD)arf_solve_lu, 0);
+  rb_define_singleton_method(Lapack, "inverse", (METHOD)arf_inverse, 0);
+  rb_define_singleton_method(Lapack, "rank", (METHOD)arf_rank, 0);
+  rb_define_singleton_method(Lapack, "det", (METHOD)arf_det, 1);
+  rb_define_singleton_method(Lapack, "norm", (METHOD)arf_norm, 1);
+  rb_define_singleton_method(Lapack, "is_lapack_available", (METHOD)arf_is_lapack_available, 0);
 }
 
 VALUE test1(VALUE self) {
@@ -331,63 +355,7 @@ static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val){
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }
 
-static VALUE arf_cholesky(VALUE self, VALUE val){
 
-  afstruct* matrix;
-  afstruct* result = ALLOC(afstruct);
-
-  Data_Get_Struct(val, afstruct, matrix);
-
-
-  result->ndims = matrix->ndims;
-  result->dimension = matrix->dimension;
-  result->count = matrix->count;
-  arf::cholesky_(result, matrix);
-
-  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, result);
-}
-
-static VALUE arf_det(VALUE self){
-
-  afstruct* matrix;
-  Data_Get_Struct(self, afstruct, matrix);
-
-  af_array m;
-  dim_t dims[matrix->ndims] ;
-  for (size_t index = 0; index < matrix->ndims; ++index){
-    dims[index] = (dim_t)matrix->dimension[index];
-  }
-  af_create_array( &m, matrix->array, matrix->ndims, dims, f64 );
-  double real, imaginary;
-  af_det(&real,&imaginary,m);
-  return DBL2NUM(real);
-}
-
-static VALUE arf_inverse(VALUE self){
-
-  afstruct* matrix;
-  afstruct* result = ALLOC(afstruct);
-
-  Data_Get_Struct(self, afstruct, matrix);
-
-  result->ndims = matrix->ndims;
-  result->dimension = matrix->dimension;
-  result->count = matrix->count;
-  arf::inverse_(result, matrix);
-
-  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
-}
-
-static VALUE arf_norm(VALUE self){
-  afstruct* matrix;
-
-  Data_Get_Struct(self, afstruct, matrix);
-
-  double norm = arf::norm_(matrix);
-
-
-  return DBL2NUM(norm);
-}
 
 static VALUE arf_get_stream(VALUE self){
   return Qnil;
@@ -533,5 +501,104 @@ static VALUE arf_replace(VALUE self){
 }
 
 static VALUE arf_replace_scalar(VALUE self){
+  return Qnil;
+}
+
+// Lapack
+
+static VALUE arf_svd(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_svd_inplace(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_lu(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_lu_inplace(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_qr(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_qr_inplace(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_cholesky(VALUE self, VALUE val){
+
+  afstruct* matrix;
+  afstruct* result = ALLOC(afstruct);
+
+  Data_Get_Struct(val, afstruct, matrix);
+
+
+  result->ndims = matrix->ndims;
+  result->dimension = matrix->dimension;
+  result->count = matrix->count;
+  arf::cholesky_(result, matrix);
+
+  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, result);
+}
+
+static VALUE arf_cholesky_inplace(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_solve(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_solve_lu(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_inverse(VALUE self){
+
+  afstruct* matrix;
+  afstruct* result = ALLOC(afstruct);
+
+  Data_Get_Struct(self, afstruct, matrix);
+
+  result->ndims = matrix->ndims;
+  result->dimension = matrix->dimension;
+  result->count = matrix->count;
+  arf::inverse_(result, matrix);
+
+  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
+}
+static VALUE arf_rank(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_det(VALUE self, VALUE val){
+
+  afstruct* matrix;
+  Data_Get_Struct(val, afstruct, matrix);
+
+  af_array m;
+  dim_t dims[matrix->ndims] ;
+  for (size_t index = 0; index < matrix->ndims; ++index){
+    dims[index] = (dim_t)matrix->dimension[index];
+  }
+  af_create_array( &m, matrix->array, matrix->ndims, dims, f64 );
+  double real, imaginary;
+  af_det(&real,&imaginary,m);
+  return DBL2NUM(real);
+}
+
+static VALUE arf_norm(VALUE self, VALUE val){
+  afstruct* matrix
+  Data_Get_Struct(val, afstruct, matrix);
+  double norm = arf::norm_(matrix);
+  return DBL2NUM(norm);
+}
+
+static VALUE arf_is_lapack_available(VALUE self){
   return Qnil;
 }
