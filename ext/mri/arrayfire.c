@@ -23,7 +23,6 @@ static VALUE ndims(VALUE self);
 static VALUE dimension(VALUE self);
 static VALUE array(VALUE self);
 static void array2(VALUE self);
-static VALUE get_info(VALUE self);
 
 static VALUE arf_get_backend_count(VALUE self);
 static VALUE arf_get_available_backends(VALUE self);
@@ -39,6 +38,34 @@ static VALUE arf_transpose_inplace(VALUE self, VALUE left_val, VALUE right_val);
 static VALUE arf_get_stream(VALUE self);
 static VALUE arf_get_native_id(VALUE self);
 static VALUE arf_set_native_id(VALUE self);
+
+static VALUE arf_info(VALUE self);
+static VALUE arf_init2(VALUE self);
+static VALUE arf_info_string(VALUE self);
+static VALUE arf_device_info(VALUE self);
+static VALUE arf_get_device_count(VALUE self);
+static VALUE arf_get_dbl_support(VALUE self);
+static VALUE arf_set_device(VALUE self);
+static VALUE arf_get_device(VALUE self);
+static VALUE arf_sync(VALUE self);
+static VALUE arf_alloc_device(VALUE self);
+static VALUE arf_free_device(VALUE self);
+static VALUE arf_alloc_pinned(VALUE self);
+static VALUE arf_free_pinned(VALUE self);
+static VALUE arf_alloc_host(VALUE self);
+static VALUE arf_free_host(VALUE self);
+static VALUE arf_device_array(VALUE self);
+static VALUE arf_device_mem_info(VALUE self);
+static VALUE arf_print_mem_info(VALUE self);
+static VALUE arf_device_gc(VALUE self);
+static VALUE arf_set_mem_step_size(VALUE self);
+static VALUE arf_get_mem_step_size(VALUE self);
+static VALUE arf_lock_device_ptr(VALUE self);
+static VALUE arf_unlock_device_ptr(VALUE self);
+static VALUE arf_lock_array(VALUE self);
+static VALUE arf_unlock_array(VALUE self);
+static VALUE arf_is_locked_array(VALUE self);
+static VALUE arf_get_device_ptr(VALUE self);
 
 static VALUE arf_get_context(VALUE self);
 static VALUE arf_get_queue(VALUE self);
@@ -139,7 +166,33 @@ void Init_arrayfire() {
   rb_define_method(Backend, "get_device_id", (METHOD)arf_get_backend_device_id, 0);
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
-  rb_define_method(Device, "getInfo", (METHOD)get_info, 0);
+  rb_define_method(Device, "info", (METHOD)arf_info, 0);
+  rb_define_method(Device, "init", (METHOD)arf_init, 0);
+  rb_define_method(Device, "info_string", (METHOD)arf_info_string, 0);
+  rb_define_method(Device, "device_info", (METHOD)arf_device_info, 0);
+  rb_define_method(Device, "get_device_count", (METHOD)arf_get_device_count, 0);
+  rb_define_method(Device, "get_dbl_support", (METHOD)arf_get_dbl_support, 0);
+  rb_define_method(Device, "set_device", (METHOD)arf_set_device, 0);
+  rb_define_method(Device, "get_device", (METHOD)arf_get_device, 0);
+  rb_define_method(Device, "sync", (METHOD)arf_sync, 0);
+  rb_define_method(Device, "alloc_device", (METHOD)arf_alloc_device, 0);
+  rb_define_method(Device, "free_device", (METHOD)arf_free_device, 0);
+  rb_define_method(Device, "alloc_pinned", (METHOD)arf_alloc_pinned, 0);
+  rb_define_method(Device, "free_pinned", (METHOD)arf_free_pinned, 0);
+  rb_define_method(Device, "alloc_host", (METHOD)arf_alloc_host, 0);
+  rb_define_method(Device, "free_host", (METHOD)arf_free_host, 0);
+  rb_define_method(Device, "device_array", (METHOD)arf_device_array, 0);
+  rb_define_method(Device, "device_mem_info", (METHOD)arf_device_mem_info, 0);
+  rb_define_method(Device, "print_mem_info", (METHOD)arf_print_mem_info, 0);
+  rb_define_method(Device, "device_gc", (METHOD)arf_device_gc, 0);
+  rb_define_method(Device, "set_mem_step_size", (METHOD)arf_set_mem_step_size, 0);
+  rb_define_method(Device, "get_mem_step_size", (METHOD)arf_get_mem_step_size, 0);
+  rb_define_method(Device, "lock_device_ptr", (METHOD)arf_lock_device_ptr, 0);
+  rb_define_method(Device, "unlock_device_ptr", (METHOD)arf_unlock_device_ptr, 0);
+  rb_define_method(Device, "lock_array", (METHOD)arf_lock_array, 0);
+  rb_define_method(Device, "unlock_array", (METHOD)arf_unlock_array, 0);
+  rb_define_method(Device, "is_locked_array", (METHOD)arf_is_locked_array, 0);
+  rb_define_method(Device, "get_device_ptr", (METHOD)arf_get_device_ptr, 0);
 
   Blas = rb_define_class_under(ArrayFire, "BLAS", rb_cObject);
   rb_define_singleton_method(Blas, "matmul", (METHOD)arf_matmul, 2);
@@ -297,14 +350,6 @@ static void array2(VALUE self){
   Data_Get_Struct(self, afstruct, af);
 }
 
-static VALUE get_info(VALUE self)
-{
-  VALUE x;
-  af_info();
-  return x;
-}
-
-
 DEF_ELEMENTWISE_RUBY_ACCESSOR(ADD, add)
 
 static VALUE elementwise_op(arf::ewop_t op, VALUE left_val, VALUE right_val) {
@@ -425,7 +470,119 @@ static VALUE arf_set_native_id(VALUE self){
   return Qnil;
 }
 
+// Device
+
+static VALUE arf_info(VALUE self){
+  af_info();
+  return Qnil;
+}
+
+static VALUE arf_init2(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_info_string(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_device_info(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_device_count(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_dbl_support(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_set_device(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_device(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_sync(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_alloc_device(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_free_device(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_alloc_pinned(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_free_pinned(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_alloc_host(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_free_host(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_device_array(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_device_mem_info(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_print_mem_info(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_device_gc(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_set_mem_step_size(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_mem_step_size(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_lock_device_ptr(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_unlock_device_ptr(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_lock_array(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_unlock_array(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_is_locked_array(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_get_device_ptr(VALUE self){
+  return Qnil;
+}
+
 // OpenCL
+
 
 static VALUE arf_get_context(VALUE self){
   return Qnil;
