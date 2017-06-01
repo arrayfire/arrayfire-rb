@@ -6,6 +6,6 @@ describe ArrayFire::BLAS do
     let(:b) { ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4] }
     let(:c) { ArrayFire::Af_Array.new 2, [2,2],[7,10,15,22] }
     subject {c}
-    it {expect(ArrayFire::BLAS.matmul(a,b)).to eq c}
+    it {expect(ArrayFire::BLAS.matmul(a,b)).array to eq c.array}
   end
 end
