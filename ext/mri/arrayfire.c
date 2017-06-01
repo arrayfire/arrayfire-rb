@@ -4,6 +4,7 @@
 
 VALUE ArrayFire = Qnil;
 VALUE Af_Array = Qnil;
+VALUE Backend = Qnil;
 VALUE Blas = Qnil;
 VALUE Cuda = Qnil;
 VALUE Data = Qnil;
@@ -23,6 +24,12 @@ static VALUE dimension(VALUE self);
 static VALUE array(VALUE self);
 static void array2(VALUE self);
 static VALUE get_info(VALUE self);
+
+static VALUE arf_get_backend_count(VALUE self);
+static VALUE arf_get_available_backends(VALUE self);
+static VALUE arf_get_backend_id(VALUE self);
+static VALUE arf_get_active_backend(VALUE self);
+static VALUE arf_get_backend_device_id(VALUE self);
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
 static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val);
@@ -123,6 +130,13 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
   rb_define_method(Af_Array, "inverse",(METHOD)arf_inverse,0);
+
+  Backend = rb_define_class_under(ArrayFire, "Backend", rb_cObject);
+  rb_define_method(Backend, "get_backend_count", (METHOD)arf_get_backend_count, 0);
+  rb_define_method(Backend, "get_available_backends", (METHOD)arf_get_available_backends, 0);
+  rb_define_method(Backend, "get_backend_id", (METHOD)arf_get_backend_id, 0);
+  rb_define_method(Backend, "get_active_backend", (METHOD)arf_get_active_backend, 0);
+  rb_define_method(Backend, "get_device_id", (METHOD)arf_get_backend_device_id, 0);
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
   rb_define_method(Device, "getInfo", (METHOD)get_info, 0);
@@ -336,6 +350,28 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
   }
 
   return Qtrue;
+}
+
+// Backend
+
+static VALUE arf_get_backend_count(VALUE self){
+   return Qnil;
+}
+
+static VALUE arf_get_available_backends(VALUE self){
+   return Qnil;
+}
+
+static VALUE arf_get_backend_id(VALUE self){
+   return Qnil;
+}
+
+static VALUE arf_get_active_backend(VALUE self){
+   return Qnil;
+}
+
+static VALUE arf_get_backend_device_id(VALUE self){
+   return Qnil;
 }
 
 // BLAS
