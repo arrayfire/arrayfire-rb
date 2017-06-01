@@ -4,6 +4,7 @@
 
 VALUE ArrayFire = Qnil;
 VALUE Af_Array = Qnil;
+VALUE Algorithm = Qnil;
 VALUE Backend = Qnil;
 VALUE Blas = Qnil;
 VALUE Cuda = Qnil;
@@ -23,6 +24,41 @@ static VALUE ndims(VALUE self);
 static VALUE dimension(VALUE self);
 static VALUE array(VALUE self);
 static void array2(VALUE self);
+
+static VALUE arf_sum(VALUE self);
+static VALUE arf_sum_nan(VALUE self);
+static VALUE arf_product(VALUE self);
+static VALUE arf_product_nan(VALUE self);
+static VALUE arf_min(VALUE self);
+static VALUE arf_max(VALUE self);
+static VALUE arf_all_true(VALUE self);
+static VALUE arf_any_true(VALUE self);
+static VALUE arf_count(VALUE self);
+static VALUE arf_sum_all(VALUE self);
+static VALUE arf_sum_nan_all(VALUE self);
+static VALUE arf_product_all(VALUE self);
+static VALUE arf_product_nan_all(VALUE self);
+static VALUE arf_min_all(VALUE self);
+static VALUE arf_max_all(VALUE self);
+static VALUE arf_all_true_all(VALUE self);
+static VALUE arf_any_true_all(VALUE self);
+static VALUE arf_count_all(VALUE self);
+static VALUE arf_imin(VALUE self);
+static VALUE arf_imax(VALUE self);
+static VALUE arf_imin_all(VALUE self);
+static VALUE arf_imax_all(VALUE self);
+static VALUE arf_accum(VALUE self);
+static VALUE arf_scan(VALUE self);
+static VALUE arf_scan_by_key(VALUE self);
+static VALUE arf_where(VALUE self);
+static VALUE arf_diff1(VALUE self);
+static VALUE arf_diff2(VALUE self);
+static VALUE arf_sort(VALUE self);
+static VALUE arf_sort_index(VALUE self);
+static VALUE arf_sort_by_key(VALUE self);
+static VALUE arf_set_unique(VALUE self);
+static VALUE arf_set_union(VALUE self);
+static VALUE arf_set_intersect(VALUE self);
 
 static VALUE arf_get_backend_count(VALUE self);
 static VALUE arf_get_available_backends(VALUE self);
@@ -157,6 +193,42 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
   rb_define_method(Af_Array, "inverse",(METHOD)arf_inverse,0);
+
+  Algorithm = rb_define_class_under(ArrayFire, "Algorithm", rb_cObject);
+  rb_define_method(Algorithm, "sum", (METHOD)arf_sum, 0);
+  rb_define_method(Algorithm, "sum_nan", (METHOD)arf_sum_nan, 0);
+  rb_define_method(Algorithm, "product", (METHOD)arf_product, 0);
+  rb_define_method(Algorithm, "product_nan", (METHOD)arf_product_nan, 0);
+  rb_define_method(Algorithm, "min", (METHOD)arf_min, 0);
+  rb_define_method(Algorithm, "max", (METHOD)arf_max, 0);
+  rb_define_method(Algorithm, "all_true", (METHOD)arf_all_true, 0);
+  rb_define_method(Algorithm, "any_true", (METHOD)arf_any_true, 0);
+  rb_define_method(Algorithm, "count", (METHOD)arf_count, 0);
+  rb_define_method(Algorithm, "sum_all", (METHOD)arf_sum_all, 0);
+  rb_define_method(Algorithm, "sum_nan_all", (METHOD)arf_sum_nan_all, 0);
+  rb_define_method(Algorithm, "product_all", (METHOD)arf_product_all, 0);
+  rb_define_method(Algorithm, "product_nan_all", (METHOD)arf_product_nan_all, 0);
+  rb_define_method(Algorithm, "min_all", (METHOD)arf_min_all, 0);
+  rb_define_method(Algorithm, "max_all", (METHOD)arf_max_all, 0);
+  rb_define_method(Algorithm, "all_true_all", (METHOD)arf_all_true_all, 0);
+  rb_define_method(Algorithm, "any_true_all", (METHOD)arf_any_true_all, 0);
+  rb_define_method(Algorithm, "count_all", (METHOD)arf_count_all, 0);
+  rb_define_method(Algorithm, "imin", (METHOD)arf_imin, 0);
+  rb_define_method(Algorithm, "imax", (METHOD)arf_imax, 0);
+  rb_define_method(Algorithm, "imin_all", (METHOD)arf_imin_all, 0);
+  rb_define_method(Algorithm, "imax_all", (METHOD)arf_imax_all, 0);
+  rb_define_method(Algorithm, "accum", (METHOD)arf_accum, 0);
+  rb_define_method(Algorithm, "scan", (METHOD)arf_scan, 0);
+  rb_define_method(Algorithm, "scan_by_key", (METHOD)arf_scan_by_key, 0);
+  rb_define_method(Algorithm, "where", (METHOD)arf_where, 0);
+  rb_define_method(Algorithm, "diff1", (METHOD)arf_diff1, 0);
+  rb_define_method(Algorithm, "diff2", (METHOD)arf_diff2, 0);
+  rb_define_method(Algorithm, "sort", (METHOD)arf_sort, 0);
+  rb_define_method(Algorithm, "sort_index", (METHOD)arf_sort_index, 0);
+  rb_define_method(Algorithm, "sort_by_key", (METHOD)arf_sort_by_key, 0);
+  rb_define_method(Algorithm, "set_unique", (METHOD)arf_set_unique, 0);
+  rb_define_method(Algorithm, "set_union", (METHOD)arf_set_union, 0);
+  rb_define_method(Algorithm, "set_intersect", (METHOD)arf_set_intersect, 0);
 
   Backend = rb_define_class_under(ArrayFire, "Backend", rb_cObject);
   rb_define_method(Backend, "get_backend_count", (METHOD)arf_get_backend_count, 0);
@@ -395,6 +467,111 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
   }
 
   return Qtrue;
+}
+
+// Algorithm
+
+static VALUE arf_sum(VALUE self){
+  return Qnil;
+}
+static VALUE arf_sum_nan(VALUE self){
+  return Qnil;
+}
+static VALUE arf_product(VALUE self){
+  return Qnil;
+}
+static VALUE arf_product_nan(VALUE self){
+  return Qnil;
+}
+static VALUE arf_min(VALUE self){
+  return Qnil;
+}
+static VALUE arf_max(VALUE self){
+  return Qnil;
+}
+static VALUE arf_all_true(VALUE self){
+  return Qnil;
+}
+static VALUE arf_any_true(VALUE self){
+  return Qnil;
+}
+static VALUE arf_count(VALUE self){
+  return Qnil;
+}
+static VALUE arf_sum_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_sum_nan_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_product_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_product_nan_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_min_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_max_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_all_true_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_any_true_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_count_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_imin(VALUE self){
+  return Qnil;
+}
+static VALUE arf_imax(VALUE self){
+  return Qnil;
+}
+static VALUE arf_imin_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_imax_all(VALUE self){
+  return Qnil;
+}
+static VALUE arf_accum(VALUE self){
+  return Qnil;
+}
+static VALUE arf_scan(VALUE self){
+  return Qnil;
+}
+static VALUE arf_scan_by_key(VALUE self){
+  return Qnil;
+}
+static VALUE arf_where(VALUE self){
+  return Qnil;
+}
+static VALUE arf_diff1(VALUE self){
+  return Qnil;
+}
+static VALUE arf_diff2(VALUE self){
+  return Qnil;
+}
+static VALUE arf_sort(VALUE self){
+  return Qnil;
+}
+static VALUE arf_sort_index(VALUE self){
+  return Qnil;
+}
+static VALUE arf_sort_by_key(VALUE self){
+  return Qnil;
+}
+static VALUE arf_set_unique(VALUE self){
+  return Qnil;
+}
+static VALUE arf_set_union(VALUE self){
+  return Qnil;
+}
+static VALUE arf_set_intersect(VALUE self){
+  return Qnil;
 }
 
 // Backend
