@@ -57,13 +57,7 @@ namespace arf {
     result->array = res.host<double>();
   }
 
-  static void matmul(afstruct *result, afstruct *left, afstruct *right)
-  {
-    array l = array(left->dimension[0], left->dimension[1], left->array);
-    array r = array(right->dimension[0], right->dimension[1], right->array);
-    array res = matmul(l,r);
-    result->array = res.host<double>();
-  }
+
 
   static void cholesky_(afstruct *result, afstruct *matrix)
   {
@@ -86,6 +80,8 @@ namespace arf {
     array m = array(matrix->dimension[0], matrix->dimension[1], matrix->array);
     return norm(m, AF_NORM_EUCLID, 1, 1);
   }
+
+  #include "blas.cpp"
 }
 extern "C" {
   #include "arrayfire.c"
