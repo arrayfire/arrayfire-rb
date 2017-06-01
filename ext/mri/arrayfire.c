@@ -12,7 +12,7 @@ VALUE Data = Qnil;
 VALUE Device = Qnil;
 VALUE Lapack = Qnil;
 VALUE OpenCL = Qnil;
-
+VALUE Random = Qnil;
 
 // prototypes
 void Init_arrayfire();
@@ -154,6 +154,22 @@ static VALUE arf_rank(VALUE self);
 static VALUE arf_det(VALUE self, VALUE val);
 static VALUE arf_norm(VALUE self, VALUE val);
 static VALUE arf_is_lapack_available(VALUE self);
+
+static VALUE arf_create_random_engine(VALUE self);
+static VALUE arf_retain_random_engine(VALUE self);
+static VALUE arf_random_engine_set_type(VALUE self);
+static VALUE arf_random_engine_get_type(VALUE self);
+static VALUE arf_random_uniform(VALUE self);
+static VALUE arf_random_normal(VALUE self);
+static VALUE arf_random_engine_set_seed(VALUE self);
+static VALUE arf_get_default_random_engine(VALUE self);
+static VALUE arf_set_default_random_engine_type(VALUE self);
+static VALUE arf_random_engine_get_seed(VALUE self);
+static VALUE arf_release_random_engine(VALUE self);
+static VALUE arf_randu(VALUE self);
+static VALUE arf_randn(VALUE self);
+static VALUE arf_set_seed(VALUE self);
+static VALUE arf_get_seed(VALUE self);
 
 static size_t*  interpret_shape(VALUE arg, size_t* dim);
 
@@ -330,6 +346,23 @@ void Init_arrayfire() {
   rb_define_singleton_method(Lapack, "det", (METHOD)arf_det, 1);
   rb_define_singleton_method(Lapack, "norm", (METHOD)arf_norm, 1);
   rb_define_singleton_method(Lapack, "is_lapack_available", (METHOD)arf_is_lapack_available, 0);
+
+  Random = rb_define_class_under(ArrayFire, "Random", rb_cObject);
+  rb_define_method(Random, "create_random_engine", (METHOD)arf_create_random_engine, 0);
+  rb_define_method(Random, "retain_random_engine", (METHOD)arf_retain_random_engine, 0);
+  rb_define_method(Random, "random_engine_set_type", (METHOD)arf_random_engine_set_type, 0);
+  rb_define_method(Random, "random_engine_get_type", (METHOD)arf_random_engine_get_type, 0);
+  rb_define_method(Random, "random_uniform", (METHOD)arf_random_uniform, 0);
+  rb_define_method(Random, "random_normal", (METHOD)arf_random_normal, 0);
+  rb_define_method(Random, "random_engine_set_seed", (METHOD)arf_random_engine_set_seed, 0);
+  rb_define_method(Random, "get_default_random_engine", (METHOD)arf_get_default_random_engine, 0);
+  rb_define_method(Random, "set_default_random_engine_type", (METHOD)arf_set_default_random_engine_type, 0);
+  rb_define_method(Random, "random_engine_get_seed", (METHOD)arf_random_engine_get_seed, 0);
+  rb_define_method(Random, "release_random_engine", (METHOD)arf_release_random_engine, 0);
+  rb_define_method(Random, "randu", (METHOD)arf_randu, 0);
+  rb_define_method(Random, "randn", (METHOD)arf_randn, 0);
+  rb_define_method(Random, "set_seed", (METHOD)arf_set_seed, 0);
+  rb_define_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
 }
 
 VALUE test1(VALUE self) {
@@ -992,5 +1025,53 @@ static VALUE arf_norm(VALUE self, VALUE val){
 }
 
 static VALUE arf_is_lapack_available(VALUE self){
+  return Qnil;
+}
+
+// Random
+
+static VALUE arf_create_random_engine(VALUE self){
+  return Qnil;
+}
+static VALUE arf_retain_random_engine(VALUE self){
+  return Qnil;
+}
+static VALUE arf_random_engine_set_type(VALUE self){
+  return Qnil;
+}
+static VALUE arf_random_engine_get_type(VALUE self){
+  return Qnil;
+}
+static VALUE arf_random_uniform(VALUE self){
+  return Qnil;
+}
+static VALUE arf_random_normal(VALUE self){
+  return Qnil;
+}
+static VALUE arf_random_engine_set_seed(VALUE self){
+  return Qnil;
+}
+static VALUE arf_get_default_random_engine(VALUE self){
+  return Qnil;
+}
+static VALUE arf_set_default_random_engine_type(VALUE self){
+  return Qnil;
+}
+static VALUE arf_random_engine_get_seed(VALUE self){
+  return Qnil;
+}
+static VALUE arf_release_random_engine(VALUE self){
+  return Qnil;
+}
+static VALUE arf_randu(VALUE self){
+  return Qnil;
+}
+static VALUE arf_randn(VALUE self){
+  return Qnil;
+}
+static VALUE arf_set_seed(VALUE self){
+  return Qnil;
+}
+static VALUE arf_get_seed(VALUE self){
   return Qnil;
 }
