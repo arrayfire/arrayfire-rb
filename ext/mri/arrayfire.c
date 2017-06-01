@@ -24,6 +24,10 @@ static VALUE array(VALUE self);
 static void array2(VALUE self);
 static VALUE get_info(VALUE self);
 
+static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
+static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val);
+static VALUE arf_transpose(VALUE self, VALUE left_val, VALUE right_val);
+static VALUE arf_transpose_inplace(VALUE self, VALUE left_val, VALUE right_val);
 
 static VALUE arf_get_stream(VALUE self);
 static VALUE arf_get_native_id(VALUE self);
@@ -93,6 +97,7 @@ DECL_ELEMENTWISE_RUBY_ACCESSOR(add)
 
 
 static VALUE elementwise_op(arf::ewop_t op, VALUE left_val, VALUE right_val);
+
 /*
  * Macro defines an element-wise accessor function for some operation.
  *
@@ -124,6 +129,9 @@ void Init_arrayfire() {
 
   Blas = rb_define_class_under(ArrayFire, "BLAS", rb_cObject);
   rb_define_singleton_method(Blas, "matmul", (METHOD)arf_matmul, 2);
+  rb_define_singleton_method(Blas, "dot", (METHOD)arf_dot, 2);
+  rb_define_singleton_method(Blas, "transpose", (METHOD)arf_transpose, 2);
+  rb_define_singleton_method(Blas, "transpose_inplace", (METHOD)arf_transpose_inplace, 2);
 
   Cuda = rb_define_class_under(ArrayFire, "CUDA", rb_cObject);
   rb_define_singleton_method(Cuda, "get_stream", (METHOD)arf_get_stream, 0);
@@ -315,8 +323,6 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
   Data_Get_Struct(left_val, afstruct, left);
   Data_Get_Struct(right_val, afstruct, right);
 
-  printf("%d\n", left->ndims);
-
   for(size_t i = 0; i < left->ndims; i++){
     if(left->dimension[i]!= right->dimension[i]){
       return Qfalse;
@@ -331,6 +337,8 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
 
   return Qtrue;
 }
+
+// BLAS
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val){
 
@@ -355,7 +363,19 @@ static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val){
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }
 
+static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val){
+  return Qnil;
+}
 
+static VALUE arf_transpose(VALUE self, VALUE left_val, VALUE right_val){
+  return Qnil;
+}
+
+static VALUE arf_transpose_inplace(VALUE self, VALUE left_val, VALUE right_val){
+  return Qnil;
+}
+
+// CUDA
 
 static VALUE arf_get_stream(VALUE self){
   return Qnil;
@@ -368,6 +388,8 @@ static VALUE arf_get_native_id(VALUE self){
 static VALUE arf_set_native_id(VALUE self){
   return Qnil;
 }
+
+// OpenCL
 
 static VALUE arf_get_context(VALUE self){
   return Qnil;
