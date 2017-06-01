@@ -6,6 +6,7 @@ VALUE ArrayFire = Qnil;
 VALUE Af_Array = Qnil;
 VALUE Blas = Qnil;
 VALUE Cuda = Qnil;
+VALUE Data = Qnil;
 VALUE Device = Qnil;
 VALUE Lapack = Qnil;
 VALUE OpenCL = Qnil;
@@ -37,6 +38,31 @@ static VALUE arf_set_device_context(VALUE self);
 static VALUE arf_delete_device_context(VALUE self);
 static VALUE arf_get_device_type(VALUE self);
 static VALUE arf_get_platform(VALUE self);
+
+static VALUE arf_constant(VALUE self);
+static VALUE arf_constant_complex(VALUE self);
+static VALUE arf_constant_long(VALUE self);
+static VALUE arf_constant_ulong(VALUE self);
+static VALUE arf_range(VALUE self);
+static VALUE arf_iota(VALUE self);
+static VALUE arf_identity(VALUE self);
+static VALUE arf_diag_create(VALUE self);
+static VALUE arf_diag_extract(VALUE self);
+static VALUE arf_join(VALUE self);
+static VALUE arf_join_many(VALUE self);
+static VALUE arf_tile(VALUE self);
+static VALUE arf_reorder(VALUE self);
+static VALUE arf_shift(VALUE self);
+static VALUE arf_moddims(VALUE self);
+static VALUE arf_flat(VALUE self);
+static VALUE arf_flip(VALUE self);
+static VALUE arf_lower(VALUE self);
+static VALUE arf_upper(VALUE self);
+static VALUE arf_select(VALUE self);
+static VALUE arf_select_scalar_r(VALUE self);
+static VALUE arf_select_scalar_l(VALUE self);
+static VALUE arf_replace(VALUE self);
+static VALUE arf_replace_scalar(VALUE self);
 
 
 static size_t*  interpret_shape(VALUE arg, size_t* dim);
@@ -108,6 +134,31 @@ void Init_arrayfire() {
   rb_define_singleton_method(OpenCL, "get_device_type", (METHOD)arf_get_device_type, 0);
   rb_define_singleton_method(OpenCL, "get_platform", (METHOD)arf_get_platform, 0);
 
+  Data = rb_define_class_under(ArrayFire, "Data", rb_cObject);
+  rb_define_singleton_method(Data, "constant", (METHOD)arf_constant, 0);
+  rb_define_singleton_method(Data, "constant_complex", (METHOD)arf_constant_complex, 0);
+  rb_define_singleton_method(Data, "constant_long", (METHOD)arf_constant_long, 0);
+  rb_define_singleton_method(Data, "constant_ulong", (METHOD)arf_constant_ulong, 0);
+  rb_define_singleton_method(Data, "range", (METHOD)arf_range, 0);
+  rb_define_singleton_method(Data, "iota", (METHOD)arf_iota, 0);
+  rb_define_singleton_method(Data, "identity", (METHOD)arf_identity, 0);
+  rb_define_singleton_method(Data, "diag_create", (METHOD)arf_diag_create, 0);
+  rb_define_singleton_method(Data, "diag_extract", (METHOD)arf_diag_extract, 0);
+  rb_define_singleton_method(Data, "join", (METHOD)arf_join, 0);
+  rb_define_singleton_method(Data, "join_many", (METHOD)arf_join_many, 0);
+  rb_define_singleton_method(Data, "tile", (METHOD)arf_tile, 0);
+  rb_define_singleton_method(Data, "reorder", (METHOD)arf_reorder, 0);
+  rb_define_singleton_method(Data, "shift", (METHOD)arf_shift, 0);
+  rb_define_singleton_method(Data, "moddims", (METHOD)arf_moddims, 0);
+  rb_define_singleton_method(Data, "flat", (METHOD)arf_flat, 0);
+  rb_define_singleton_method(Data, "flip", (METHOD)arf_flip, 0);
+  rb_define_singleton_method(Data, "lower", (METHOD)arf_lower, 0);
+  rb_define_singleton_method(Data, "upper", (METHOD)arf_upper, 0);
+  rb_define_singleton_method(Data, "select", (METHOD)arf_select, 0);
+  rb_define_singleton_method(Data, "select_scalar_r", (METHOD)arf_select_scalar_r, 0);
+  rb_define_singleton_method(Data, "select_scalar_l", (METHOD)arf_select_scalar_l, 0);
+  rb_define_singleton_method(Data, "replace", (METHOD)arf_replace, 0);
+  rb_define_singleton_method(Data, "replace_scalar", (METHOD)arf_replace_scalar, 0);
 }
 
 VALUE test1(VALUE self) {
@@ -383,5 +434,104 @@ static VALUE arf_get_device_type(VALUE self){
 }
 
 static VALUE arf_get_platform(VALUE self){
+  return Qnil;
+}
+
+//Data
+
+
+static VALUE arf_constant(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_constant_complex(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_constant_long(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_constant_ulong(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_range(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_iota(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_identity(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_diag_create(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_diag_extract(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_join(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_join_many(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_tile(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_reorder(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_shift(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_moddims(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_flat(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_flip(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_lower(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_upper(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_select(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_select_scalar_r(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_select_scalar_l(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_replace(VALUE self){
+  return Qnil;
+}
+
+static VALUE arf_replace_scalar(VALUE self){
   return Qnil;
 }
