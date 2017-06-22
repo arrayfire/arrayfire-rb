@@ -1,5 +1,5 @@
 Gem::Specification.new do |gem|
-  gem.name        = 'ArrayFire'
+  gem.name        = 'arrayfire'
   gem.version     = '0.0.0'
   gem.date        = '2016-09-29'
   gem.summary     = 'Ruby wrapper for ArrayFire.'
@@ -9,6 +9,10 @@ Gem::Specification.new do |gem|
   gem.files       = ['lib/arrayfire.rb']
   gem.homepage    = 'http://rubygems.org/gems/arrayfire'
   gem.license     = 'BSD-3-Clause'
+  gem.extensions  = ['ext/mri/extconf.rb']
+  gem.files       = `git ls-files -- ext/mri`.split("\n")
+  gem.files      += `git ls-files -- lib`.split("\n")
+  gem.require_paths = ["lib"]
   gem.add_development_dependency 'rubocop'
   gem.add_development_dependency 'bundler', '~>1.6'
   gem.add_development_dependency 'json'
