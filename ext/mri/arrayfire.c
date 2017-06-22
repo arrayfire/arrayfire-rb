@@ -254,7 +254,7 @@ void Init_arrayfire() {
   rb_define_method(Backend, "get_device_id", (METHOD)arf_get_backend_device_id, 0);
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
-  rb_define_method(Device, "info", (METHOD)arf_info, 0);
+  rb_define_singleton_method(Device, "info", (METHOD)arf_info, 0);
   rb_define_method(Device, "init", (METHOD)arf_init, 0);
   rb_define_method(Device, "info_string", (METHOD)arf_info_string, 0);
   rb_define_method(Device, "device_info", (METHOD)arf_device_info, 0);
