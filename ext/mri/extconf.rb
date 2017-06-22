@@ -23,7 +23,7 @@ INCLUDEDIR  = RbConfig::CONFIG['includedir']
 
 HEADER_DIRS = [INCLUDEDIR, '/usr/local/include/', '/usr/local/include/af/']
 
-have_library('afcuda')
+have_library('afopencl')
 have_library('cusolver')
 have_library('cudart')
 have_library('cufft')
