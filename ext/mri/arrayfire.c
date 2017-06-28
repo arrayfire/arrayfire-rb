@@ -63,8 +63,8 @@ static VALUE arf_get_backend_device_id(VALUE self);
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
 static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val);
-static VALUE arf_transpose(VALUE self, VALUE left_val, VALUE right_val);
-static VALUE arf_transpose_inplace(VALUE self, VALUE left_val, VALUE right_val);
+static VALUE arf_transpose(VALUE self, VALUE input);
+static VALUE arf_transpose_inplace(VALUE self, VALUE input);
 
 static VALUE arf_get_stream(VALUE self);
 static VALUE arf_get_native_id(VALUE self);
@@ -669,42 +669,7 @@ static VALUE arf_get_backend_device_id(VALUE self){
    return Qnil;
 }
 
-// BLAS
-
-static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val){
-
-  afstruct* left;
-  afstruct* right;
-  afstruct* result = ALLOC(afstruct);
-
-  Data_Get_Struct(left_val, afstruct, left);
-  Data_Get_Struct(right_val, afstruct, right);
-
-
-  result->ndims = left->ndims;
-  size_t dimension[2];
-  dimension[0] = left->dimension[0];
-  dimension[1] = right->dimension[1];
-  size_t count = dimension[0]*dimension[1];
-  result->dimension = dimension;
-  result->count = count;
-
-  arf::matmul(result, left, right);
-
-  return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
-}
-
-static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val){
-  return Qnil;
-}
-
-static VALUE arf_transpose(VALUE self, VALUE left_val, VALUE right_val){
-  return Qnil;
-}
-
-static VALUE arf_transpose_inplace(VALUE self, VALUE left_val, VALUE right_val){
-  return Qnil;
-}
+#include "cmodules/blas.c"
 
 // CUDA
 
