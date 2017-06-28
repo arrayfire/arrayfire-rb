@@ -892,66 +892,7 @@ static VALUE arf_replace_scalar(VALUE self){
   return Qnil;
 }
 
-// Lapack
-
-static VALUE arf_svd(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_svd_inplace(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_lu(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_lu_inplace(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_qr(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_qr_inplace(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_cholesky(VALUE self, VALUE val){
-  return Qnil;
-}
-
-static VALUE arf_cholesky_inplace(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_solve(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_solve_lu(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_inverse(VALUE self){
-  return Qnil;
-}
-static VALUE arf_rank(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_det(VALUE self, VALUE val){
-  return Qnil;
-}
-
-static VALUE arf_norm(VALUE self, VALUE val){
-  return Qnil;
-}
-
-static VALUE arf_is_lapack_available(VALUE self){
-  return Qnil;
-}
+#include "cmodules/lapack.c"
 
 // Random
 
