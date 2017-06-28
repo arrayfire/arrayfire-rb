@@ -242,8 +242,35 @@ void Init_arrayfire() {
   rb_define_alloc_func(Af_Array, arf_alloc);
   rb_define_method(Af_Array, "initialize", (METHOD)arf_init, -1);
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
+  rb_define_method(Af_Array, "-",(METHOD)arf_ew_subtract,1);
+  rb_define_method(Af_Array, "*",(METHOD)arf_ew_multiply,1);
+  rb_define_method(Af_Array, "/",(METHOD)arf_ew_divide,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
-  rb_define_method(Af_Array, "inverse",(METHOD)arf_inverse,0);
+
+  rb_define_method(Af_Array, "sin", (METHOD)arf_unary_sin, 0);
+  rb_define_method(Af_Array, "cos", (METHOD)arf_unary_cos, 0);
+  rb_define_method(Af_Array, "tan", (METHOD)arf_unary_tan, 0);
+  rb_define_method(Af_Array, "asin", (METHOD)arf_unary_asin, 0);
+  rb_define_method(Af_Array, "acos", (METHOD)arf_unary_acos, 0);
+  rb_define_method(Af_Array, "atan", (METHOD)arf_unary_atan, 0);
+  rb_define_method(Af_Array, "sinh", (METHOD)arf_unary_sinh, 0);
+  rb_define_method(Af_Array, "cosh", (METHOD)arf_unary_cosh, 0);
+  rb_define_method(Af_Array, "tanh", (METHOD)arf_unary_tanh, 0);
+  rb_define_method(Af_Array, "asinh", (METHOD)arf_unary_asinh, 0);
+  rb_define_method(Af_Array, "acosh", (METHOD)arf_unary_acosh, 0);
+  rb_define_method(Af_Array, "atanh", (METHOD)arf_unary_atanh, 0);
+  rb_define_method(Af_Array, "exp", (METHOD)arf_unary_exp, 0);
+  rb_define_method(Af_Array, "log2", (METHOD)arf_unary_log2, 0);
+  rb_define_method(Af_Array, "log1p", (METHOD)arf_unary_log1p, 0);
+  rb_define_method(Af_Array, "log10", (METHOD)arf_unary_log10, 0);
+  rb_define_method(Af_Array, "sqrt", (METHOD)arf_unary_sqrt, 0);
+  rb_define_method(Af_Array, "erf", (METHOD)arf_unary_erf, 0);
+  rb_define_method(Af_Array, "erfc", (METHOD)arf_unary_erfc, 0);
+  rb_define_method(Af_Array, "cbrt", (METHOD)arf_unary_cbrt, 0);
+  rb_define_method(Af_Array, "lgamma", (METHOD)arf_unary_lgamma, 0);
+  rb_define_method(Af_Array, "tgamma", (METHOD)arf_unary_tgamma, 0);
+  rb_define_method(Af_Array, "floor", (METHOD)arf_unary_floor, 0);
+  rb_define_method(Af_Array, "ceil", (METHOD)arf_unary_ceil, 0);
 
   Algorithm = rb_define_class_under(ArrayFire, "Algorithm", rb_cObject);
   rb_define_method(Algorithm, "sum", (METHOD)arf_sum, 0);
