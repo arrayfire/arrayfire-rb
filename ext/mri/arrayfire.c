@@ -360,23 +360,22 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
 {
   afstruct* afarray;
   Data_Get_Struct(self, afstruct, afarray);
-  afarray->ndims = FIX2LONG(argv[0]);
-  afarray->dimension = ALLOC_N(VALUE, argv[0]);
-  size_t count = 1;
-  for (size_t index = 0; index < FIX2LONG(argv[0]); index++) {
-    afarray->dimension[index] = FIX2LONG(RARRAY_AREF(argv[1], index));
-    count *= afarray->dimension[index];
+  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t count = 1;
+  for (size_t index = 0; index < ndims; index++) {
+    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+    count *= dimensions[index];
   }
-  afarray->count = count;
-  afarray->array = ALLOC_N(double, count);
+  float* host_array = (float*)malloc(count * sizeof(float));
   for (size_t index = 0; index < count; index++) {
-    afarray->array[index] = NUM2DBL(RARRAY_AREF(argv[2], index));
+    host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
-  dim_t dims[afarray->ndims] ;
 
-  for (size_t index = 0; index < afarray->ndims; ++index){
-    dims[index] = (dim_t)afarray->dimension[index];
-  }
+  af_create_array(&afarray->carray, host_array, 2, dimensions, f32);
+
+  af_print_array(afarray->carray);
+
   return self;
 }
 
