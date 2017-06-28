@@ -174,7 +174,11 @@ static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {  \
 }
 
 #define DECL_ELEMENTWISE_RUBY_ACCESSOR(name)    static VALUE arf_ew_##name(VALUE left_val, VALUE right_val);
+
 DECL_ELEMENTWISE_RUBY_ACCESSOR(add)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(subtract)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(multiply)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(divide)
 
 
 static VALUE elementwise_op(arf::ewop_t op, VALUE left_val, VALUE right_val);
