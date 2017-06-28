@@ -16,14 +16,9 @@ VALUE Random = Qnil;
 
 // prototypes
 void Init_arrayfire();
-static VALUE test1(VALUE self);
 static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
 static void arf_free(afstruct* af);
-static VALUE ndims(VALUE self);
-static VALUE dimension(VALUE self);
-static VALUE array(VALUE self);
-static void array2(VALUE self);
 
 static VALUE arf_sum(VALUE self);
 static VALUE arf_sum_nan(VALUE self);
@@ -202,10 +197,6 @@ void Init_arrayfire() {
   Af_Array = rb_define_class_under(ArrayFire, "Af_Array", rb_cObject);
   rb_define_alloc_func(Af_Array, arf_alloc);
   rb_define_method(Af_Array, "initialize", (METHOD)arf_init, -1);
-  rb_define_method(Af_Array, "ndims", (METHOD)ndims, 0);
-  rb_define_method(Af_Array, "dimension", (METHOD)dimension, 0);
-  rb_define_method(Af_Array, "array", (METHOD)array, 0);
-  rb_define_method(Af_Array, "array2", (METHOD)array2, 0);
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
   rb_define_method(Af_Array, "inverse",(METHOD)arf_inverse,0);
@@ -365,12 +356,6 @@ void Init_arrayfire() {
   rb_define_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
 }
 
-VALUE test1(VALUE self) {
-  VALUE x;
-  x = rb_str_new_cstr("Hello, world!");
-  return x;
-}
-
 VALUE arf_init(int argc, VALUE* argv, VALUE self)
 {
   afstruct* afarray;
@@ -408,51 +393,6 @@ static VALUE arf_alloc(VALUE klass)
 static void arf_free(afstruct* af)
 {
   free(af);
-}
-
-static VALUE ndims(VALUE self)
-{
-  afstruct * af;
-
-  Data_Get_Struct(self, afstruct, af);
-
-  return INT2NUM(af->ndims);
-}
-
-static VALUE dimension(VALUE self)
-{
-  afstruct * af;
-
-  Data_Get_Struct(self, afstruct, af);
-
-  VALUE* dimension = ALLOC_N(VALUE, af->ndims);
-
-  for (size_t index = 0; index < af->ndims; ++index){
-    dimension[index] = INT2FIX(af->dimension[index]);
-  }
-
-  return rb_ary_new4(af->ndims, dimension);
-}
-
-static VALUE array(VALUE self)
-{
-  afstruct * af;
-
-  Data_Get_Struct(self, afstruct, af);
-
-  VALUE* array = ALLOC_N(VALUE, af->count);
-
-  for (size_t index = 0; index < af->count; ++index){
-    array[index] = DBL2NUM(af->array[index]);
-  }
-
-  return rb_ary_new4(af->count, array);
-}
-
-static void array2(VALUE self){
-  afstruct * af;
-
-  Data_Get_Struct(self, afstruct, af);
 }
 
 DEF_ELEMENTWISE_RUBY_ACCESSOR(ADD, add)
