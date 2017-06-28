@@ -168,9 +168,16 @@ static VALUE arf_get_seed(VALUE self);
 
 static size_t*  interpret_shape(VALUE arg, size_t* dim);
 
-#define DEF_ELEMENTWISE_RUBY_ACCESSOR(oper, name)                 \
-static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {  \
-  return elementwise_op(arf::EW_##oper, left_val, right_val);  \
+#define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                          \
+static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {              \
+  afstruct* left;                                                          \
+  afstruct* right;                                                         \
+  afstruct* result = ALLOC(afstruct);                                      \
+  Data_Get_Struct(left_val, afstruct, left);                               \
+  Data_Get_Struct(right_val, afstruct, right);                             \
+  af_##oper(&result->carray,  left->carray, right->carray, true);          \
+  af_print_array(result->carray);                                          \
+  return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);     \
 }
 
 #define DECL_ELEMENTWISE_RUBY_ACCESSOR(name)    static VALUE arf_ew_##name(VALUE left_val, VALUE right_val);
@@ -444,6 +451,11 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
 
   return Qtrue;
 }
+
+DEF_ELEMENTWISE_RUBY_ACCESSOR(add, add)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(subtract, sub)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(multiply, mul)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(divide, div)
 
 // Algorithm
 
