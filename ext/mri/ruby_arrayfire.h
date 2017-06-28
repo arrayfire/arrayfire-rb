@@ -6,11 +6,7 @@
 
 typedef struct AF_STRUCT
 {
-  // af_array arr;
-  size_t ndims;
-  size_t count;
-  size_t* dimension;
-  double* array;
+  af_array carray;
 }afstruct;
 
 #ifndef HAVE_RB_ARRAY_CONST_PTR
