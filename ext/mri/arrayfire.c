@@ -236,7 +236,6 @@ static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
 
 void Init_arrayfire() {
   ArrayFire = rb_define_module("ArrayFire");
-  rb_define_method(ArrayFire, "test1", (METHOD)test1, 0);
 
   Af_Array = rb_define_class_under(ArrayFire, "Af_Array", rb_cObject);
   rb_define_alloc_func(Af_Array, arf_alloc);
@@ -467,49 +466,8 @@ static void arf_free(afstruct* af)
 
 DEF_ELEMENTWISE_RUBY_ACCESSOR(ADD, add)
 
-static VALUE elementwise_op(arf::ewop_t op, VALUE left_val, VALUE right_val) {
-
-  afstruct* left;
-  afstruct* right;
-  afstruct* result = ALLOC(afstruct);
-
-  Data_Get_Struct(left_val, afstruct, left);
-  Data_Get_Struct(right_val, afstruct, right);
-
-
-  result->ndims = left->ndims;
-  result->dimension = left->dimension;
-  result->count = left->count;
-  arf::add(result, left, right);
-
-  return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
-}
-
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
-  afstruct* left;
-  afstruct* right;
-
-  bool result = true;
-
-  size_t i;
-  size_t count = 1;
-
-  Data_Get_Struct(left_val, afstruct, left);
-  Data_Get_Struct(right_val, afstruct, right);
-
-  for(size_t i = 0; i < left->ndims; i++){
-    if(left->dimension[i]!= right->dimension[i]){
-      return Qfalse;
-    }
-  }
-
-  for(size_t i = 0; i < left->count; i++){
-    if(left->array[i]!= right->array[i]){
-      return Qfalse;
-    }
-  }
-
-  return Qtrue;
+  return Qnil;
 }
 
 DEF_ELEMENTWISE_RUBY_ACCESSOR(add, add)
@@ -961,19 +919,7 @@ static VALUE arf_qr_inplace(VALUE self){
 }
 
 static VALUE arf_cholesky(VALUE self, VALUE val){
-
-  afstruct* matrix;
-  afstruct* result = ALLOC(afstruct);
-
-  Data_Get_Struct(val, afstruct, matrix);
-
-
-  result->ndims = matrix->ndims;
-  result->dimension = matrix->dimension;
-  result->count = matrix->count;
-  arf::cholesky_(result, matrix);
-
-  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, result);
+  return Qnil;
 }
 
 static VALUE arf_cholesky_inplace(VALUE self){
@@ -989,44 +935,18 @@ static VALUE arf_solve_lu(VALUE self){
 }
 
 static VALUE arf_inverse(VALUE self){
-
-  afstruct* matrix;
-  afstruct* result = ALLOC(afstruct);
-
-  Data_Get_Struct(self, afstruct, matrix);
-
-  result->ndims = matrix->ndims;
-  result->dimension = matrix->dimension;
-  result->count = matrix->count;
-  arf::inverse_(result, matrix);
-
-  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
+  return Qnil;
 }
 static VALUE arf_rank(VALUE self){
   return Qnil;
 }
 
 static VALUE arf_det(VALUE self, VALUE val){
-
-  afstruct* matrix;
-  Data_Get_Struct(val, afstruct, matrix);
-
-  af_array m;
-  dim_t dims[matrix->ndims] ;
-  for (size_t index = 0; index < matrix->ndims; ++index){
-    dims[index] = (dim_t)matrix->dimension[index];
-  }
-  af_create_array( &m, matrix->array, matrix->ndims, dims, f64 );
-  double real, imaginary;
-  af_det(&real,&imaginary,m);
-  return DBL2NUM(real);
+  return Qnil;
 }
 
 static VALUE arf_norm(VALUE self, VALUE val){
-  afstruct* matrix
-  Data_Get_Struct(val, afstruct, matrix);
-  double norm = arf::norm_(matrix);
-  return DBL2NUM(norm);
+  return Qnil;
 }
 
 static VALUE arf_is_lapack_available(VALUE self){
