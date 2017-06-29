@@ -115,13 +115,13 @@ static VALUE arf_constant_ulong(int argc, VALUE* argv);
 static VALUE arf_range(int argc, VALUE* argv);
 static VALUE arf_iota(VALUE self);
 static VALUE arf_identity(int argc, VALUE* argv);
-static VALUE arf_diag_create(VALUE self, VALUE array_val, VALUE num_val)
-static VALUE arf_diag_extract(VALUE self, VALUE array_val, VALUE num_val)
-static VALUE arf_join(VALUE self);
+static VALUE arf_diag_create(VALUE self, VALUE array_val, VALUE num_val);
+static VALUE arf_diag_extract(VALUE self, VALUE array_val, VALUE num_val);
+static VALUE arf_join(VALUE self, VALUE dim_val, VALUE first_array_val, VALUE second_array_val);
 static VALUE arf_join_many(VALUE self);
-static VALUE arf_tile(VALUE self);
-static VALUE arf_reorder(VALUE self);
-static VALUE arf_shift(VALUE self);
+static VALUE arf_tile(VALUE self, VALUE array_val, VALUE x_val, VALUE y_val, VALUE z_val, VALUE w_val);
+static VALUE arf_reorder(VALUE self, VALUE array_val, VALUE x_val, VALUE y_val, VALUE z_val, VALUE w_val);
+static VALUE arf_shift(VALUE self, VALUE array_val, VALUE x_val, VALUE y_val, VALUE z_val, VALUE w_val);
 static VALUE arf_moddims(VALUE self);
 static VALUE arf_flat(VALUE self);
 static VALUE arf_flip(VALUE self);
@@ -375,11 +375,11 @@ void Init_arrayfire() {
   rb_define_singleton_method(Data, "identity", (METHOD)arf_identity, -1);
   rb_define_singleton_method(Data, "diag_create", (METHOD)arf_diag_create, 2);
   rb_define_singleton_method(Data, "diag_extract", (METHOD)arf_diag_extract, 2);
-  rb_define_singleton_method(Data, "join", (METHOD)arf_join, 0);
+  rb_define_singleton_method(Data, "join", (METHOD)arf_join, 3);
   rb_define_singleton_method(Data, "join_many", (METHOD)arf_join_many, 0);
-  rb_define_singleton_method(Data, "tile", (METHOD)arf_tile, 0);
-  rb_define_singleton_method(Data, "reorder", (METHOD)arf_reorder, 0);
-  rb_define_singleton_method(Data, "shift", (METHOD)arf_shift, 0);
+  rb_define_singleton_method(Data, "tile", (METHOD)arf_tile, 5);
+  rb_define_singleton_method(Data, "reorder", (METHOD)arf_reorder, 5);
+  rb_define_singleton_method(Data, "shift", (METHOD)arf_shift, 5);
   rb_define_singleton_method(Data, "moddims", (METHOD)arf_moddims, 0);
   rb_define_singleton_method(Data, "flat", (METHOD)arf_flat, 0);
   rb_define_singleton_method(Data, "flip", (METHOD)arf_flip, 0);
