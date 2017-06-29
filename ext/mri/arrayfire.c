@@ -115,8 +115,8 @@ static VALUE arf_constant_ulong(int argc, VALUE* argv);
 static VALUE arf_range(int argc, VALUE* argv);
 static VALUE arf_iota(VALUE self);
 static VALUE arf_identity(int argc, VALUE* argv);
-static VALUE arf_diag_create(VALUE self);
-static VALUE arf_diag_extract(VALUE self);
+static VALUE arf_diag_create(VALUE self, VALUE array_val, VALUE num_val)
+static VALUE arf_diag_extract(VALUE self, VALUE array_val, VALUE num_val)
 static VALUE arf_join(VALUE self);
 static VALUE arf_join_many(VALUE self);
 static VALUE arf_tile(VALUE self);
@@ -373,8 +373,8 @@ void Init_arrayfire() {
   rb_define_singleton_method(Data, "range", (METHOD)arf_range, -1);
   rb_define_singleton_method(Data, "iota", (METHOD)arf_iota, 0);
   rb_define_singleton_method(Data, "identity", (METHOD)arf_identity, -1);
-  rb_define_singleton_method(Data, "diag_create", (METHOD)arf_diag_create, 0);
-  rb_define_singleton_method(Data, "diag_extract", (METHOD)arf_diag_extract, 0);
+  rb_define_singleton_method(Data, "diag_create", (METHOD)arf_diag_create, 2);
+  rb_define_singleton_method(Data, "diag_extract", (METHOD)arf_diag_extract, 2);
   rb_define_singleton_method(Data, "join", (METHOD)arf_join, 0);
   rb_define_singleton_method(Data, "join_many", (METHOD)arf_join_many, 0);
   rb_define_singleton_method(Data, "tile", (METHOD)arf_tile, 0);

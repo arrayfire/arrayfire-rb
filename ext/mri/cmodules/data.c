@@ -90,12 +90,28 @@ static VALUE arf_identity(int argc, VALUE* argv){
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_diag_create(VALUE self){
-  return Qnil;
+static VALUE arf_diag_create(VALUE self, VALUE array_val, VALUE num_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_diag_create(&output->carray, input->carray, NUM2INT(num));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_diag_extract(VALUE self){
-  return Qnil;
+static VALUE arf_diag_extract(VALUE self, VALUE array_val, VALUE num_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_diag_extract(&output->carray, input->carray, NUM2INT(num));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_join(VALUE self){
