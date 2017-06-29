@@ -96,7 +96,7 @@ static VALUE arf_diag_create(VALUE self, VALUE array_val, VALUE num_val){
 
   Data_Get_Struct(array_val, afstruct, input);
 
-  af_diag_create(&output->carray, input->carray, NUM2INT(num));
+  af_diag_create(&output->carray, input->carray, NUM2INT(num_val));
   af_print_array(output->carray);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
@@ -108,30 +108,64 @@ static VALUE arf_diag_extract(VALUE self, VALUE array_val, VALUE num_val){
 
   Data_Get_Struct(array_val, afstruct, input);
 
-  af_diag_extract(&output->carray, input->carray, NUM2INT(num));
+  af_diag_extract(&output->carray, input->carray, NUM2INT(num_val));
   af_print_array(output->carray);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_join(VALUE self){
-  return Qnil;
+static VALUE arf_join(VALUE self, VALUE dim_val, VALUE first_array_val, VALUE second_array_val){
+  afstruct* first_array;
+  afstruct* second_array;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(first_array_val, afstruct, first_array);
+  Data_Get_Struct(second_array_val, afstruct, second_array);
+
+  af_join(&output->carray, NUM2INT(dim_val), first_array->carray, second_array->carray);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_join_many(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_tile(VALUE self){
-  return Qnil;
+static VALUE arf_tile(VALUE self, VALUE array_val, VALUE x_val, VALUE y_val, VALUE z_val, VALUE w_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_tile(&output->carray, input->carray, NUM2UINT(x_val), NUM2UINT(y_val), NUM2UINT(z_val), NUM2UINT(w_val));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_reorder(VALUE self){
-  return Qnil;
+static VALUE arf_reorder(VALUE self, VALUE array_val, VALUE x_val, VALUE y_val, VALUE z_val, VALUE w_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_reorder(&output->carray, input->carray, NUM2UINT(x_val), NUM2UINT(y_val), NUM2UINT(z_val), NUM2UINT(w_val));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_shift(VALUE self){
-  return Qnil;
+static VALUE arf_shift(VALUE self, VALUE array_val, VALUE x_val, VALUE y_val, VALUE z_val, VALUE w_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_shift(&output->carray, input->carray, NUM2INT(x_val), NUM2INT(y_val), NUM2INT(z_val), NUM2INT(w_val));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_moddims(VALUE self){
