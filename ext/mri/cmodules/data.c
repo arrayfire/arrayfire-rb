@@ -172,12 +172,28 @@ static VALUE arf_moddims(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_flat(VALUE self){
-  return Qnil;
+static VALUE arf_flat(VALUE self, VALUE array_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_flat(&output->carray, input->carray);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_flip(VALUE self){
-  return Qnil;
+static VALUE arf_flip(VALUE self, VALUE array_val, VALUE dim_val){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_flip(&output->carray, input->carray, NUM2UINT(dim_val));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_lower(VALUE self){
