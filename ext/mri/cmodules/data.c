@@ -196,12 +196,28 @@ static VALUE arf_flip(VALUE self, VALUE array_val, VALUE dim_val){
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_lower(VALUE self){
-  return Qnil;
+static VALUE arf_lower(VALUE self, VALUE array_val, VALUE is_unit_diag){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_lower(&output->carray, input->carray, RTEST(is_unit_diag));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_upper(VALUE self){
-  return Qnil;
+static VALUE arf_upper(VALUE self, VALUE array_val, VALUE is_unit_diag){
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_val, afstruct, input);
+
+  af_upper(&output->carray, input->carray, RTEST(is_unit_diag));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_select(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE array_b_val){
