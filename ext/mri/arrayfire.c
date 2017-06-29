@@ -130,8 +130,8 @@ static VALUE arf_upper(VALUE self);
 static VALUE arf_select(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE array_b_val);
 static VALUE arf_select_scalar_r(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE b_val);
 static VALUE arf_select_scalar_l(VALUE self, VALUE array_cond_val, VALUE a_val, VALUE array_b_val);
-static VALUE arf_replace(VALUE self);
-static VALUE arf_replace_scalar(VALUE self);
+static void arf_replace(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE array_b_val);
+static void arf_replace_scalar(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE b_val);
 
 
 static VALUE arf_svd(VALUE self, VALUE val);
@@ -388,8 +388,8 @@ void Init_arrayfire() {
   rb_define_singleton_method(Data, "select", (METHOD)arf_select, 3);
   rb_define_singleton_method(Data, "select_scalar_r", (METHOD)arf_select_scalar_r, 3);
   rb_define_singleton_method(Data, "select_scalar_l", (METHOD)arf_select_scalar_l, 3);
-  rb_define_singleton_method(Data, "replace", (METHOD)arf_replace, 0);
-  rb_define_singleton_method(Data, "replace_scalar", (METHOD)arf_replace_scalar, 0);
+  rb_define_singleton_method(Data, "replace", (METHOD)arf_replace, 3);
+  rb_define_singleton_method(Data, "replace_scalar", (METHOD)arf_replace_scalar, 3);
 
   Lapack = rb_define_class_under(ArrayFire, "LAPACK", rb_cObject);
   rb_define_singleton_method(Lapack, "svd", (METHOD)arf_svd, 0);

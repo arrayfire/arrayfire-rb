@@ -248,10 +248,26 @@ static VALUE arf_select_scalar_l(VALUE self, VALUE array_cond_val, VALUE a_val, 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_replace(VALUE self){
-  return Qnil;
+static void arf_replace(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE array_b_val){
+  afstruct* input;
+  afstruct* array_cond;
+  afstruct* array_b;
+
+  Data_Get_Struct(array_input_val, afstruct, input);
+  Data_Get_Struct(array_cond_val, afstruct, array_cond);
+  Data_Get_Struct(array_b_val, afstruct, array_b);
+
+  af_replace(&input->carray, array_cond->carray, array_b->carray);
+
 }
 
-static VALUE arf_replace_scalar(VALUE self){
-  return Qnil;
+static void arf_replace_scalar(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE b_val){
+  afstruct* input;
+  afstruct* array_cond;
+
+  Data_Get_Struct(array_input_val, afstruct, input);
+  Data_Get_Struct(array_cond_val, afstruct, array_cond);
+
+  af_replace_scalar(&input->carray, array_cond->carray, NUM2DBL(b_val));
+
 }
