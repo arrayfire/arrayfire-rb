@@ -53,16 +53,41 @@ static VALUE arf_constant_ulong(int argc, VALUE* argv){
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_range(VALUE self){
-  return Qnil;
+static VALUE arf_range(int argc, VALUE* argv){
+  afstruct* output = ALLOC(afstruct);
+
+  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t count = 1;
+  for (size_t index = 0; index < ndims; index++) {
+    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+    count *= dimensions[index];
+  }
+  int seq_dim = NUM2INT(argv[2]);
+  af_range(&output->carray, ndims, dimensions, seq_dim, f32);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_iota(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_identity(VALUE self){
-  return Qnil;
+static VALUE arf_identity(int argc, VALUE* argv){
+  afstruct* output = ALLOC(afstruct);
+
+  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t count = 1;
+  for (size_t index = 0; index < ndims; index++) {
+    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+    count *= dimensions[index];
+  }
+  af_identity(&output->carray, ndims, dimensions, f32);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_diag_create(VALUE self){
