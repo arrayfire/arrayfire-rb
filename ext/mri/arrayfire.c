@@ -527,23 +527,7 @@ static VALUE arf_get_backend_device_id(VALUE self){
 }
 
 #include "cmodules/blas.c"
-
-// CUDA
-
-static VALUE arf_get_stream(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_get_native_id(VALUE self){
-  return Qnil;
-}
-
-static VALUE arf_set_native_id(VALUE self){
-  return Qnil;
-}
-
-// Device
-
+#include "cmodules/cuda.c"
 #include "cmodules/device.c"
 #include "cmodules/opencl.c"
 #include "cmodules/data.c"
