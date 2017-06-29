@@ -108,7 +108,7 @@ static VALUE arf_delete_device_context(VALUE self);
 static VALUE arf_get_device_type(VALUE self);
 static VALUE arf_get_platform(VALUE self);
 
-static VALUE arf_constant(VALUE self);
+static VALUE arf_constant(int argc, VALUE* argv);
 static VALUE arf_constant_complex(VALUE self);
 static VALUE arf_constant_long(VALUE self);
 static VALUE arf_constant_ulong(VALUE self);
@@ -366,7 +366,7 @@ void Init_arrayfire() {
   rb_define_singleton_method(OpenCL, "get_platform", (METHOD)arf_get_platform, 0);
 
   Data = rb_define_class_under(ArrayFire, "Data", rb_cObject);
-  rb_define_singleton_method(Data, "constant", (METHOD)arf_constant, 0);
+  rb_define_singleton_method(Data, "constant", (METHOD)arf_constant, -1);
   rb_define_singleton_method(Data, "constant_complex", (METHOD)arf_constant_complex, 0);
   rb_define_singleton_method(Data, "constant_long", (METHOD)arf_constant_long, 0);
   rb_define_singleton_method(Data, "constant_ulong", (METHOD)arf_constant_ulong, 0);

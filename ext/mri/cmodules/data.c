@@ -1,5 +1,19 @@
-static VALUE arf_constant(VALUE self){
-  return Qnil;
+static VALUE arf_constant(int argc, VALUE* argv)
+{
+  afstruct* output = ALLOC(afstruct);
+
+  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t count = 1;
+  for (size_t index = 0; index < ndims; index++) {
+    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+    count *= dimensions[index];
+  }
+  float data = NUM2DBL(argv[2]);
+  af_constant(&output->carray, data, 2, dimensions, f32);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_constant_complex(VALUE self){
