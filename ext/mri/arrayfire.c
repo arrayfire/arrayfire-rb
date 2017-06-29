@@ -500,32 +500,8 @@ DEF_UNARY_RUBY_ACCESSOR(tgamma, tgamma)
 DEF_UNARY_RUBY_ACCESSOR(floor, floor)
 DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 
-// Algorithm
-
 #include "cmodules/algorithm.c"
-
-// Backend
-
-static VALUE arf_get_backend_count(VALUE self){
-   return Qnil;
-}
-
-static VALUE arf_get_available_backends(VALUE self){
-   return Qnil;
-}
-
-static VALUE arf_get_backend_id(VALUE self){
-   return Qnil;
-}
-
-static VALUE arf_get_active_backend(VALUE self){
-   return Qnil;
-}
-
-static VALUE arf_get_backend_device_id(VALUE self){
-   return Qnil;
-}
-
+#include "cmodules/backend.c"
 #include "cmodules/blas.c"
 #include "cmodules/cuda.c"
 #include "cmodules/device.c"
