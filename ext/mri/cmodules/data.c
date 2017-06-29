@@ -204,16 +204,48 @@ static VALUE arf_upper(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_select(VALUE self){
-  return Qnil;
+static VALUE arf_select(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE array_b_val){
+  afstruct* array_cond;
+  afstruct* array_a;
+  afstruct* array_b;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_cond_val, afstruct, array_cond);
+  Data_Get_Struct(array_a_val, afstruct, array_a);
+  Data_Get_Struct(array_b_val, afstruct, array_b);
+
+  af_select(&output->carray, array_cond->carray, array_a->carray, array_b->carray);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_select_scalar_r(VALUE self){
-  return Qnil;
+static VALUE arf_select_scalar_r(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE b_val){
+  afstruct* array_cond;
+  afstruct* array_a;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_cond_val, afstruct, array_cond);
+  Data_Get_Struct(array_a_val, afstruct, array_a);
+
+  af_select_scalar_r(&output->carray, array_cond->carray, array_a->carray, NUM2DBL(b_val));
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
-static VALUE arf_select_scalar_l(VALUE self){
-  return Qnil;
+static VALUE arf_select_scalar_l(VALUE self, VALUE array_cond_val, VALUE a_val, VALUE array_b_val){
+  afstruct* array_cond;
+  afstruct* array_b;
+  afstruct* output = ALLOC(afstruct);
+
+  Data_Get_Struct(array_cond_val, afstruct, array_cond);
+  Data_Get_Struct(array_b_val, afstruct, array_b);
+
+  af_select_scalar_l(&output->carray, array_cond->carray, NUM2DBL(a_val), array_b->carray);
+  af_print_array(output->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
 
 static VALUE arf_replace(VALUE self){
