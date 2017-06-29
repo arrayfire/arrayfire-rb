@@ -110,8 +110,8 @@ static VALUE arf_get_platform(VALUE self);
 
 static VALUE arf_constant(int argc, VALUE* argv);
 static VALUE arf_constant_complex(VALUE self);
-static VALUE arf_constant_long(VALUE self);
-static VALUE arf_constant_ulong(VALUE self);
+static VALUE arf_constant_long(int argc, VALUE* argv);
+static VALUE arf_constant_ulong(int argc, VALUE* argv);
 static VALUE arf_range(VALUE self);
 static VALUE arf_iota(VALUE self);
 static VALUE arf_identity(VALUE self);
@@ -368,8 +368,8 @@ void Init_arrayfire() {
   Data = rb_define_class_under(ArrayFire, "Data", rb_cObject);
   rb_define_singleton_method(Data, "constant", (METHOD)arf_constant, -1);
   rb_define_singleton_method(Data, "constant_complex", (METHOD)arf_constant_complex, 0);
-  rb_define_singleton_method(Data, "constant_long", (METHOD)arf_constant_long, 0);
-  rb_define_singleton_method(Data, "constant_ulong", (METHOD)arf_constant_ulong, 0);
+  rb_define_singleton_method(Data, "constant_long", (METHOD)arf_constant_long, -1);
+  rb_define_singleton_method(Data, "constant_ulong", (METHOD)arf_constant_ulong, -1);
   rb_define_singleton_method(Data, "range", (METHOD)arf_range, 0);
   rb_define_singleton_method(Data, "iota", (METHOD)arf_iota, 0);
   rb_define_singleton_method(Data, "identity", (METHOD)arf_identity, 0);
