@@ -32,16 +32,26 @@ static VALUE arf_get_data_ptr(VALUE self){
   return rb_ary_new4(count, array);
 }
 
-static VALUE arf_release_array(VALUE self){
-  return Qnil;
+static void arf_release_array(VALUE self){
+  afstruct* input;
+  Data_Get_Struct(self, afstruct, input);
+  af_release_array(input->carray);
 }
 
 static VALUE arf_retain_array(VALUE self){
-  return Qnil;
+  afstruct* input;
+  afstruct* output = ALLOC(afstruct);
+  Data_Get_Struct(self, afstruct, input);
+  af_retain_array(&output->carray, input->carray);
+  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, output);
 }
 
 static VALUE arf_get_data_ref_count(VALUE self){
-  return Qnil;
+  afstruct* input;
+  int use_count;
+  Data_Get_Struct(self, afstruct, input);
+  af_get_data_ref_count(&use_count, input->carray);
+  return INT2NUM(use_count);
 }
 
 static VALUE arf_eval(VALUE self){

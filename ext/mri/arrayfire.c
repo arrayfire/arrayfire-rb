@@ -26,7 +26,7 @@ static VALUE arf_create_handle(VALUE self);
 static VALUE arf_copy_array(VALUE self);
 static VALUE arf_write_array(VALUE self);
 static VALUE arf_get_data_ptr(VALUE self);
-static VALUE arf_release_array(VALUE self);
+static void arf_release_array(VALUE self);
 static VALUE arf_retain_array(VALUE self);
 static VALUE arf_get_data_ref_count(VALUE self);
 static VALUE arf_eval(VALUE self);
