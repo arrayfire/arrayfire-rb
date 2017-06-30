@@ -10,6 +10,7 @@ VALUE Blas = Qnil;
 VALUE Cuda = Qnil;
 VALUE Data = Qnil;
 VALUE Device = Qnil;
+VALUE Index = Qnil;
 VALUE Lapack = Qnil;
 VALUE OpenCL = Qnil;
 VALUE Random = Qnil;
@@ -164,6 +165,16 @@ static VALUE arf_select_scalar_l(VALUE self, VALUE array_cond_val, VALUE a_val, 
 static void arf_replace(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE array_b_val);
 static void arf_replace_scalar(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE b_val);
 
+static VALUE arf_index(VALUE self);
+static VALUE arf_lookup(VALUE self);
+static VALUE arf_assign_seq(VALUE self);
+static VALUE arf_index_gen(VALUE self);
+static VALUE arf_assign_gen(VALUE self);
+static VALUE arf_create_indexers(VALUE self);
+static VALUE arf_set_array_indexer(VALUE self);
+static VALUE arf_set_seq_indexer(VALUE self);
+static VALUE arf_set_seq_param_indexer(VALUE self);
+static VALUE arf_release_indexers(VALUE self);
 
 static VALUE arf_svd(VALUE self, VALUE val);
 static VALUE arf_svd_inplace(VALUE self, VALUE val);
@@ -417,6 +428,18 @@ void Init_arrayfire() {
   rb_define_singleton_method(Cuda, "get_native_id", (METHOD)arf_get_native_id, 0);
   rb_define_singleton_method(Cuda, "set_native_id", (METHOD)arf_set_native_id, 0);
 
+  Index = rb_define_class_under(ArrayFire, "Index", rb_cObject);
+  rb_define_singleton_method(Index, "index", (METHOD)arf_index, 0);
+  rb_define_singleton_method(Index, "lookup", (METHOD)arf_lookup, 0);
+  rb_define_singleton_method(Index, "assign_seq", (METHOD)arf_assign_seq, 0);
+  rb_define_singleton_method(Index, "index_gen", (METHOD)arf_index_gen, 0);
+  rb_define_singleton_method(Index, "assign_gen", (METHOD)arf_assign_gen, 0);
+  rb_define_singleton_method(Index, "create_indexers", (METHOD)arf_create_indexers, 0);
+  rb_define_singleton_method(Index, "set_array_indexer", (METHOD)arf_set_array_indexer, 0);
+  rb_define_singleton_method(Index, "set_seq_indexer", (METHOD)arf_set_seq_indexer, 0);
+  rb_define_singleton_method(Index, "set_seq_param_indexer", (METHOD)arf_set_seq_param_indexer, 0);
+  rb_define_singleton_method(Index, "release_indexers", (METHOD)arf_release_indexers, 0);
+
   OpenCL = rb_define_class_under(ArrayFire, "OpenCL", rb_cObject);
   rb_define_singleton_method(OpenCL, "get_context", (METHOD)arf_get_context, 0);
   rb_define_singleton_method(OpenCL, "get_queue", (METHOD)arf_get_queue, 0);
@@ -569,6 +592,7 @@ DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 #include "cmodules/blas.c"
 #include "cmodules/cuda.c"
 #include "cmodules/device.c"
+#include "cmodules/index.c"
 #include "cmodules/opencl.c"
 #include "cmodules/data.c"
 #include "cmodules/lapack.c"
