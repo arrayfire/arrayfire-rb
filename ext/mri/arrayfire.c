@@ -20,6 +20,37 @@ static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
 static void arf_free(afstruct* af);
 
+static VALUE arf_create_array(VALUE self);
+static VALUE arf_create_handle(VALUE self);
+static VALUE arf_copy_array(VALUE self);
+static VALUE arf_write_array(VALUE self);
+static VALUE arf_get_data_ptr(VALUE self);
+static VALUE arf_release_array(VALUE self);
+static VALUE arf_retain_array(VALUE self);
+static VALUE arf_get_data_ref_count(VALUE self);
+static VALUE arf_eval(VALUE self);
+static VALUE arf_eval_multiple(VALUE self);
+static VALUE arf_set_manual_eval_flag(VALUE self);
+static VALUE arf_get_manual_eval_flag(VALUE self);
+static VALUE arf_get_elements(VALUE self);
+static VALUE arf_get_type(VALUE self);
+static VALUE arf_get_dims(VALUE self);
+static VALUE arf_get_numdims(VALUE self);
+static VALUE arf_is_empty(VALUE self);
+static VALUE arf_is_scalar(VALUE self);
+static VALUE arf_is_row(VALUE self);
+static VALUE arf_is_column(VALUE self);
+static VALUE arf_is_vector(VALUE self);
+static VALUE arf_is_complex(VALUE self);
+static VALUE arf_is_real(VALUE self);
+static VALUE arf_is_double(VALUE self);
+static VALUE arf_is_single(VALUE self);
+static VALUE arf_is_realfloating(VALUE self);
+static VALUE arf_is_floating(VALUE self);
+static VALUE arf_is_integer(VALUE self);
+static VALUE arf_is_bool(VALUE self);
+static VALUE arf_is_sparse(VALUE self);
+
 static VALUE arf_sum(VALUE self, VALUE array_val, VALUE dim_val);
 static VALUE arf_sum_nan(VALUE self, VALUE array_val, VALUE dim_val, VALUE nan_val);
 static VALUE arf_product(VALUE self, VALUE array_val, VALUE dim_val);
@@ -240,6 +271,38 @@ void Init_arrayfire() {
   Af_Array = rb_define_class_under(ArrayFire, "Af_Array", rb_cObject);
   rb_define_alloc_func(Af_Array, arf_alloc);
   rb_define_method(Af_Array, "initialize", (METHOD)arf_init, -1);
+  rb_define_method(Af_Array, "arf_create_array", (METHOD)arf_create_array, 0);
+  rb_define_method(Af_Array, "arf_create_handle", (METHOD)arf_create_handle, 0);
+  rb_define_method(Af_Array, "arf_copy_array", (METHOD)arf_copy_array, 0);
+  rb_define_method(Af_Array, "arf_write_array", (METHOD)arf_write_array, 0);
+  rb_define_method(Af_Array, "arf_get_data_ptr", (METHOD)arf_get_data_ptr, 0);
+  rb_define_method(Af_Array, "arf_release_array", (METHOD)arf_release_array, 0);
+  rb_define_method(Af_Array, "arf_retain_array", (METHOD)arf_retain_array, 0);
+  rb_define_method(Af_Array, "arf_get_data_ref_count", (METHOD)arf_get_data_ref_count, 0);
+  rb_define_method(Af_Array, "arf_eval", (METHOD)arf_eval, 0);
+  rb_define_method(Af_Array, "arf_eval_multiple", (METHOD)arf_eval_multiple, 0);
+  rb_define_method(Af_Array, "arf_set_manual_eval_flag", (METHOD)arf_set_manual_eval_flag, 0);
+  rb_define_method(Af_Array, "arf_get_manual_eval_flag", (METHOD)arf_get_manual_eval_flag, 0);
+  rb_define_method(Af_Array, "arf_get_elements", (METHOD)arf_get_elements, 0);
+  rb_define_method(Af_Array, "arf_get_type", (METHOD)arf_get_type, 0);
+  rb_define_method(Af_Array, "arf_get_dims", (METHOD)arf_get_dims, 0);
+  rb_define_method(Af_Array, "arf_get_numdims", (METHOD)arf_get_numdims, 0);
+  rb_define_method(Af_Array, "arf_is_empty", (METHOD)arf_is_empty, 0);
+  rb_define_method(Af_Array, "arf_is_scalar", (METHOD)arf_is_scalar, 0);
+  rb_define_method(Af_Array, "arf_is_row", (METHOD)arf_is_row, 0);
+  rb_define_method(Af_Array, "arf_is_column", (METHOD)arf_is_column, 0);
+  rb_define_method(Af_Array, "arf_is_vector", (METHOD)arf_is_vector, 0);
+  rb_define_method(Af_Array, "arf_is_complex", (METHOD)arf_is_complex, 0);
+  rb_define_method(Af_Array, "arf_is_real", (METHOD)arf_is_real, 0);
+  rb_define_method(Af_Array, "arf_is_double", (METHOD)arf_is_double, 0);
+  rb_define_method(Af_Array, "arf_is_single", (METHOD)arf_is_single, 0);
+  rb_define_method(Af_Array, "arf_is_realfloating", (METHOD)arf_is_realfloating, 0);
+  rb_define_method(Af_Array, "arf_is_floating", (METHOD)arf_is_floating, 0);
+  rb_define_method(Af_Array, "arf_is_integer", (METHOD)arf_is_integer, 0);
+  rb_define_method(Af_Array, "arf_is_bool", (METHOD)arf_is_bool, 0);
+  rb_define_method(Af_Array, "arf_is_sparse", (METHOD)arf_is_sparse, 0);
+
+
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
   rb_define_method(Af_Array, "-",(METHOD)arf_ew_subtract,1);
   rb_define_method(Af_Array, "*",(METHOD)arf_ew_multiply,1);
@@ -500,6 +563,7 @@ DEF_UNARY_RUBY_ACCESSOR(tgamma, tgamma)
 DEF_UNARY_RUBY_ACCESSOR(floor, floor)
 DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 
+#include "cmodules/array.c"
 #include "cmodules/algorithm.c"
 #include "cmodules/backend.c"
 #include "cmodules/blas.c"
