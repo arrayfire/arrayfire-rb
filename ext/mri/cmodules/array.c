@@ -1,9 +1,43 @@
-static VALUE arf_create_array(VALUE self){
-  return Qnil;
+static VALUE arf_create_array(int argc, VALUE* argv){
+  afstruct* afarray = ALLOC(afstruct);
+  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t count = 1;
+  for (size_t index = 0; index < ndims; index++) {
+    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+    count *= dimensions[index];
+  }
+  float* host_array = (float*)malloc(count * sizeof(float));
+  for (size_t index = 0; index < count; index++) {
+    host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
+  }
+
+  af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
+
+  af_print_array(afarray->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, afarray);
 }
 
-static VALUE arf_create_handle(VALUE self){
-  return Qnil;
+static VALUE arf_create_handle(int argc, VALUE* argv){
+  afstruct* afarray = ALLOC(afstruct);
+  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t count = 1;
+  for (size_t index = 0; index < ndims; index++) {
+    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+    count *= dimensions[index];
+  }
+  float* host_array = (float*)malloc(count * sizeof(float));
+  for (size_t index = 0; index < count; index++) {
+    host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
+  }
+
+  af_create_handle(&afarray->carray, ndims, dimensions, f32);
+
+  af_print_array(afarray->carray);
+
+  return Data_Wrap_Struct(Af_Array, NULL, arf_free, afarray);
 }
 
 static VALUE arf_copy_array(VALUE self){
