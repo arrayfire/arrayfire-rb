@@ -392,7 +392,7 @@ void Init_arrayfire() {
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
   rb_define_singleton_method(Device, "info", (METHOD)arf_info, 0);
-  rb_define_method(Device, "init", (METHOD)arf_init, 0);
+  rb_define_method(Device, "init", (METHOD)arf_init2, 0);
   rb_define_method(Device, "info_string", (METHOD)arf_info_string, 0);
   rb_define_method(Device, "device_info", (METHOD)arf_device_info, 0);
   rb_define_method(Device, "get_device_count", (METHOD)arf_get_device_count, 0);
@@ -530,7 +530,7 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
     host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
-  af_create_array(&afarray->carray, host_array, 2, dimensions, f32);
+  af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
 
   af_print_array(afarray->carray);
 
