@@ -21,8 +21,8 @@ static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
 static void arf_free(afstruct* af);
 
-static VALUE arf_create_array(VALUE self);
-static VALUE arf_create_handle(VALUE self);
+static VALUE arf_create_array(int argc, VALUE* argv);
+static VALUE arf_create_handle(int argc, VALUE* argv);
 static VALUE arf_copy_array(VALUE self);
 static VALUE arf_write_array(VALUE self);
 static VALUE arf_get_data_ptr(VALUE self);
@@ -282,8 +282,8 @@ void Init_arrayfire() {
   Af_Array = rb_define_class_under(ArrayFire, "Af_Array", rb_cObject);
   rb_define_alloc_func(Af_Array, arf_alloc);
   rb_define_method(Af_Array, "initialize", (METHOD)arf_init, -1);
-  rb_define_method(Af_Array, "create_array", (METHOD)arf_create_array, 0);
-  rb_define_method(Af_Array, "create_handle", (METHOD)arf_create_handle, 0);
+  rb_define_singleton_method(Af_Array, "create_array", (METHOD)arf_create_array, -1);
+  rb_define_singleton_method(Af_Array, "create_handle", (METHOD)arf_create_handle, -1);
   rb_define_method(Af_Array, "copy_array", (METHOD)arf_copy_array, 0);
   rb_define_method(Af_Array, "write_array", (METHOD)arf_write_array, 0);
   rb_define_method(Af_Array, "get_data_ptr", (METHOD)arf_get_data_ptr, 0);
