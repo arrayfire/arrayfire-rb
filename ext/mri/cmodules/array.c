@@ -15,7 +15,21 @@ static VALUE arf_write_array(VALUE self){
 }
 
 static VALUE arf_get_data_ptr(VALUE self){
-  return Qnil;
+  afstruct* input;
+  dim_t count;
+
+  Data_Get_Struct(self, afstruct, input);
+
+  af_get_elements(&count, input->carray);
+  float* data = (float*)malloc(count * sizeof(float));
+  af_get_data_ptr(data, input->carray);
+
+  VALUE* array = ALLOC_N(VALUE, count);
+  for (size_t index = 0; index < (size_t)count; index++){
+    array[index] = DBL2NUM(data[index]);
+  }
+
+  return rb_ary_new4(count, array);
 }
 
 static VALUE arf_release_array(VALUE self){
