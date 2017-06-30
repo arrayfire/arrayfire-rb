@@ -41,7 +41,14 @@ static VALUE arf_create_handle(int argc, VALUE* argv){
 }
 
 static VALUE arf_copy_array(VALUE self){
-  return Qnil;
+  afstruct* array_val;
+  afstruct* result = ALLOC(afstruct);
+
+  Data_Get_Struct(self, afstruct, result);
+
+  af_copy_array(&result->carray, result->carray);
+
+  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
 }
 
 static VALUE arf_write_array(VALUE self){
