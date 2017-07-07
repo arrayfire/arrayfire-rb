@@ -240,6 +240,13 @@ DECL_ELEMENTWISE_RUBY_ACCESSOR(subtract)
 DECL_ELEMENTWISE_RUBY_ACCESSOR(multiply)
 DECL_ELEMENTWISE_RUBY_ACCESSOR(divide)
 
+DECL_ELEMENTWISE_RUBY_ACCESSOR(eqeq)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(neq)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(leq)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(geq)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(lt)
+DECL_ELEMENTWISE_RUBY_ACCESSOR(gt)
+
 DECL_UNARY_RUBY_ACCESSOR(sin)
 DECL_UNARY_RUBY_ACCESSOR(cos)
 DECL_UNARY_RUBY_ACCESSOR(tan)
@@ -321,6 +328,13 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "*",(METHOD)arf_ew_multiply,1);
   rb_define_method(Af_Array, "/",(METHOD)arf_ew_divide,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
+
+  rb_define_method(Af_Array, "=~",(METHOD)arf_ew_eqeq,1);
+  rb_define_method(Af_Array, "!~", (METHOD)arf_ew_neq, 1);
+  rb_define_method(Af_Array, "<=", (METHOD)arf_ew_leq, 1);
+  rb_define_method(Af_Array, ">=", (METHOD)arf_ew_geq, 1);
+  rb_define_method(Af_Array, "<", (METHOD)arf_ew_lt, 1);
+  rb_define_method(Af_Array, ">", (METHOD)arf_ew_gt, 1);
 
   rb_define_method(Af_Array, "sin", (METHOD)arf_unary_sin, 0);
   rb_define_method(Af_Array, "cos", (METHOD)arf_unary_cos, 0);
@@ -562,6 +576,13 @@ DEF_ELEMENTWISE_RUBY_ACCESSOR(add, add)
 DEF_ELEMENTWISE_RUBY_ACCESSOR(subtract, sub)
 DEF_ELEMENTWISE_RUBY_ACCESSOR(multiply, mul)
 DEF_ELEMENTWISE_RUBY_ACCESSOR(divide, div)
+
+DEF_ELEMENTWISE_RUBY_ACCESSOR(eqeq, eq)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(neq, neq)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(leq, le)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(geq, ge)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(lt, lt)
+DEF_ELEMENTWISE_RUBY_ACCESSOR(gt, gt)
 
 DEF_UNARY_RUBY_ACCESSOR(sin, sin)
 DEF_UNARY_RUBY_ACCESSOR(cos, cos)
