@@ -320,8 +320,10 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "is_bool", (METHOD)arf_is_bool, 0);
   rb_define_method(Af_Array, "is_sparse", (METHOD)arf_is_sparse, 0);
 
-  rb_define_alias(Af_Array, "to_cpu", "get_data_ptr");
   rb_define_alias(Af_Array, "ndims", "get_numdims");
+  rb_define_alias(Af_Array, "dims", "get_dims");
+  rb_define_alias(Af_Array, "to_cpu", "get_data_ptr");
+  rb_define_alias(Af_Array, "elements", "get_data_ptr");
 
   rb_define_method(Af_Array, "+",(METHOD)arf_ew_add,1);
   rb_define_method(Af_Array, "-",(METHOD)arf_ew_subtract,1);
