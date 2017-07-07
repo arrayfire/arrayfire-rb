@@ -134,12 +134,21 @@ static VALUE arf_get_type(VALUE self){
 
 static VALUE arf_get_dims(VALUE self){
   afstruct* input;
-  dim_t d0, d1, d2, d3;
+  uint ndims;
+  dim_t* dims = (dim_t*)malloc(ndims * sizeof(dim_t));;
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_get_dims(&d0, &d1, &d2, &d3, input->carray);
-  return Qnil;
+  af_get_numdims(&ndims, input->carray);
+
+  af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
+
+  VALUE* array = ALLOC_N(VALUE, ndims);
+  for (size_t index = 0; index < ndims; index++){
+    array[index] = UINT2NUM(dims[index]);
+  }
+
+  return rb_ary_new4(ndims, array);
 }
 
 static VALUE arf_get_numdims(VALUE self){
