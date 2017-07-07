@@ -578,15 +578,14 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
 
   dim_t count;
   af_get_elements(&count, result->carray);
-  float* data = (float*)malloc(count * sizeof(float));
+  bool* data = (bool*)malloc(count * sizeof(bool));
   af_get_data_ptr(data, result->carray);
 
   for (size_t index = 0; index < (size_t)count; index++){
-    if(data[index] == 0){
+    if(!data[index]){
       return Qfalse;
     }
   }
-
   return Qtrue;
 }
 
