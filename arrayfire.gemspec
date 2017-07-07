@@ -21,4 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake-compiler', '~>0.8'
   gem.add_development_dependency 'rdoc', '~>4.0', '>=4.0.1'
   gem.add_development_dependency 'rspec', '~>2.14'
+  gem.add_development_dependency 'rspec-its'
 end
