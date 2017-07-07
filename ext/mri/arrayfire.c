@@ -569,7 +569,25 @@ static void arf_free(afstruct* af)
 DEF_ELEMENTWISE_RUBY_ACCESSOR(ADD, add)
 
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
-  return Qnil;
+  afstruct* left;
+  afstruct* right;
+  afstruct* result = ALLOC(afstruct);
+  Data_Get_Struct(left_val, afstruct, left);
+  Data_Get_Struct(right_val, afstruct, right);
+  af_eq(&result->carray,  left->carray, right->carray, true);
+
+  dim_t count;
+  af_get_elements(&count, result->carray);
+  float* data = (float*)malloc(count * sizeof(float));
+  af_get_data_ptr(data, result->carray);
+
+  for (size_t index = 0; index < (size_t)count; index++){
+    if(data[index] == 0){
+      return Qfalse;
+    }
+  }
+
+  return Qtrue;
 }
 
 DEF_ELEMENTWISE_RUBY_ACCESSOR(add, add)
