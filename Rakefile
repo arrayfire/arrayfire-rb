@@ -21,3 +21,9 @@ end
 def run(*cmd)
   sh(cmd.join(' '))
 end
+
+require "rdoc/task"
+RDoc::Task.new do |rdoc|
+  rdoc.main = "README.md"
+  rdoc.rdoc_files.include(%w{README.md LICENSE CONTRIBUTING.md lib ext})
+end
