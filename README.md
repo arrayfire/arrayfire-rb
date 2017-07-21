@@ -18,7 +18,12 @@ cd arrayfire/
 gem install bundler
 bundle install
 rake compile
-rspec
+```
+
+Run the tests using
+
+```sh
+rake test
 ```
 
 If you want to try out the code without installing:
