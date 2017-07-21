@@ -1,11 +1,15 @@
-require 'spec_helper'
+require 'test_helper'
 
-describe ArrayFire::BLAS do
-  context '#matmul' do
-    let(:a) { ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4] }
-    let(:b) { ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4] }
-    let(:c) { ArrayFire::Af_Array.new 2, [2,2],[7.0,10.0,15.0,22.0] }
-    subject {ArrayFire::BLAS.matmul(a,b)}
-    it {is_expected.to eq c}
+class ArrayFire::BLASTest < Minitest::Test
+
+  def setup
+    @a = ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4]
+    @b = ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4]
   end
+
+  def test_matmul
+    c =  ArrayFire::Af_Array.new 2, [2,2],[7.0,10.0,15.0,22.0]
+    assert_equal c, ArrayFire::BLAS.matmul(@a,@b)
+  end
+
 end

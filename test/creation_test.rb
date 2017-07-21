@@ -1,20 +1,21 @@
-require 'spec_helper'
+require 'test_helper'
 
-describe ArrayFire::Af_Array do
-  context '#initialize' do
-    let(:i) { ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4] }
-    subject { i }
-    its(:ndims) { is_expected.to eq 2 }
-    its(:dims) { is_expected.to eq [2,2] }
-    its(:elements) {is_expected.to eq [1,2,3,4]}
+class ArrayFire::Af_ArrayTest < Minitest::Test
+
+  def setup
+    @i = ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4]
   end
 
-  context '#addition' do
-    let(:a) { ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4] }
-    let(:b) { ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4] }
-    let(:c) { ArrayFire::Af_Array.new 2, [2,2],[2,4,6,8] }
-    subject {a+b}
-    it {is_expected.to eq c}
+  def test_ndims
+    assert_equal 2, @i.ndims
+  end
+
+  def test_dims
+    assert_equal [2,2], @i.dims
+  end
+
+  def test_elements
+    assert_equal [1, 2, 3, 4], @i.elements
   end
 
 end
