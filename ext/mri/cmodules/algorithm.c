@@ -105,7 +105,7 @@ static VALUE arf_sum_all(VALUE self, VALUE array_val){
 
   af_sum_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_sum_nan_all(VALUE self, VALUE array_val, VALUE nan_val){
@@ -116,7 +116,7 @@ static VALUE arf_sum_nan_all(VALUE self, VALUE array_val, VALUE nan_val){
 
   af_sum_nan_all(&real_part, &imag_part, input->carray, NUM2DBL(nan_val));
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_product_all(VALUE self, VALUE array_val){
@@ -127,7 +127,7 @@ static VALUE arf_product_all(VALUE self, VALUE array_val){
 
   af_product_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_product_nan_all(VALUE self, VALUE array_val, VALUE nan_val){
@@ -138,7 +138,7 @@ static VALUE arf_product_nan_all(VALUE self, VALUE array_val, VALUE nan_val){
 
   af_product_nan_all(&real_part, &imag_part, input->carray, NUM2DBL(nan_val));
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_min_all(VALUE self, VALUE array_val){
@@ -149,7 +149,7 @@ static VALUE arf_min_all(VALUE self, VALUE array_val){
 
   af_min_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_max_all(VALUE self, VALUE array_val){
@@ -160,7 +160,7 @@ static VALUE arf_max_all(VALUE self, VALUE array_val){
 
   af_max_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_all_true_all(VALUE self, VALUE array_val){
@@ -171,7 +171,7 @@ static VALUE arf_all_true_all(VALUE self, VALUE array_val){
 
   af_all_true_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_any_true_all(VALUE self, VALUE array_val){
@@ -182,7 +182,7 @@ static VALUE arf_any_true_all(VALUE self, VALUE array_val){
 
   af_any_true_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_count_all(VALUE self, VALUE array_val){
@@ -193,7 +193,7 @@ static VALUE arf_count_all(VALUE self, VALUE array_val){
 
   af_count_all(&real_part, &imag_part, input->carray);
 
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_imin(VALUE self, VALUE array_val, VALUE dim_val){
@@ -226,7 +226,7 @@ static VALUE arf_imin_all(VALUE self, VALUE array_val){
   Data_Get_Struct(array_val, afstruct, input);
 
   af_imin_all(&real_part, &imag_part, &idx, input->carray);
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_imax_all(VALUE self, VALUE array_val){
@@ -237,7 +237,7 @@ static VALUE arf_imax_all(VALUE self, VALUE array_val){
   Data_Get_Struct(array_val, afstruct, input);
 
   af_imax_all(&real_part, &imag_part, &idx, input->carray);
-  return NUM2DBL(real_part);
+  return DBL2NUM(real_part);
 }
 
 static VALUE arf_accum(VALUE self, VALUE array_val, VALUE dim_val){

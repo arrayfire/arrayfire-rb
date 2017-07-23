@@ -46,21 +46,53 @@ class ArrayFire::AlgorithmTest < Minitest::Test
   end
 
   def test_all_true
-    sum_arr = ArrayFire::Af_Array.new 1, [3], [1.0, 1.0, 1.0]
+    all_true_arr = ArrayFire::Af_Array.new 1, [3], [1.0, 1.0, 1.0]
     result = ArrayFire::Algorithm.all_true(@input, 1)
-    assert_equal(sum_arr, result)
+    assert_equal(all_true_arr, result)
   end
 
   def test_any_true
-    sum_arr = ArrayFire::Af_Array.new 1, [3], [1.0, 1.0, 1.0]
+    any_true_arr = ArrayFire::Af_Array.new 1, [3], [1.0, 1.0, 1.0]
     result = ArrayFire::Algorithm.any_true(@input, 1)
-    assert_equal(sum_arr, result)
+    assert_equal(any_true_arr, result)
   end
 
   def test_count
-    sum_arr = ArrayFire::Af_Array.new 1, [3], [3.0, 3.0, 3.0]
+    count_arr = ArrayFire::Af_Array.new 1, [3], [3.0, 3.0, 3.0]
     result = ArrayFire::Algorithm.count(@input, 1)
-    assert_equal(sum_arr, result)
+    assert_equal(count_arr, result)
+  end
+
+  def test_sum_all
+    assert_equal 4, ArrayFire::Algorithm.sum_all(@input)
+  end
+
+  def test_sum_nan_all
+    assert_equal 18, ArrayFire::Algorithm.sum_nan_all(@nan_array, 10)
+  end
+
+  def test_product_all
+    assert_equal 2874960.0, ArrayFire::Algorithm.product_all(@input)
+  end
+
+  def test_product_nan_all
+    assert_equal 10, ArrayFire::Algorithm.product_nan_all(@nan_array, 10)
+  end
+
+  def test_min_all
+    assert_equal -22, ArrayFire::Algorithm.min_all(@input)
+  end
+
+  def test_max_all
+    assert_equal 11, ArrayFire::Algorithm.max_all(@input)
+  end
+
+  def test_all_true_all
+    assert_equal 1, ArrayFire::Algorithm.all_true_all(@input)
+  end
+
+  def test_any_true_all
+    assert_equal 1, ArrayFire::Algorithm.any_true_all(@input)
   end
 
 end
