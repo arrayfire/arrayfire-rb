@@ -70,7 +70,7 @@ static VALUE arf_all_true(VALUE self, VALUE array_val, VALUE dim_val){
 
   Data_Get_Struct(array_val, afstruct, input);
 
-  af_sum(&output->carray, input->carray, FIX2INT(dim_val));
+  af_all_true(&output->carray, input->carray, FIX2INT(dim_val));
 
   return Data_Wrap_Struct(CLASS_OF(array_val), NULL, arf_free, output);
 }
@@ -81,7 +81,7 @@ static VALUE arf_any_true(VALUE self, VALUE array_val, VALUE dim_val){
 
   Data_Get_Struct(array_val, afstruct, input);
 
-  af_sum(&output->carray, input->carray, FIX2INT(dim_val));
+  af_any_true(&output->carray, input->carray, FIX2INT(dim_val));
 
   return Data_Wrap_Struct(CLASS_OF(array_val), NULL, arf_free, output);
 }
@@ -92,7 +92,7 @@ static VALUE arf_count(VALUE self, VALUE array_val, VALUE dim_val){
 
   Data_Get_Struct(array_val, afstruct, input);
 
-  af_sum(&output->carray, input->carray, FIX2INT(dim_val));
+  af_count(&output->carray, input->carray, FIX2INT(dim_val));
 
   return Data_Wrap_Struct(CLASS_OF(array_val), NULL, arf_free, output);
 }

@@ -370,9 +370,9 @@ void Init_arrayfire() {
   rb_define_singleton_method(Algorithm, "product_nan", (METHOD)arf_product_nan, 3);
   rb_define_singleton_method(Algorithm, "min", (METHOD)arf_min, 2);
   rb_define_singleton_method(Algorithm, "max", (METHOD)arf_max, 2);
-  rb_define_singleton_method(Algorithm, "all_true", (METHOD)arf_all_true, 0);
-  rb_define_singleton_method(Algorithm, "any_true", (METHOD)arf_any_true, 0);
-  rb_define_singleton_method(Algorithm, "count", (METHOD)arf_count, 0);
+  rb_define_singleton_method(Algorithm, "all_true", (METHOD)arf_all_true, 2);
+  rb_define_singleton_method(Algorithm, "any_true", (METHOD)arf_any_true, 2);
+  rb_define_singleton_method(Algorithm, "count", (METHOD)arf_count, 2);
   rb_define_singleton_method(Algorithm, "sum_all", (METHOD)arf_sum_all, 0);
   rb_define_singleton_method(Algorithm, "sum_nan_all", (METHOD)arf_sum_nan_all, 0);
   rb_define_singleton_method(Algorithm, "product_all", (METHOD)arf_product_all, 0);

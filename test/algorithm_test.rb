@@ -45,4 +45,22 @@ class ArrayFire::AlgorithmTest < Minitest::Test
     assert_equal(max_arr, result)
   end
 
+  def test_all_true
+    sum_arr = ArrayFire::Af_Array.new 1, [3], [1.0, 1.0, 1.0]
+    result = ArrayFire::Algorithm.all_true(@input, 1)
+    assert_equal(sum_arr, result)
+  end
+
+  def test_any_true
+    sum_arr = ArrayFire::Af_Array.new 1, [3], [1.0, 1.0, 1.0]
+    result = ArrayFire::Algorithm.any_true(@input, 1)
+    assert_equal(sum_arr, result)
+  end
+
+  def test_count
+    sum_arr = ArrayFire::Af_Array.new 1, [3], [3.0, 3.0, 3.0]
+    result = ArrayFire::Algorithm.count(@input, 1)
+    assert_equal(sum_arr, result)
+  end
+
 end
