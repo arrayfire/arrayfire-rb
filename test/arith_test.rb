@@ -18,7 +18,7 @@ class ArrayFire::ArithTest < Minitest::Test
 
   def test_multiplication
     c = ArrayFire::Af_Array.new 2, [2,2],[2,8,18,32]
-    assert_equal @a, @b - @a
+    assert_equal c, @b * @a
   end
 
   def test_division

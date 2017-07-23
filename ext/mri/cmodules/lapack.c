@@ -143,7 +143,7 @@ static VALUE arf_norm(VALUE self, VALUE val){
 }
 
 static VALUE arf_is_lapack_available(VALUE self){
-  bool* output;
-  // af_is_lapack_available(output);
-  return Qfalse;
+  bool output;
+  af_is_lapack_available(&output);
+  return output ? Qtrue : Qfalse;
 }
