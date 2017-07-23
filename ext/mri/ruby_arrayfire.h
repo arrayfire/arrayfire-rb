@@ -41,15 +41,6 @@ extern "C" {
 #endif
 
   void Init_arrayfire();
-  static void test();
-  // External API
-  static void createArray(afstruct *afarray);
-  static void hostArray(afstruct *afarray);
-  static void add(afstruct *result, afstruct *left, afstruct *right);
-  static void matmul(afstruct *result, afstruct *left, afstruct *right);
-  static void cholesky_(afstruct *result, afstruct *matrix);
-  static void inverse_(afstruct *result, afstruct *matrix);
-  static double norm_(afstruct *matrix);
 
 #ifdef __cplusplus
 }
