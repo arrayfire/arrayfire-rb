@@ -33,7 +33,7 @@ static VALUE arf_transpose(VALUE self, VALUE input){
 
   af_transpose(&result->carray, obj->carray, false);
 
-  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
+  return Data_Wrap_Struct(CLASS_OF(input), NULL, arf_free, result);
 }
 
 static VALUE arf_transpose_inplace(VALUE self, VALUE input){
@@ -43,5 +43,5 @@ static VALUE arf_transpose_inplace(VALUE self, VALUE input){
 
   af_transpose_inplace(obj->carray, false);
 
-  return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, obj);
+  return Data_Wrap_Struct(CLASS_OF(input), NULL, arf_free, obj);
 }

@@ -437,8 +437,8 @@ void Init_arrayfire() {
   Blas = rb_define_class_under(ArrayFire, "BLAS", rb_cObject);
   rb_define_singleton_method(Blas, "matmul", (METHOD)arf_matmul, 2);
   rb_define_singleton_method(Blas, "dot", (METHOD)arf_dot, 2);
-  rb_define_singleton_method(Blas, "transpose", (METHOD)arf_transpose, 2);
-  rb_define_singleton_method(Blas, "transpose_inplace", (METHOD)arf_transpose_inplace, 2);
+  rb_define_singleton_method(Blas, "transpose", (METHOD)arf_transpose, 1);
+  rb_define_singleton_method(Blas, "transpose_inplace", (METHOD)arf_transpose_inplace, 1);
 
   Cuda = rb_define_class_under(ArrayFire, "CUDA", rb_cObject);
   rb_define_singleton_method(Cuda, "get_stream", (METHOD)arf_get_stream, 0);
