@@ -208,8 +208,6 @@ static VALUE arf_randn(VALUE self);
 static VALUE arf_set_seed(VALUE self);
 static VALUE arf_get_seed(VALUE self);
 
-static size_t*  interpret_shape(VALUE arg, size_t* dim);
-
 #define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                          \
 static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {              \
   afstruct* left;                                                          \
@@ -537,12 +535,12 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
   float* host_array = (float*)malloc(count * sizeof(float));
-  for (size_t index = 0; index < count; index++) {
+  for (dim_t index = 0; index < count; index++) {
     host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
@@ -568,8 +566,6 @@ static void arf_free(afstruct* af)
   free(af);
 }
 
-DEF_ELEMENTWISE_RUBY_ACCESSOR(ADD, add)
-
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
   afstruct* left;
   afstruct* right;
@@ -583,7 +579,7 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
   bool* data = (bool*)malloc(count * sizeof(bool));
   af_get_data_ptr(data, result->carray);
 
-  for (size_t index = 0; index < (size_t)count; index++){
+  for (dim_t index = 0; index < count; index++){
     if(!data[index]){
       return Qfalse;
     }

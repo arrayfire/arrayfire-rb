@@ -4,7 +4,7 @@ static VALUE arf_constant(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
@@ -25,7 +25,7 @@ static VALUE arf_constant_long(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
@@ -42,7 +42,7 @@ static VALUE arf_constant_ulong(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
@@ -59,7 +59,7 @@ static VALUE arf_range(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
@@ -80,7 +80,7 @@ static VALUE arf_identity(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
