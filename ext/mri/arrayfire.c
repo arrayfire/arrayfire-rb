@@ -277,7 +277,7 @@ DECL_UNARY_RUBY_ACCESSOR(ceil)
  */
 
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val);
-
+static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val);
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
 
@@ -328,6 +328,7 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "*",(METHOD)arf_ew_multiply,1);
   rb_define_method(Af_Array, "/",(METHOD)arf_ew_divide,1);
   rb_define_method(Af_Array, "==",(METHOD)arf_eqeq,1);
+  rb_define_method(Af_Array, "approx_equal",(METHOD)arf_eqeq_approx,1);
 
   rb_define_method(Af_Array, "=~",(METHOD)arf_ew_eqeq,1);
   rb_define_method(Af_Array, "!~", (METHOD)arf_ew_neq, 1);
@@ -581,6 +582,38 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
 
   for (dim_t index = 0; index < count; index++){
     if(!data[index]){
+      return Qfalse;
+    }
+  }
+  return Qtrue;
+}
+
+static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val) {
+
+  afstruct* left;
+  afstruct* right;
+
+  dim_t left_count;
+  dim_t right_count;
+
+  Data_Get_Struct(left_val, afstruct, left);
+  Data_Get_Struct(right_val, afstruct, right);
+
+  af_get_elements(&left_count, left->carray);
+  af_get_elements(&right_count, right->carray);
+
+  if(left_count != right_count){return Qfalse;}
+
+  float* left_arr = (float*)malloc(left_count * sizeof(float));
+  af_get_data_ptr(left_arr, left->carray);
+
+  float* right_arr = (float*)malloc(left_count * sizeof(float));
+  af_get_data_ptr(right_arr, right->carray);
+
+  for (dim_t index = 0; index < left_count; index++){
+    float diff = left_arr[index] - right_arr[index];
+    if(diff < 0){diff *= -1;}
+    if(diff > 1e-3){
       return Qfalse;
     }
   }
