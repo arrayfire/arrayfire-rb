@@ -99,7 +99,6 @@ static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_va
 }
 
 static VALUE arf_inverse(VALUE self, VALUE val){
-
   afstruct* matrix;
   afstruct* result = ALLOC(afstruct);
 
@@ -122,13 +121,11 @@ static VALUE arf_rank(VALUE self, VALUE val){
 
 static VALUE arf_det(VALUE self, VALUE val){
   afstruct* matrix;
-  uint a;
-  double det_real;
-  // double det_image;
+  double det_real, det_imag;
 
   Data_Get_Struct(val, afstruct, matrix);
 
-  af_rank(&a, matrix->carray, det_real);
+  af_det(&det_real, &det_imag, matrix->carray);
   return DBL2NUM(det_real);
 }
 
