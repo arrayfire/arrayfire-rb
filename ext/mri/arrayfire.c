@@ -505,8 +505,8 @@ void Init_arrayfire() {
   rb_define_singleton_method(Lapack, "cholesky_inplace", (METHOD)arf_cholesky_inplace, 1);
   rb_define_singleton_method(Lapack, "solve", (METHOD)arf_solve, 0);
   rb_define_singleton_method(Lapack, "solve_lu", (METHOD)arf_solve_lu, 0);
-  rb_define_singleton_method(Lapack, "inverse", (METHOD)arf_inverse, 0);
-  rb_define_singleton_method(Lapack, "rank", (METHOD)arf_rank, 0);
+  rb_define_singleton_method(Lapack, "inverse", (METHOD)arf_inverse, 1);
+  rb_define_singleton_method(Lapack, "rank", (METHOD)arf_rank, 1);
   rb_define_singleton_method(Lapack, "det", (METHOD)arf_det, 1);
   rb_define_singleton_method(Lapack, "norm", (METHOD)arf_norm, 1);
   rb_define_singleton_method(Lapack, "is_lapack_available", (METHOD)arf_is_lapack_available, 0);
