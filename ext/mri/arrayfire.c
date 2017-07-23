@@ -364,12 +364,12 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "ceil", (METHOD)arf_unary_ceil, 0);
 
   Algorithm = rb_define_class_under(ArrayFire, "Algorithm", rb_cObject);
-  rb_define_singleton_method(Algorithm, "sum", (METHOD)arf_sum, 0);
-  rb_define_singleton_method(Algorithm, "sum_nan", (METHOD)arf_sum_nan, 0);
-  rb_define_singleton_method(Algorithm, "product", (METHOD)arf_product, 0);
-  rb_define_singleton_method(Algorithm, "product_nan", (METHOD)arf_product_nan, 0);
-  rb_define_singleton_method(Algorithm, "min", (METHOD)arf_min, 0);
-  rb_define_singleton_method(Algorithm, "max", (METHOD)arf_max, 0);
+  rb_define_singleton_method(Algorithm, "sum", (METHOD)arf_sum, 2);
+  rb_define_singleton_method(Algorithm, "sum_nan", (METHOD)arf_sum_nan, 3);
+  rb_define_singleton_method(Algorithm, "product", (METHOD)arf_product, 2);
+  rb_define_singleton_method(Algorithm, "product_nan", (METHOD)arf_product_nan, 3);
+  rb_define_singleton_method(Algorithm, "min", (METHOD)arf_min, 2);
+  rb_define_singleton_method(Algorithm, "max", (METHOD)arf_max, 2);
   rb_define_singleton_method(Algorithm, "all_true", (METHOD)arf_all_true, 0);
   rb_define_singleton_method(Algorithm, "any_true", (METHOD)arf_any_true, 0);
   rb_define_singleton_method(Algorithm, "count", (METHOD)arf_count, 0);
@@ -496,14 +496,14 @@ void Init_arrayfire() {
   rb_define_singleton_method(Data, "replace_scalar", (METHOD)arf_replace_scalar, 3);
 
   Lapack = rb_define_class_under(ArrayFire, "LAPACK", rb_cObject);
-  rb_define_singleton_method(Lapack, "svd", (METHOD)arf_svd, 0);
-  rb_define_singleton_method(Lapack, "svd_inplace", (METHOD)arf_svd_inplace, 0);
-  rb_define_singleton_method(Lapack, "lu", (METHOD)arf_lu, 0);
-  rb_define_singleton_method(Lapack, "lu_inplace", (METHOD)arf_lu_inplace, 0);
-  rb_define_singleton_method(Lapack, "qr", (METHOD)arf_qr, 0);
-  rb_define_singleton_method(Lapack, "qr_inplace", (METHOD)arf_qr_inplace, 0);
+  rb_define_singleton_method(Lapack, "svd", (METHOD)arf_svd, 1);
+  rb_define_singleton_method(Lapack, "svd_inplace", (METHOD)arf_svd_inplace, 1);
+  rb_define_singleton_method(Lapack, "lu", (METHOD)arf_lu, 1);
+  rb_define_singleton_method(Lapack, "lu_inplace", (METHOD)arf_lu_inplace, 1);
+  rb_define_singleton_method(Lapack, "qr", (METHOD)arf_qr, 1);
+  rb_define_singleton_method(Lapack, "qr_inplace", (METHOD)arf_qr_inplace, 1);
   rb_define_singleton_method(Lapack, "cholesky", (METHOD)arf_cholesky, 1);
-  rb_define_singleton_method(Lapack, "cholesky_inplace", (METHOD)arf_cholesky_inplace, 0);
+  rb_define_singleton_method(Lapack, "cholesky_inplace", (METHOD)arf_cholesky_inplace, 1);
   rb_define_singleton_method(Lapack, "solve", (METHOD)arf_solve, 0);
   rb_define_singleton_method(Lapack, "solve_lu", (METHOD)arf_solve_lu, 0);
   rb_define_singleton_method(Lapack, "inverse", (METHOD)arf_inverse, 0);
