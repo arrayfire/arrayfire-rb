@@ -3,12 +3,12 @@ static VALUE arf_create_array(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
   float* host_array = (float*)malloc(count * sizeof(float));
-  for (size_t index = 0; index < count; index++) {
+  for (dim_t index = 0; index < count; index++) {
     host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
@@ -24,12 +24,12 @@ static VALUE arf_create_handle(int argc, VALUE* argv){
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
   dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
   dim_t count = 1;
-  for (size_t index = 0; index < ndims; index++) {
+  for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
   float* host_array = (float*)malloc(count * sizeof(float));
-  for (size_t index = 0; index < count; index++) {
+  for (dim_t index = 0; index < count; index++) {
     host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
@@ -44,9 +44,9 @@ static VALUE arf_copy_array(VALUE self){
   afstruct* array_val;
   afstruct* result = ALLOC(afstruct);
 
-  Data_Get_Struct(self, afstruct, result);
+  Data_Get_Struct(self, afstruct, array_val);
 
-  af_copy_array(&result->carray, result->carray);
+  af_copy_array(&result->carray, array_val->carray);
 
   return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
 }
@@ -66,7 +66,7 @@ static VALUE arf_get_data_ptr(VALUE self){
   af_get_data_ptr(data, input->carray);
 
   VALUE* array = ALLOC_N(VALUE, count);
-  for (size_t index = 0; index < (size_t)count; index++){
+  for (dim_t index = 0; index < count; index++){
     array[index] = DBL2NUM(data[index]);
   }
 
@@ -134,17 +134,17 @@ static VALUE arf_get_type(VALUE self){
 
 static VALUE arf_get_dims(VALUE self){
   afstruct* input;
-  uint ndims;
-  dim_t* dims = (dim_t*)malloc(ndims * sizeof(dim_t));;
-
   Data_Get_Struct(self, afstruct, input);
 
+  uint ndims;
   af_get_numdims(&ndims, input->carray);
+
+  dim_t* dims = (dim_t*)malloc(ndims * sizeof(dim_t));
 
   af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
 
   VALUE* array = ALLOC_N(VALUE, ndims);
-  for (size_t index = 0; index < ndims; index++){
+  for (dim_t index = 0; index < ndims; index++){
     array[index] = UINT2NUM(dims[index]);
   }
 
@@ -298,6 +298,6 @@ static VALUE arf_is_sparse(VALUE self){
   Data_Get_Struct(self, afstruct, input);
 
   //FIXME
-  // af_is_bool(&result, input->carray);
+  af_is_bool(&result, input->carray);
   return result ? Qtrue : Qfalse;
 }
