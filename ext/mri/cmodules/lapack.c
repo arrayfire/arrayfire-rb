@@ -1,17 +1,20 @@
-static VALUE arf_svd(VALUE self, VALUE val){
+static VALUE arf_svd_func(VALUE self, VALUE u_val, VALUE s_val, VALUE vt_val, VALUE val){
   afstruct* input;
-  afstruct* u = ALLOC(afstruct);
-  afstruct* s = ALLOC(afstruct);
-  afstruct* vt = ALLOC(afstruct);
+  afstruct* u;
+  afstruct* s;
+  afstruct* vt;
 
   Data_Get_Struct(val, afstruct, input);
+  Data_Get_Struct(u_val, afstruct, u);
+  Data_Get_Struct(s_val, afstruct, s);
+  Data_Get_Struct(vt_val, afstruct, vt);
 
   af_svd(&u->carray, &s->carray, &vt->carray, input->carray);
 
-  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, u);
+  return Qtrue;
 }
 
-static VALUE arf_svd_inplace(VALUE self, VALUE val){
+static VALUE arf_svd_inplace_func(VALUE self, VALUE val){
   afstruct* input;
   afstruct* u = ALLOC(afstruct);
   afstruct* s = ALLOC(afstruct);
@@ -24,54 +27,62 @@ static VALUE arf_svd_inplace(VALUE self, VALUE val){
   return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, u);
 }
 
-static VALUE arf_lu(VALUE self, VALUE val){
+static VALUE arf_lu_func(VALUE self, VALUE lower_val, VALUE upper_val, VALUE pivot_val, VALUE val){
   afstruct* input;
-  afstruct* lower = ALLOC(afstruct);
-  afstruct* upper = ALLOC(afstruct);
-  afstruct* pivot = ALLOC(afstruct);
+  afstruct* lower;
+  afstruct* upper;
+  afstruct* pivot;
 
   Data_Get_Struct(val, afstruct, input);
+  Data_Get_Struct(lower_val, afstruct, lower);
+  Data_Get_Struct(upper_val, afstruct, upper);
+  Data_Get_Struct(pivot_val, afstruct, pivot);
 
   af_lu(&lower->carray, &upper->carray, &pivot->carray, input->carray);
-  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, lower);
+  return Qtrue;
 }
 
-static VALUE arf_lu_inplace(VALUE self){
+static VALUE arf_lu_inplace_func(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_qr(VALUE self, VALUE val){
+static VALUE arf_qr_func(VALUE self, VALUE q_val, VALUE r_val, VALUE tau_val, VALUE val){
   afstruct* input;
-  afstruct* q = ALLOC(afstruct);
-  afstruct* r = ALLOC(afstruct);
-  afstruct* tau = ALLOC(afstruct);
+  afstruct* q;
+  afstruct* r;
+  afstruct* tau;
 
   Data_Get_Struct(val, afstruct, input);
+  Data_Get_Struct(q_val, afstruct, q);
+  Data_Get_Struct(r_val, afstruct, r);
+  Data_Get_Struct(tau_val, afstruct, tau);
 
   af_qr(&q->carray, &r->carray, &tau->carray, input->carray);
-  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, q);
+  return Qfalse;
 }
 
-static VALUE arf_qr_inplace(VALUE self){
+static VALUE arf_qr_inplace_func(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_cholesky(VALUE self, VALUE val){
+static VALUE arf_cholesky_func(VALUE self, VALUE output_val, VALUE val, VALUE is_upper_val){
   afstruct* input;
-  afstruct* output = ALLOC(afstruct);
-  int* info;
+  afstruct* output;
+  int info;
 
   Data_Get_Struct(val, afstruct, input);
+  Data_Get_Struct(output_val, afstruct, output);
 
-  af_cholesky(&output->carray, info, input->carray, true);
-  return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, output);
+  af_cholesky(&output->carray, &info, input->carray, is_upper_val);
+
+  return INT2NUM(info);
 }
 
-static VALUE arf_cholesky_inplace(VALUE self){
+static VALUE arf_cholesky_inplace_func(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_solve(VALUE self, VALUE lhs_val, VALUE rhs_val){
+static VALUE arf_solve_func(VALUE self, VALUE lhs_val, VALUE rhs_val){
 
   afstruct* lhs;
   afstruct* rhs;
@@ -85,7 +96,7 @@ static VALUE arf_solve(VALUE self, VALUE lhs_val, VALUE rhs_val){
 
 }
 
-static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val){
+static VALUE arf_solve_lu_func(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val){
   afstruct* lhs;
   afstruct* rhs;
   afstruct* piv;

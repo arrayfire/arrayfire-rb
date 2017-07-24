@@ -176,16 +176,16 @@ static VALUE arf_set_seq_indexer(VALUE self);
 static VALUE arf_set_seq_param_indexer(VALUE self);
 static VALUE arf_release_indexers(VALUE self);
 
-static VALUE arf_svd(VALUE self, VALUE val);
-static VALUE arf_svd_inplace(VALUE self, VALUE val);
-static VALUE arf_lu(VALUE self, VALUE val);
-static VALUE arf_lu_inplace(VALUE self);
-static VALUE arf_qr(VALUE self, VALUE val);
-static VALUE arf_qr_inplace(VALUE self);
-static VALUE arf_cholesky(VALUE self, VALUE val);
-static VALUE arf_cholesky_inplace(VALUE self);
-static VALUE arf_solve(VALUE self, VALUE lhs_val, VALUE rhs_val);
-static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val);
+static VALUE arf_svd_func(VALUE self, VALUE u_val, VALUE s_val, VALUE vt_val, VALUE val);
+static VALUE arf_svd_inplace_func(VALUE self, VALUE val);
+static VALUE arf_lu_func(VALUE self, VALUE lower_val, VALUE upper_val, VALUE pivot_val, VALUE val);
+static VALUE arf_lu_inplace_func(VALUE self);
+static VALUE arf_qr_func(VALUE self, VALUE q_val, VALUE r_val, VALUE tau_val, VALUE val);
+static VALUE arf_qr_inplace_func(VALUE self);
+static VALUE arf_cholesky_func(VALUE self, VALUE output_val, VALUE val, VALUE is_upper_val);
+static VALUE arf_cholesky_inplace_func(VALUE self);
+static VALUE arf_solve_func(VALUE self, VALUE lhs_val, VALUE rhs_val);
+static VALUE arf_solve_lu_func(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val);
 static VALUE arf_inverse(VALUE self, VALUE val);
 static VALUE arf_rank(VALUE self, VALUE val);
 static VALUE arf_det(VALUE self, VALUE val);
@@ -495,16 +495,16 @@ void Init_arrayfire() {
   rb_define_singleton_method(Data, "replace_scalar", (METHOD)arf_replace_scalar, 3);
 
   Lapack = rb_define_class_under(ArrayFire, "LAPACK", rb_cObject);
-  rb_define_singleton_method(Lapack, "svd", (METHOD)arf_svd, 1);
-  rb_define_singleton_method(Lapack, "svd_inplace", (METHOD)arf_svd_inplace, 1);
-  rb_define_singleton_method(Lapack, "lu", (METHOD)arf_lu, 1);
-  rb_define_singleton_method(Lapack, "lu_inplace", (METHOD)arf_lu_inplace, 1);
-  rb_define_singleton_method(Lapack, "qr", (METHOD)arf_qr, 1);
-  rb_define_singleton_method(Lapack, "qr_inplace", (METHOD)arf_qr_inplace, 1);
-  rb_define_singleton_method(Lapack, "cholesky", (METHOD)arf_cholesky, 1);
-  rb_define_singleton_method(Lapack, "cholesky_inplace", (METHOD)arf_cholesky_inplace, 1);
-  rb_define_singleton_method(Lapack, "solve", (METHOD)arf_solve, 0);
-  rb_define_singleton_method(Lapack, "solve_lu", (METHOD)arf_solve_lu, 0);
+  rb_define_singleton_method(Lapack, "svd_func", (METHOD)arf_svd_func, 4);
+  rb_define_singleton_method(Lapack, "svd_inplace_func", (METHOD)arf_svd_inplace_func, 1);
+  rb_define_singleton_method(Lapack, "lu_func", (METHOD)arf_lu_func, 4);
+  rb_define_singleton_method(Lapack, "lu_inplace_func", (METHOD)arf_lu_inplace_func, 1);
+  rb_define_singleton_method(Lapack, "qr_func", (METHOD)arf_qr_func, 4);
+  rb_define_singleton_method(Lapack, "qr_inplace_func", (METHOD)arf_qr_inplace_func, 1);
+  rb_define_singleton_method(Lapack, "cholesky_func", (METHOD)arf_cholesky_func, 3);
+  rb_define_singleton_method(Lapack, "cholesky_inplace_func", (METHOD)arf_cholesky_inplace_func, 1);
+  rb_define_singleton_method(Lapack, "solve_func", (METHOD)arf_solve_func, 0);
+  rb_define_singleton_method(Lapack, "solve_lu_func", (METHOD)arf_solve_lu_func, 0);
   rb_define_singleton_method(Lapack, "inverse", (METHOD)arf_inverse, 1);
   rb_define_singleton_method(Lapack, "rank", (METHOD)arf_rank, 1);
   rb_define_singleton_method(Lapack, "det", (METHOD)arf_det, 1);
@@ -533,21 +533,24 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
 {
   afstruct* afarray;
   Data_Get_Struct(self, afstruct, afarray);
-  dim_t ndims = (dim_t)FIX2LONG(argv[0]);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
-  dim_t count = 1;
-  for (dim_t index = 0; index < ndims; index++) {
-    dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
-    count *= dimensions[index];
-  }
-  float* host_array = (float*)malloc(count * sizeof(float));
-  for (dim_t index = 0; index < count; index++) {
-    host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
-  }
+  if(argc > 0){
 
-  af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
+    dim_t ndims = (dim_t)FIX2LONG(argv[0]);
+    dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+    dim_t count = 1;
+    for (dim_t index = 0; index < ndims; index++) {
+      dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
+      count *= dimensions[index];
+    }
+    float* host_array = (float*)malloc(count * sizeof(float));
+    for (dim_t index = 0; index < count; index++) {
+      host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
+    }
 
-  af_print_array(afarray->carray);
+    af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
+
+    af_print_array(afarray->carray);
+  }
 
   return self;
 }
