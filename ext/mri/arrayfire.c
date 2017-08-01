@@ -89,9 +89,10 @@ static VALUE arf_set_intersect(VALUE self);
 
 static VALUE arf_get_backend_count(VALUE self);
 static VALUE arf_get_available_backends(VALUE self);
-static VALUE arf_get_backend_id(VALUE self);
+static VALUE arf_get_backend_id(VALUE self, VALUE array_val);
 static VALUE arf_get_active_backend(VALUE self);
-static VALUE arf_get_backend_device_id(VALUE self);
+static VALUE arf_get_backend_device_id(VALUE self, VALUE array_val);
+static VALUE arf_set_backend(VALUE self);
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
 static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val);
@@ -399,11 +400,12 @@ void Init_arrayfire() {
   rb_define_singleton_method(Algorithm, "set_intersect", (METHOD)arf_set_intersect, 0);
 
   Backend = rb_define_class_under(ArrayFire, "Backend", rb_cObject);
-  rb_define_method(Backend, "get_backend_count", (METHOD)arf_get_backend_count, 0);
-  rb_define_method(Backend, "get_available_backends", (METHOD)arf_get_available_backends, 0);
-  rb_define_method(Backend, "get_backend_id", (METHOD)arf_get_backend_id, 0);
-  rb_define_method(Backend, "get_active_backend", (METHOD)arf_get_active_backend, 0);
-  rb_define_method(Backend, "get_device_id", (METHOD)arf_get_backend_device_id, 0);
+  rb_define_singleton_method(Backend, "get_backend_count", (METHOD)arf_get_backend_count, 0);
+  rb_define_singleton_method(Backend, "get_available_backends", (METHOD)arf_get_available_backends, 0);
+  rb_define_singleton_method(Backend, "get_backend_id", (METHOD)arf_get_backend_id, 1);
+  rb_define_singleton_method(Backend, "get_active_backend", (METHOD)arf_get_active_backend, 0);
+  rb_define_singleton_method(Backend, "get_device_id", (METHOD)arf_get_backend_device_id, 1);
+  rb_define_singleton_method(Backend, "set_backend", (METHOD)arf_set_backend, 0);
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
   rb_define_singleton_method(Device, "info", (METHOD)arf_info, 0);
