@@ -15,6 +15,7 @@ VALUE Lapack = Qnil;
 VALUE OpenCL = Qnil;
 VALUE Random = Qnil;
 VALUE Statistics = Qnil;
+VALUE Util = Qnil;
 
 // prototypes
 void Init_arrayfire();
@@ -224,6 +225,18 @@ static VALUE arf_var_all_weighted(VALUE self, VALUE array_val, VALUE weighted_ar
 static VALUE arf_stdev_all(VALUE self, VALUE array_val);
 static VALUE arf_median_all(VALUE self, VALUE array_val);
 static VALUE arf_corrcoef(VALUE self, VALUE first_array_val, VALUE second_array_val);
+
+static VALUE arf_print_array(VALUE self);
+static VALUE arf_print_array_gen(VALUE self);
+static VALUE arf_save_array(VALUE self);
+static VALUE arf_read_array_index(VALUE self);
+static VALUE arf_read_array_key(VALUE self);
+static VALUE arf_read_array_key_check(VALUE self);
+static VALUE arf_array_to_string(VALUE self);
+static VALUE arf_example_function(VALUE self);
+static VALUE arf_get_version(VALUE self);
+static VALUE arf_get_revision(VALUE self);
+static VALUE arf_get_size_of(VALUE self);
 
 #define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                          \
 static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {              \
@@ -562,6 +575,19 @@ void Init_arrayfire() {
   rb_define_singleton_method(Statistics, "median_all", (METHOD)arf_median_all, 1);
   rb_define_singleton_method(Statistics, "corrcoef", (METHOD)arf_corrcoef, 2);
 
+  Util = rb_define_class_under(ArrayFire, "Util", rb_cObject);
+  rb_define_singleton_method(Util, "print_array", (METHOD)arf_print_array, 0);
+  rb_define_singleton_method(Util, "print_array_gen", (METHOD)arf_print_array_gen, 0);
+  rb_define_singleton_method(Util, "save_array", (METHOD)arf_save_array, 0);
+  rb_define_singleton_method(Util, "read_array_index", (METHOD)arf_read_array_index, 0);
+  rb_define_singleton_method(Util, "read_array_key", (METHOD)arf_read_array_key, 0);
+  rb_define_singleton_method(Util, "read_array_key_check", (METHOD)arf_read_array_key_check, 0);
+  rb_define_singleton_method(Util, "array_to_string", (METHOD)arf_array_to_string, 0);
+  rb_define_singleton_method(Util, "example_function", (METHOD)arf_example_function, 0);
+  rb_define_singleton_method(Util, "get_version", (METHOD)arf_get_version, 0);
+  rb_define_singleton_method(Util, "get_revision", (METHOD)arf_get_revision, 0);
+  rb_define_singleton_method(Util, "get_size_of", (METHOD)arf_get_size_of, 0);
+
 }
 
 VALUE arf_init(int argc, VALUE* argv, VALUE self)
@@ -707,3 +733,4 @@ DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 #include "cmodules/lapack.c"
 #include "cmodules/random.c"
 #include "cmodules/statistics.c"
+#include "cmodules/util.c"
