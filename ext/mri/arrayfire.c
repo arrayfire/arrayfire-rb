@@ -14,6 +14,7 @@ VALUE Index = Qnil;
 VALUE Lapack = Qnil;
 VALUE OpenCL = Qnil;
 VALUE Random = Qnil;
+VALUE Statistics = Qnil;
 
 // prototypes
 void Init_arrayfire();
@@ -208,6 +209,21 @@ static VALUE arf_randu(VALUE self);
 static VALUE arf_randn(VALUE self);
 static VALUE arf_set_seed(VALUE self);
 static VALUE arf_get_seed(VALUE self);
+
+static VALUE arf_mean(VALUE self);
+static VALUE arf_mean_weighted(VALUE self);
+static VALUE arf_var(VALUE self);
+static VALUE arf_var_weighted(VALUE self);
+static VALUE arf_stdev(VALUE self);
+static VALUE arf_cov(VALUE self);
+static VALUE arf_median(VALUE self);
+static VALUE arf_mean_all(VALUE self);
+static VALUE arf_mean_all_weighted(VALUE self);
+static VALUE arf_var_all(VALUE self);
+static VALUE arf_var_all_weighted(VALUE self);
+static VALUE arf_stdev_all(VALUE self);
+static VALUE arf_median_all(VALUE self);
+static VALUE arf_corrcoef(VALUE self);
 
 #define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                          \
 static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {              \
@@ -529,6 +545,23 @@ void Init_arrayfire() {
   rb_define_method(Random, "randn", (METHOD)arf_randn, 0);
   rb_define_method(Random, "set_seed", (METHOD)arf_set_seed, 0);
   rb_define_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
+
+  Statistics = rb_define_class_under(ArrayFire, "Statistics", rb_cObject);
+  rb_define_singleton_method(Statistics, "mean", (METHOD)arf_mean, 0);
+  rb_define_singleton_method(Statistics, "mean_weighted", (METHOD)arf_mean_weighted, 0);
+  rb_define_singleton_method(Statistics, "var", (METHOD)arf_var, 0);
+  rb_define_singleton_method(Statistics, "var_weighted", (METHOD)arf_var_weighted, 0);
+  rb_define_singleton_method(Statistics, "stdev", (METHOD)arf_stdev, 0);
+  rb_define_singleton_method(Statistics, "cov", (METHOD)arf_cov, 0);
+  rb_define_singleton_method(Statistics, "median", (METHOD)arf_median, 0);
+  rb_define_singleton_method(Statistics, "mean_all", (METHOD)arf_mean_all, 0);
+  rb_define_singleton_method(Statistics, "mean_all_weighted", (METHOD)arf_mean_all_weighted, 0);
+  rb_define_singleton_method(Statistics, "var_all", (METHOD)arf_var_all, 0);
+  rb_define_singleton_method(Statistics, "var_all_weighted", (METHOD)arf_var_all_weighted, 0);
+  rb_define_singleton_method(Statistics, "stdev_all", (METHOD)arf_stdev_all, 0);
+  rb_define_singleton_method(Statistics, "median_all", (METHOD)arf_median_all, 0);
+  rb_define_singleton_method(Statistics, "corrcoef", (METHOD)arf_corrcoef, 0);
+
 }
 
 VALUE arf_init(int argc, VALUE* argv, VALUE self)
@@ -673,3 +706,4 @@ DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 #include "cmodules/data.c"
 #include "cmodules/lapack.c"
 #include "cmodules/random.c"
+#include "cmodules/statistics.c"
