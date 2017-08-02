@@ -210,20 +210,20 @@ static VALUE arf_randn(VALUE self);
 static VALUE arf_set_seed(VALUE self);
 static VALUE arf_get_seed(VALUE self);
 
-static VALUE arf_mean(VALUE self);
-static VALUE arf_mean_weighted(VALUE self);
-static VALUE arf_var(VALUE self);
-static VALUE arf_var_weighted(VALUE self);
-static VALUE arf_stdev(VALUE self);
-static VALUE arf_cov(VALUE self);
-static VALUE arf_median(VALUE self);
-static VALUE arf_mean_all(VALUE self);
-static VALUE arf_mean_all_weighted(VALUE self);
-static VALUE arf_var_all(VALUE self);
-static VALUE arf_var_all_weighted(VALUE self);
-static VALUE arf_stdev_all(VALUE self);
-static VALUE arf_median_all(VALUE self);
-static VALUE arf_corrcoef(VALUE self);
+static VALUE arf_mean(VALUE self, VALUE array_val, VALUE dim_val);
+static VALUE arf_mean_weighted(VALUE self, VALUE array_val, VALUE weighted_array_val, VALUE dim_val);
+static VALUE arf_var(VALUE self, VALUE array_val, VALUE is_biased, VALUE dim_val);
+static VALUE arf_var_weighted(VALUE self, VALUE array_val, VALUE weighted_array_val, VALUE dim_val);
+static VALUE arf_stdev(VALUE self, VALUE array_val, VALUE dim_val);
+static VALUE arf_cov(VALUE self, VALUE first_array_val, VALUE second_array_val, VALUE is_biased);
+static VALUE arf_median(VALUE self, VALUE array_val, VALUE dim_val);
+static VALUE arf_mean_all(VALUE self, VALUE array_val);
+static VALUE arf_mean_all_weighted(VALUE self, VALUE array_val, VALUE weighted_array_val);
+static VALUE arf_var_all(VALUE self, VALUE array_val, VALUE is_biased);
+static VALUE arf_var_all_weighted(VALUE self, VALUE array_val, VALUE weighted_array_val);
+static VALUE arf_stdev_all(VALUE self, VALUE array_val);
+static VALUE arf_median_all(VALUE self, VALUE array_val);
+static VALUE arf_corrcoef(VALUE self, VALUE first_array_val, VALUE second_array_val);
 
 #define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                          \
 static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {              \
@@ -547,20 +547,20 @@ void Init_arrayfire() {
   rb_define_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
 
   Statistics = rb_define_class_under(ArrayFire, "Statistics", rb_cObject);
-  rb_define_singleton_method(Statistics, "mean", (METHOD)arf_mean, 0);
-  rb_define_singleton_method(Statistics, "mean_weighted", (METHOD)arf_mean_weighted, 0);
-  rb_define_singleton_method(Statistics, "var", (METHOD)arf_var, 0);
-  rb_define_singleton_method(Statistics, "var_weighted", (METHOD)arf_var_weighted, 0);
-  rb_define_singleton_method(Statistics, "stdev", (METHOD)arf_stdev, 0);
-  rb_define_singleton_method(Statistics, "cov", (METHOD)arf_cov, 0);
-  rb_define_singleton_method(Statistics, "median", (METHOD)arf_median, 0);
-  rb_define_singleton_method(Statistics, "mean_all", (METHOD)arf_mean_all, 0);
-  rb_define_singleton_method(Statistics, "mean_all_weighted", (METHOD)arf_mean_all_weighted, 0);
-  rb_define_singleton_method(Statistics, "var_all", (METHOD)arf_var_all, 0);
-  rb_define_singleton_method(Statistics, "var_all_weighted", (METHOD)arf_var_all_weighted, 0);
-  rb_define_singleton_method(Statistics, "stdev_all", (METHOD)arf_stdev_all, 0);
-  rb_define_singleton_method(Statistics, "median_all", (METHOD)arf_median_all, 0);
-  rb_define_singleton_method(Statistics, "corrcoef", (METHOD)arf_corrcoef, 0);
+  rb_define_singleton_method(Statistics, "mean", (METHOD)arf_mean, 2);
+  rb_define_singleton_method(Statistics, "mean_weighted", (METHOD)arf_mean_weighted, 3);
+  rb_define_singleton_method(Statistics, "var", (METHOD)arf_var, 3);
+  rb_define_singleton_method(Statistics, "var_weighted", (METHOD)arf_var_weighted, 3);
+  rb_define_singleton_method(Statistics, "stdev", (METHOD)arf_stdev, 2);
+  rb_define_singleton_method(Statistics, "cov", (METHOD)arf_cov, 3);
+  rb_define_singleton_method(Statistics, "median", (METHOD)arf_median, 2);
+  rb_define_singleton_method(Statistics, "mean_all", (METHOD)arf_mean_all, 1);
+  rb_define_singleton_method(Statistics, "mean_all_weighted", (METHOD)arf_mean_all_weighted, 2);
+  rb_define_singleton_method(Statistics, "var_all", (METHOD)arf_var_all, 2);
+  rb_define_singleton_method(Statistics, "var_all_weighted", (METHOD)arf_var_all_weighted, 2);
+  rb_define_singleton_method(Statistics, "stdev_all", (METHOD)arf_stdev_all, 1);
+  rb_define_singleton_method(Statistics, "median_all", (METHOD)arf_median_all, 1);
+  rb_define_singleton_method(Statistics, "corrcoef", (METHOD)arf_corrcoef, 2);
 
 }
 
