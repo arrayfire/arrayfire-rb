@@ -107,7 +107,7 @@ static VALUE arf_mean_all_weighted(VALUE self, VALUE array_val, VALUE weighted_a
   Data_Get_Struct(array_val, afstruct, input);
   Data_Get_Struct(weighted_array_val, afstruct, weighted_array);
 
-  // af_mean_all_weigheted(&real_part, &imag_part, input->carray, weighted_array->carray);
+  af_mean_all_weighted(&real_part, &imag_part, input->carray, weighted_array->carray);
 
   return DBL2NUM(real_part);
 }
@@ -131,7 +131,7 @@ static VALUE arf_var_all_weighted(VALUE self, VALUE array_val, VALUE weighted_ar
   Data_Get_Struct(array_val, afstruct, input);
   Data_Get_Struct(weighted_array_val, afstruct, weighted_array);
 
-  // af_var_all_weigheted(&real_part, &imag_part, input->carray, weighted_array->carray);
+  af_var_all_weighted(&real_part, &imag_part, input->carray, weighted_array->carray);
 
   return DBL2NUM(real_part);
 }
@@ -142,7 +142,7 @@ static VALUE arf_stdev_all(VALUE self, VALUE array_val){
 
   Data_Get_Struct(array_val, afstruct, input);
 
-  // af_stddev_all(&real_part, &imag_part, input->carray);
+  af_stdev_all(&real_part, &imag_part, input->carray);
 
   return DBL2NUM(real_part);
 }
@@ -164,7 +164,7 @@ static VALUE arf_corrcoef(VALUE self, VALUE first_array_val, VALUE second_array_
   double real_part, imag_part;
 
   Data_Get_Struct(first_array_val, afstruct, first_array);
-  Data_Get_Struct(first_array_val, afstruct, first_array);
+  Data_Get_Struct(first_array_val, afstruct, second_array);
 
   af_corrcoef(&real_part, &imag_part, first_array->carray, second_array->carray);
 
