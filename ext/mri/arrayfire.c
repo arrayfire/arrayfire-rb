@@ -22,6 +22,8 @@ void Init_arrayfire();
 static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
 static void arf_free(afstruct* af);
+static VALUE arf_engine_alloc(VALUE klass);
+static void arf_engine_free(afrandomenginestruct* afrandomengine);
 
 static VALUE arf_create_array(int argc, VALUE* argv);
 static VALUE arf_create_handle(int argc, VALUE* argv);
@@ -195,19 +197,19 @@ static VALUE arf_det(VALUE self, VALUE val);
 static VALUE arf_norm(VALUE self, VALUE val);
 static VALUE arf_is_lapack_available(VALUE self);
 
-static VALUE arf_create_random_engine(VALUE self);
-static VALUE arf_retain_random_engine(VALUE self);
+static VALUE arf_create_random_engine(VALUE self, VALUE seed_val);
+static VALUE arf_retain_random_engine(VALUE self, VALUE engine_val);
 static VALUE arf_random_engine_set_type(VALUE self);
 static VALUE arf_random_engine_get_type(VALUE self);
-static VALUE arf_random_uniform(VALUE self);
-static VALUE arf_random_normal(VALUE self);
-static VALUE arf_random_engine_set_seed(VALUE self);
+static VALUE arf_random_uniform(VALUE self, VALUE ndims_val, VALUE dim_val, VALUE engine_val);
+static VALUE arf_random_normal(VALUE self, VALUE ndims_val, VALUE dim_val, VALUE engine_val);
+static VALUE arf_random_engine_set_seed(VALUE self, VALUE engine_val ,VALUE seed_val);
 static VALUE arf_get_default_random_engine(VALUE self);
 static VALUE arf_set_default_random_engine_type(VALUE self);
 static VALUE arf_random_engine_get_seed(VALUE self);
 static VALUE arf_release_random_engine(VALUE self);
-static VALUE arf_randu(VALUE self);
-static VALUE arf_randn(VALUE self);
+static VALUE arf_randu(VALUE self, VALUE ndims_val, VALUE dim_val);
+static VALUE arf_randn(VALUE self, VALUE ndims_val, VALUE dim_val);
 static VALUE arf_set_seed(VALUE self);
 static VALUE arf_get_seed(VALUE self);
 
@@ -543,21 +545,22 @@ void Init_arrayfire() {
   rb_define_singleton_method(Lapack, "is_lapack_available", (METHOD)arf_is_lapack_available, 0);
 
   Random = rb_define_class_under(ArrayFire, "Random", rb_cObject);
-  rb_define_method(Random, "create_random_engine", (METHOD)arf_create_random_engine, 0);
-  rb_define_method(Random, "retain_random_engine", (METHOD)arf_retain_random_engine, 0);
-  rb_define_method(Random, "random_engine_set_type", (METHOD)arf_random_engine_set_type, 0);
-  rb_define_method(Random, "random_engine_get_type", (METHOD)arf_random_engine_get_type, 0);
-  rb_define_method(Random, "random_uniform", (METHOD)arf_random_uniform, 0);
-  rb_define_method(Random, "random_normal", (METHOD)arf_random_normal, 0);
-  rb_define_method(Random, "random_engine_set_seed", (METHOD)arf_random_engine_set_seed, 0);
-  rb_define_method(Random, "get_default_random_engine", (METHOD)arf_get_default_random_engine, 0);
-  rb_define_method(Random, "set_default_random_engine_type", (METHOD)arf_set_default_random_engine_type, 0);
-  rb_define_method(Random, "random_engine_get_seed", (METHOD)arf_random_engine_get_seed, 0);
-  rb_define_method(Random, "release_random_engine", (METHOD)arf_release_random_engine, 0);
-  rb_define_method(Random, "randu", (METHOD)arf_randu, 0);
-  rb_define_method(Random, "randn", (METHOD)arf_randn, 0);
-  rb_define_method(Random, "set_seed", (METHOD)arf_set_seed, 0);
-  rb_define_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
+  rb_define_alloc_func(Random, arf_engine_alloc);
+  rb_define_singleton_method(Random, "create_random_engine", (METHOD)arf_create_random_engine, 1);
+  rb_define_singleton_method(Random, "retain_random_engine", (METHOD)arf_retain_random_engine, 1);
+  rb_define_singleton_method(Random, "random_engine_set_type", (METHOD)arf_random_engine_set_type, 0);
+  rb_define_singleton_method(Random, "random_engine_get_type", (METHOD)arf_random_engine_get_type, 0);
+  rb_define_singleton_method(Random, "random_uniform", (METHOD)arf_random_uniform, 3);
+  rb_define_singleton_method(Random, "random_normal", (METHOD)arf_random_normal, 3);
+  rb_define_singleton_method(Random, "random_engine_set_seed", (METHOD)arf_random_engine_set_seed, 2);
+  rb_define_singleton_method(Random, "get_default_random_engine", (METHOD)arf_get_default_random_engine, 0);
+  rb_define_singleton_method(Random, "set_default_random_engine_type", (METHOD)arf_set_default_random_engine_type, 0);
+  rb_define_singleton_method(Random, "random_engine_get_seed", (METHOD)arf_random_engine_get_seed, 0);
+  rb_define_singleton_method(Random, "release_random_engine", (METHOD)arf_release_random_engine, 0);
+  rb_define_singleton_method(Random, "randu", (METHOD)arf_randu, 2);
+  rb_define_singleton_method(Random, "randn", (METHOD)arf_randn, 2);
+  rb_define_singleton_method(Random, "set_seed", (METHOD)arf_set_seed, 0);
+  rb_define_singleton_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
 
   Statistics = rb_define_class_under(ArrayFire, "Statistics", rb_cObject);
   rb_define_singleton_method(Statistics, "mean", (METHOD)arf_mean, 2);
@@ -625,10 +628,22 @@ static VALUE arf_alloc(VALUE klass)
   return Data_Wrap_Struct(klass, NULL, arf_free, af);
 }
 
+static VALUE arf_engine_alloc(VALUE klass)
+{
+  /* allocate */
+  afrandomenginestruct* afrandomengine = ALLOC(afrandomenginestruct);
+  /* wrap */
+  return Data_Wrap_Struct(klass, NULL, arf_engine_free, afrandomengine);
+}
 
 static void arf_free(afstruct* af)
 {
   free(af);
+}
+
+static void arf_engine_free(afrandomenginestruct* afrandomengine)
+{
+  free(afrandomengine);
 }
 
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
