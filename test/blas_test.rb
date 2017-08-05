@@ -11,7 +11,7 @@ class ArrayFire::BLASTest < Minitest::Test
 
   def test_matmul
     result = ArrayFire::Af_Array.new 2, [2,2],[-2681.0, 1653.0, -67.0, 966.0]
-    assert_equal result, ArrayFire::BLAS.matmul(@matrix_left, @matrix_right)
+    assert_equal result, ArrayFire::BLAS.matmul(@matrix_left, @matrix_right, :AF_MAT_NONE)
   end
 
   def test_dot
