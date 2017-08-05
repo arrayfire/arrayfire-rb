@@ -1,4 +1,4 @@
-static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val){
+static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE prop_val){
 
   afstruct* left;
   afstruct* right;
@@ -7,7 +7,9 @@ static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val){
   Data_Get_Struct(left_val, afstruct, left);
   Data_Get_Struct(right_val, afstruct, right);
 
-  af_matmul(&result->carray, left->carray, right->carray, AF_MAT_NONE, AF_MAT_NONE);
+  af_mat_prop mat_prop = arf_mat_type_from_rbsymbol(prop_val);
+
+  af_matmul(&result->carray, left->carray, right->carray, AF_MAT_NONE, mat_prop);
 
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }

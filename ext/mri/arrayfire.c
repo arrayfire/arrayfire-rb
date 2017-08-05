@@ -21,6 +21,8 @@ VALUE Util = Qnil;
 void Init_arrayfire();
 
 af_dtype arf_dtype_from_rbsymbol(VALUE sym);
+af_mat_prop arf_mat_type_from_rbsymbol(VALUE sym);
+
 static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
 static void arf_free(afstruct* af);
@@ -100,7 +102,7 @@ static VALUE arf_get_active_backend(VALUE self);
 static VALUE arf_get_backend_device_id(VALUE self, VALUE array_val);
 static VALUE arf_set_backend(VALUE self);
 
-static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
+static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE prop_val);
 static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val);
 static VALUE arf_transpose(VALUE self, VALUE input);
 static VALUE arf_transpose_inplace(VALUE self, VALUE input);
@@ -313,8 +315,6 @@ DECL_UNARY_RUBY_ACCESSOR(ceil)
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val);
 static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val);
 
-static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val);
-
 void Init_arrayfire() {
   ArrayFire = rb_define_module("ArrayFire");
 
@@ -470,7 +470,7 @@ void Init_arrayfire() {
   rb_define_method(Device, "get_device_ptr", (METHOD)arf_get_device_ptr, 0);
 
   Blas = rb_define_class_under(ArrayFire, "BLAS", rb_cObject);
-  rb_define_singleton_method(Blas, "matmul", (METHOD)arf_matmul, 2);
+  rb_define_singleton_method(Blas, "matmul", (METHOD)arf_matmul, 3);
   rb_define_singleton_method(Blas, "dot", (METHOD)arf_dot, 2);
   rb_define_singleton_method(Blas, "transpose", (METHOD)arf_transpose, 1);
   rb_define_singleton_method(Blas, "transpose_inplace", (METHOD)arf_transpose_inplace, 1);
