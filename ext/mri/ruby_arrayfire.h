@@ -14,6 +14,8 @@ typedef struct RANDOM_ENGINE_STRUCT
   af_random_engine cengine;
 }afrandomenginestruct;
 
+#define ARF_NUM_DTYPES 12
+
 #ifndef HAVE_RB_ARRAY_CONST_PTR
 static inline const VALUE *
 rb_array_const_ptr(VALUE a)
