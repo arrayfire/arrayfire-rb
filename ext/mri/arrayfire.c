@@ -19,6 +19,8 @@ VALUE Util = Qnil;
 
 // prototypes
 void Init_arrayfire();
+
+af_dtype arf_dtype_from_rbsymbol(VALUE sym);
 static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
 static void arf_free(afstruct* af);
@@ -598,6 +600,7 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
   afstruct* afarray;
   Data_Get_Struct(self, afstruct, afarray);
   if(argc > 0){
+    af_dtype dtype = (argc == 4) ? arf_dtype_from_rbsymbol(argv[3]) : f32;
 
     dim_t ndims = (dim_t)FIX2LONG(argv[0]);
     dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
@@ -611,14 +614,12 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
       host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
     }
 
-    af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
-
+    af_create_array(&afarray->carray, host_array, ndims, dimensions, dtype);
     af_print_array(afarray->carray);
   }
 
   return self;
 }
-
 
 static VALUE arf_alloc(VALUE klass)
 {
@@ -741,11 +742,12 @@ DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 #include "cmodules/backend.c"
 #include "cmodules/blas.c"
 #include "cmodules/cuda.c"
+#include "cmodules/data.c"
+#include "cmodules/defines.c"
 #include "cmodules/device.c"
 #include "cmodules/index.c"
-#include "cmodules/opencl.c"
-#include "cmodules/data.c"
 #include "cmodules/lapack.c"
+#include "cmodules/opencl.c"
 #include "cmodules/random.c"
 #include "cmodules/statistics.c"
 #include "cmodules/util.c"
