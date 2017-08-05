@@ -1,4 +1,4 @@
-static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE prop_val){
+static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE left_prop_val, VALUE right_prop_val){
 
   afstruct* left;
   afstruct* right;
@@ -7,14 +7,15 @@ static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE prop_
   Data_Get_Struct(left_val, afstruct, left);
   Data_Get_Struct(right_val, afstruct, right);
 
-  af_mat_prop mat_prop = arf_mat_type_from_rbsymbol(prop_val);
+  af_mat_prop left_mat_prop = arf_mat_type_from_rbsymbol(left_prop_val);
+  af_mat_prop right_mat_prop = arf_mat_type_from_rbsymbol(right_prop_val);
 
-  af_matmul(&result->carray, left->carray, right->carray, AF_MAT_NONE, mat_prop);
+  af_matmul(&result->carray, left->carray, right->carray, left_mat_prop, right_mat_prop);
 
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }
 
-static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val){
+static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val, VALUE left_prop_val, VALUE right_prop_val){
   afstruct* left;
   afstruct* right;
   afstruct* result = ALLOC(afstruct);
@@ -22,7 +23,10 @@ static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val){
   Data_Get_Struct(left_val, afstruct, left);
   Data_Get_Struct(right_val, afstruct, right);
 
-  af_dot(&result->carray, left->carray, right->carray, AF_MAT_NONE, AF_MAT_NONE);
+  af_mat_prop left_mat_prop = arf_mat_type_from_rbsymbol(left_prop_val);
+  af_mat_prop right_mat_prop = arf_mat_type_from_rbsymbol(right_prop_val);
+
+  af_dot(&result->carray, left->carray, right->carray, left_mat_prop, right_mat_prop);
 
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }
