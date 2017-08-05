@@ -4,6 +4,8 @@
 #include <arrayfire.h>
 #include <stdio.h>
 #include <math.h>
+#include <map>
+
 /*
  * Project Includes
  */

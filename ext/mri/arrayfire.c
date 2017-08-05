@@ -21,7 +21,10 @@ VALUE Util = Qnil;
 void Init_arrayfire();
 
 af_dtype arf_dtype_from_rbsymbol(VALUE sym);
+af_source arf_source_from_rbsymbol(VALUE sym);
 af_mat_prop arf_mat_type_from_rbsymbol(VALUE sym);
+af_norm_type arf_norm_type_from_rbsymbol(VALUE sym);
+af_moment_type arf_moment_type_from_rbsymbol(VALUE sym);
 
 static VALUE arf_init(int argc, VALUE* argv, VALUE self);
 static VALUE arf_alloc(VALUE klass);
