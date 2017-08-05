@@ -11,12 +11,12 @@ class ArrayFire::BLASTest < Minitest::Test
 
   def test_matmul
     result = ArrayFire::Af_Array.new 2, [2,2],[-2681.0, 1653.0, -67.0, 966.0]
-    assert_equal result, ArrayFire::BLAS.matmul(@matrix_left, @matrix_right, :AF_MAT_NONE)
+    assert_equal result, ArrayFire::BLAS.matmul(@matrix_left, @matrix_right, :AF_MAT_NONE, :AF_MAT_NONE)
   end
 
   def test_dot
     result = ArrayFire::Af_Array.new 1,[1],[5965.0]
-    assert_equal result, ArrayFire::BLAS.dot(@vector_left, @vector_right)
+    assert_equal result, ArrayFire::BLAS.dot(@vector_left, @vector_right, :AF_MAT_NONE, :AF_MAT_NONE)
   end
 
   def test_transpose
