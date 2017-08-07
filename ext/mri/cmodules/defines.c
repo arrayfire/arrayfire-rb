@@ -14,8 +14,8 @@ const char* const DTYPE_NAMES[ARF_NUM_DTYPES] = {
 };
 
 const char* const SOURCE_NAMES[ARF_NUM_SOURCES] = {
-  "afDevice",   ///< Device pointer
-  "afHost"     ///< Host pointer
+  "afDevice",                                        ///< Device pointer
+  "afHost"                                           ///< Host pointer
 };
 
 std::map<char*, size_t> MAT_PROPERTIES = {
@@ -51,6 +51,54 @@ std::map<char*, size_t> MOMENT_TYPES = {
   {"AF_MOMENT_M10", 4},
   {"AF_MOMENT_M11", 8}
   //AF_MOMENT_FIRST_ORDER = AF_MOMENT_M00 | AF_MOMENT_M01 | AF_MOMENT_M10 | AF_MOMENT_M11
+};
+
+std::map<char*, size_t> BACKEND_TYPES = {
+  {"AF_BACKEND_DEFAULT" , 0},                        ///< Default backend order: OpenCL -> CUDA -> CPU
+  {"AF_BACKEND_CPU"     , 1},                        ///< CPU a.k.a sequential algorithms
+  {"AF_BACKEND_CUDA"    , 2},                        ///< CUDA Compute Backend
+  {"AF_BACKEND_OPENCL"  , 4}                         ///< OpenCL Compute Backend
+};
+
+std::map<char*, size_t> RANDOM_ENGINE_TYPES = {
+  {"AF_RANDOM_ENGINE_PHILOX_4X32_10"   , 100},       //Philox variant with N = 4, W = 32 and Rounds = 10
+  {"AF_RANDOM_ENGINE_THREEFRY_2X32_16" , 200},       //Threefry variant with N = 2, W = 32 and Rounds = 16
+  {"AF_RANDOM_ENGINE_MERSENNE_GP11213" , 300},       //Mersenne variant with MEXP = 11213
+  {"AF_RANDOM_ENGINE_PHILOX"           , 100},       //Resolves to Philox 4x32_10
+  {"AF_RANDOM_ENGINE_THREEFRY"         , 200},       //Resolves to Threefry 2X32_16
+  {"AF_RANDOM_ENGINE_MERSENNE"         , 300},       //Resolves to Mersenne GP 11213
+  {"AF_RANDOM_ENGINE_DEFAULT"          , 100},       //Resolves to Philox
+};
+
+std::map<char*, size_t> ERROR_TYPES = {
+  {"AF_SUCCESS"                ,   0},
+  {"AF_ERR_NO_MEM"             , 101},
+  {"AF_ERR_DRIVER"             , 102},
+  {"AF_ERR_RUNTIME"            , 103},
+  {"AF_ERR_INVALID_ARRAY"      , 201},
+  {"AF_ERR_ARG"                , 202},
+  {"AF_ERR_SIZE"               , 203},
+  {"AF_ERR_TYPE"               , 204},
+  {"AF_ERR_DIFF_TYPE"          , 205},
+  {"AF_ERR_BATCH"              , 207},
+  {"AF_ERR_DEVICE"             , 208},
+  {"AF_ERR_NOT_SUPPORTED"      , 301},
+  {"AF_ERR_NOT_CONFIGURED"     , 302},
+  {"AF_ERR_NONFREE"            , 303},
+  {"AF_ERR_NO_DBL"             , 401},
+  {"AF_ERR_NO_GFX"             , 402},
+  {"AF_ERR_LOAD_LIB"           , 501},
+  {"AF_ERR_LOAD_SYM"           , 502},
+  {"AF_ERR_ARR_BKND_MISMATCH"  , 503},
+  {"AF_ERR_INTERNAL"           , 998},
+  {"AF_ERR_UNKNOWN"            , 999}
+};
+
+const char* const STORAGE_TYPES[ARF_NUM_STORAGE_TYPES] = {
+  "AF_STORAGE_DENSE",                                ///< Storage type is dense
+  "AF_STORAGE_CSR",                                  ///< Storage type is CSR
+  "AF_STORAGE_CSC",                                  ///< Storage type is CSC
+  "AF_STORAGE_COO",                                  ///< Storage type is COO
 };
 
 af_dtype arf_dtype_from_rbsymbol(VALUE sym) {
@@ -116,4 +164,30 @@ af_moment_type arf_moment_type_from_rbsymbol(VALUE sym) {
 
   VALUE str = rb_any_to_s(sym);
   rb_raise(rb_eArgError, "invalid moment type symbol (:%s) specified", RSTRING_PTR(str));
+}
+
+af_backend arf_backend_type_from_rbsymbol(VALUE sym) {
+  ID sym_id = SYM2ID(sym);
+
+  for(std::map<char*, size_t>::value_type& entry : BACKEND_TYPES) {
+    if (sym_id == rb_intern(entry.first)) {
+      return static_cast<af_backend>(entry.second);
+    }
+  }
+
+  VALUE str = rb_any_to_s(sym);
+  rb_raise(rb_eArgError, "invalid backend type symbol (:%s) specified", RSTRING_PTR(str));
+}
+
+af_random_engine_type arf_randome_engine_type_from_rbsymbol(VALUE sym) {
+  ID sym_id = SYM2ID(sym);
+
+  for(std::map<char*, size_t>::value_type& entry : RANDOM_ENGINE_TYPES) {
+    if (sym_id == rb_intern(entry.first)) {
+      return static_cast<af_random_engine_type>(entry.second);
+    }
+  }
+
+  VALUE str = rb_any_to_s(sym);
+  rb_raise(rb_eArgError, "invalid backend type symbol (:%s) specified", RSTRING_PTR(str));
 }

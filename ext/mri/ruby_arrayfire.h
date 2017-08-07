@@ -15,8 +15,9 @@ typedef struct RANDOM_ENGINE_STRUCT
 }afrandomenginestruct;
 
 #define ARF_NUM_DTYPES 12
-#define ARF_NUM_SOURCES 2
 #define ARF_NUM_NORM_TYPES 9
+#define ARF_NUM_SOURCES 2
+#define ARF_NUM_STORAGE_TYPES 4
 
 #ifndef HAVE_RB_ARRAY_CONST_PTR
 static inline const VALUE *
