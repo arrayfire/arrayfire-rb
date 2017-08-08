@@ -3,6 +3,7 @@
 #include <fstream>
 #include <arrayfire.h>
 #include <af/cuda.h>
+#include <af/opencl.h>
 #include <stdio.h>
 #include <math.h>
 #include <map>

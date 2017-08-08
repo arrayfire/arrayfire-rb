@@ -21,6 +21,9 @@ VALUE Util = Qnil;
 void Init_arrayfire();
 
 const char* get_backend_name(af_backend backend);
+const char* get_cl_device_name(afcl_device_type device);
+const char* get_cl_platform_name(afcl_platform platform);
+
 af_backend arf_backend_type_from_rbsymbol(VALUE sym);
 af_dtype arf_dtype_from_rbsymbol(VALUE sym);
 af_mat_prop arf_mat_type_from_rbsymbol(VALUE sym);
