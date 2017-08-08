@@ -20,6 +20,7 @@ VALUE Util = Qnil;
 // prototypes
 void Init_arrayfire();
 
+const char* get_backend_name(af_backend backend);
 af_backend arf_backend_type_from_rbsymbol(VALUE sym);
 af_dtype arf_dtype_from_rbsymbol(VALUE sym);
 af_mat_prop arf_mat_type_from_rbsymbol(VALUE sym);
@@ -105,7 +106,7 @@ static VALUE arf_get_available_backends(VALUE self);
 static VALUE arf_get_backend_id(VALUE self, VALUE array_val);
 static VALUE arf_get_active_backend(VALUE self);
 static VALUE arf_get_backend_device_id(VALUE self, VALUE array_val);
-static VALUE arf_set_backend(VALUE self);
+static VALUE arf_set_backend(VALUE self, VALUE backend_val);
 
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE left_prop_val, VALUE right_prop_val);
 static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val, VALUE left_prop_val, VALUE right_prop_val);
@@ -444,7 +445,7 @@ void Init_arrayfire() {
   rb_define_singleton_method(Backend, "get_backend_id", (METHOD)arf_get_backend_id, 1);
   rb_define_singleton_method(Backend, "get_active_backend", (METHOD)arf_get_active_backend, 0);
   rb_define_singleton_method(Backend, "get_device_id", (METHOD)arf_get_backend_device_id, 1);
-  rb_define_singleton_method(Backend, "set_backend", (METHOD)arf_set_backend, 0);
+  rb_define_singleton_method(Backend, "set_backend", (METHOD)arf_set_backend, 1);
 
   Device = rb_define_class_under(ArrayFire, "Device", rb_cObject);
   rb_define_singleton_method(Device, "info", (METHOD)arf_info, 0);
