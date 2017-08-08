@@ -38,6 +38,7 @@ static void arf_free(afstruct* af);
 static VALUE arf_engine_alloc(VALUE klass);
 static void arf_engine_free(afrandomenginestruct* afrandomengine);
 
+// Af_Array
 static VALUE arf_create_array(int argc, VALUE* argv);
 static VALUE arf_create_handle(int argc, VALUE* argv);
 static VALUE arf_copy_array(VALUE self);
@@ -69,6 +70,7 @@ static VALUE arf_is_integer(VALUE self);
 static VALUE arf_is_bool(VALUE self);
 static VALUE arf_is_sparse(VALUE self);
 
+// Algorithm
 static VALUE arf_sum(VALUE self, VALUE array_val, VALUE dim_val);
 static VALUE arf_sum_nan(VALUE self, VALUE array_val, VALUE dim_val, VALUE nan_val);
 static VALUE arf_product(VALUE self, VALUE array_val, VALUE dim_val);
@@ -104,6 +106,7 @@ static VALUE arf_set_unique(VALUE self);
 static VALUE arf_set_union(VALUE self);
 static VALUE arf_set_intersect(VALUE self);
 
+// Backend
 static VALUE arf_get_backend_count(VALUE self);
 static VALUE arf_get_available_backends(VALUE self);
 static VALUE arf_get_backend_id(VALUE self, VALUE array_val);
@@ -111,6 +114,7 @@ static VALUE arf_get_active_backend(VALUE self);
 static VALUE arf_get_backend_device_id(VALUE self, VALUE array_val);
 static VALUE arf_set_backend(VALUE self, VALUE backend_val);
 
+// BLAS
 static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE left_prop_val, VALUE right_prop_val);
 static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val, VALUE left_prop_val, VALUE right_prop_val);
 static VALUE arf_transpose(VALUE self, VALUE input);
@@ -121,7 +125,7 @@ static VALUE arf_get_stream(VALUE self, VALUE id);
 static VALUE arf_get_native_id(VALUE self, VALUE cuda_device_id);
 static VALUE arf_set_native_id(VALUE self, VALUE native_id);
 
-// device
+// Device
 static VALUE arf_info(VALUE self);
 static VALUE arf_init2(VALUE self);
 static VALUE arf_info_string(VALUE self, VALUE bool_val);
@@ -150,6 +154,7 @@ static VALUE arf_unlock_array(VALUE self, VALUE array_val);
 static VALUE arf_is_locked_array(VALUE self, VALUE array_val);
 static VALUE arf_get_device_ptr(VALUE self);
 
+// OpenCL
 static VALUE arf_get_context(VALUE self);
 static VALUE arf_get_queue(VALUE self);
 static VALUE arf_get_device_id(VALUE self);
@@ -160,6 +165,7 @@ static VALUE arf_delete_device_context(VALUE self);
 static VALUE arf_get_device_type(VALUE self);
 static VALUE arf_get_platform(VALUE self);
 
+// Data
 static VALUE arf_constant(int argc, VALUE* argv);
 static VALUE arf_constant_complex(VALUE self);
 static VALUE arf_constant_long(int argc, VALUE* argv);
@@ -185,6 +191,7 @@ static VALUE arf_select_scalar_l(VALUE self, VALUE array_cond_val, VALUE a_val, 
 static void arf_replace(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE array_b_val);
 static void arf_replace_scalar(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE b_val);
 
+// Index
 static VALUE arf_index(VALUE self);
 static VALUE arf_lookup(VALUE self);
 static VALUE arf_assign_seq(VALUE self);
@@ -196,6 +203,7 @@ static VALUE arf_set_seq_indexer(VALUE self);
 static VALUE arf_set_seq_param_indexer(VALUE self);
 static VALUE arf_release_indexers(VALUE self);
 
+// LAPACK
 static VALUE arf_svd_func(VALUE self, VALUE u_val, VALUE s_val, VALUE vt_val, VALUE val);
 static VALUE arf_svd_inplace_func(VALUE self, VALUE val);
 static VALUE arf_lu_func(VALUE self, VALUE lower_val, VALUE upper_val, VALUE pivot_val, VALUE val);
@@ -212,6 +220,7 @@ static VALUE arf_det(VALUE self, VALUE val);
 static VALUE arf_norm(VALUE self, VALUE val);
 static VALUE arf_is_lapack_available(VALUE self);
 
+// Random
 static VALUE arf_create_random_engine(VALUE self, VALUE seed_val);
 static VALUE arf_retain_random_engine(VALUE self, VALUE engine_val);
 static VALUE arf_random_engine_set_type(VALUE self);
@@ -228,6 +237,20 @@ static VALUE arf_randn(VALUE self, VALUE ndims_val, VALUE dim_val);
 static VALUE arf_set_seed(VALUE self);
 static VALUE arf_get_seed(VALUE self);
 
+// Sparse
+static VALUE arf_create_sparse_array(VALUE self);
+static VALUE arf_create_sparse_array_from_ptr(VALUE self);
+static VALUE arf_create_sparse_array_from_dense(VALUE self);
+static VALUE arf_sparse_convert_to(VALUE self);
+static VALUE arf_sparse_to_dense(VALUE self);
+static VALUE arf_sparse_get_info(VALUE self);
+static VALUE arf_sparse_get_values(VALUE self);
+static VALUE arf_sparse_get_row_idx(VALUE self);
+static VALUE arf_sparse_get_col_idx(VALUE self);
+static VALUE arf_sparse_get_nnz(VALUE self);
+static VALUE arf_sparse_get_storage(VALUE self);
+
+// Statistics
 static VALUE arf_mean(VALUE self, VALUE array_val, VALUE dim_val);
 static VALUE arf_mean_weighted(VALUE self, VALUE array_val, VALUE weighted_array_val, VALUE dim_val);
 static VALUE arf_var(VALUE self, VALUE array_val, VALUE is_biased, VALUE dim_val);
@@ -243,6 +266,7 @@ static VALUE arf_stdev_all(VALUE self, VALUE array_val);
 static VALUE arf_median_all(VALUE self, VALUE array_val);
 static VALUE arf_corrcoef(VALUE self, VALUE first_array_val, VALUE second_array_val);
 
+// Util
 static VALUE arf_print_array(VALUE self);
 static VALUE arf_print_array_gen(VALUE self);
 static VALUE arf_save_array(VALUE self);
