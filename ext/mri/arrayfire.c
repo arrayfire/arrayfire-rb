@@ -113,9 +113,10 @@ static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val, VALUE left_pro
 static VALUE arf_transpose(VALUE self, VALUE input);
 static VALUE arf_transpose_inplace(VALUE self, VALUE input);
 
-static VALUE arf_get_stream(VALUE self);
-static VALUE arf_get_native_id(VALUE self);
-static VALUE arf_set_native_id(VALUE self);
+// CUDA
+static VALUE arf_get_stream(VALUE self, VALUE id);
+static VALUE arf_get_native_id(VALUE self, VALUE cuda_device_id);
+static VALUE arf_set_native_id(VALUE self, VALUE native_id);
 
 // device
 static VALUE arf_info(VALUE self);
@@ -483,9 +484,9 @@ void Init_arrayfire() {
   rb_define_singleton_method(Blas, "transpose_inplace", (METHOD)arf_transpose_inplace, 1);
 
   Cuda = rb_define_class_under(ArrayFire, "CUDA", rb_cObject);
-  rb_define_singleton_method(Cuda, "get_stream", (METHOD)arf_get_stream, 0);
-  rb_define_singleton_method(Cuda, "get_native_id", (METHOD)arf_get_native_id, 0);
-  rb_define_singleton_method(Cuda, "set_native_id", (METHOD)arf_set_native_id, 0);
+  rb_define_singleton_method(Cuda, "get_stream", (METHOD)arf_get_stream, 1);
+  rb_define_singleton_method(Cuda, "get_native_id", (METHOD)arf_get_native_id, 1);
+  rb_define_singleton_method(Cuda, "set_native_id", (METHOD)arf_set_native_id, 1);
 
   Index = rb_define_class_under(ArrayFire, "Index", rb_cObject);
   rb_define_singleton_method(Index, "index", (METHOD)arf_index, 0);
