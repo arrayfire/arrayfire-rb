@@ -14,6 +14,7 @@ VALUE Index = Qnil;
 VALUE Lapack = Qnil;
 VALUE OpenCL = Qnil;
 VALUE Random = Qnil;
+VALUE Sparse = Qnil;
 VALUE Statistics = Qnil;
 VALUE Util = Qnil;
 
@@ -599,6 +600,19 @@ void Init_arrayfire() {
   rb_define_singleton_method(Random, "set_seed", (METHOD)arf_set_seed, 0);
   rb_define_singleton_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
 
+  Sparse = rb_define_class_under(ArrayFire, "Sparse", rb_cObject);
+  rb_define_singleton_method(Sparse, "create_sparse_array", (METHOD)arf_create_sparse_array, 0);
+  rb_define_singleton_method(Sparse, "create_sparse_array_from_ptr", (METHOD)arf_create_sparse_array_from_ptr, 0);
+  rb_define_singleton_method(Sparse, "create_sparse_array_from_dense", (METHOD)arf_create_sparse_array_from_dense, 0);
+  rb_define_singleton_method(Sparse, "sparse_convert_to", (METHOD)arf_sparse_convert_to, 0);
+  rb_define_singleton_method(Sparse, "sparse_to_dense", (METHOD)arf_sparse_to_dense, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_info", (METHOD)arf_sparse_get_info, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_values", (METHOD)arf_sparse_get_values, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_row_idx", (METHOD)arf_sparse_get_row_idx, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_col_idx", (METHOD)arf_sparse_get_col_idx, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_nnz", (METHOD)arf_sparse_get_nnz, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_storage", (METHOD)arf_sparse_get_storage, 0);
+
   Statistics = rb_define_class_under(ArrayFire, "Statistics", rb_cObject);
   rb_define_singleton_method(Statistics, "mean", (METHOD)arf_mean, 2);
   rb_define_singleton_method(Statistics, "mean_weighted", (METHOD)arf_mean_weighted, 3);
@@ -633,7 +647,7 @@ void Init_arrayfire() {
 /*
  * call-seq:
  *     new(dimesnsion) -> Af_Array
- *     new(dims, dimesnsion, elements, data_type) -> NMatrix
+ *     new(dims, dimesnsion, elements, data_type) -> Af_Array
  *
  * Create a new Af_Array.
  *
@@ -793,5 +807,6 @@ DEF_UNARY_RUBY_ACCESSOR(ceil, ceil)
 #include "cmodules/lapack.c"
 #include "cmodules/opencl.c"
 #include "cmodules/random.c"
+#include "cmodules/sparse.c"
 #include "cmodules/statistics.c"
 #include "cmodules/util.c"
