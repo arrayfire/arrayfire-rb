@@ -192,6 +192,19 @@ af_random_engine_type arf_randome_engine_type_from_rbsymbol(VALUE sym) {
   rb_raise(rb_eArgError, "invalid backend type symbol (:%s) specified", RSTRING_PTR(str));
 }
 
+af_storage arf_storage_type_from_rbsymbol(VALUE sym){
+  ID sym_id = SYM2ID(sym);
+
+  for (size_t index = 0; index < ARF_NUM_STORAGE_TYPES; ++index) {
+    if (sym_id == rb_intern(STORAGE_TYPES[index])) {
+      return static_cast<af_storage>(index);
+    }
+  }
+
+  VALUE str = rb_any_to_s(sym);
+  rb_raise(rb_eArgError, "invalid storage type symbol (:%s) specified", RSTRING_PTR(str));
+}
+
 const char* get_backend_name(af_backend backend){
   for(std::map<char*, size_t>::value_type& entry : BACKEND_TYPES) {
     if (backend == entry.second) {
