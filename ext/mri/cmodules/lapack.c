@@ -82,7 +82,7 @@ static VALUE arf_cholesky_inplace_func(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_solve_func(VALUE self, VALUE lhs_val, VALUE rhs_val){
+static VALUE arf_solve(VALUE self, VALUE lhs_val, VALUE rhs_val){
 
   afstruct* lhs;
   afstruct* rhs;
@@ -96,7 +96,7 @@ static VALUE arf_solve_func(VALUE self, VALUE lhs_val, VALUE rhs_val){
 
 }
 
-static VALUE arf_solve_lu_func(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val){
+static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val){
   afstruct* lhs;
   afstruct* rhs;
   afstruct* piv;
@@ -104,6 +104,7 @@ static VALUE arf_solve_lu_func(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE p
 
   Data_Get_Struct(lhs_val, afstruct, lhs);
   Data_Get_Struct(rhs_val, afstruct, rhs);
+  Data_Get_Struct(piv_val, afstruct, piv);
 
   af_solve_lu(&result->carray, lhs->carray, piv->carray, rhs->carray, AF_MAT_NONE);
   return Data_Wrap_Struct(CLASS_OF(lhs_val), NULL, arf_free, result);

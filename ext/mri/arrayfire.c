@@ -213,8 +213,8 @@ static VALUE arf_qr_func(VALUE self, VALUE q_val, VALUE r_val, VALUE tau_val, VA
 static VALUE arf_qr_inplace_func(VALUE self);
 static VALUE arf_cholesky_func(VALUE self, VALUE output_val, VALUE val, VALUE is_upper_val);
 static VALUE arf_cholesky_inplace_func(VALUE self);
-static VALUE arf_solve_func(VALUE self, VALUE lhs_val, VALUE rhs_val);
-static VALUE arf_solve_lu_func(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val);
+static VALUE arf_solve(VALUE self, VALUE lhs_val, VALUE rhs_val);
+static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val);
 static VALUE arf_inverse(VALUE self, VALUE val);
 static VALUE arf_rank(VALUE self, VALUE val);
 static VALUE arf_det(VALUE self, VALUE val);
@@ -552,8 +552,8 @@ void Init_arrayfire() {
   rb_define_singleton_method(Lapack, "qr_inplace_func", (METHOD)arf_qr_inplace_func, 1);
   rb_define_singleton_method(Lapack, "cholesky_func", (METHOD)arf_cholesky_func, 3);
   rb_define_singleton_method(Lapack, "cholesky_inplace_func", (METHOD)arf_cholesky_inplace_func, 1);
-  rb_define_singleton_method(Lapack, "solve_func", (METHOD)arf_solve_func, 0);
-  rb_define_singleton_method(Lapack, "solve_lu_func", (METHOD)arf_solve_lu_func, 0);
+  rb_define_singleton_method(Lapack, "solve", (METHOD)arf_solve, 2);
+  rb_define_singleton_method(Lapack, "solve_lu", (METHOD)arf_solve_lu, 3);
   rb_define_singleton_method(Lapack, "inverse", (METHOD)arf_inverse, 1);
   rb_define_singleton_method(Lapack, "rank", (METHOD)arf_rank, 1);
   rb_define_singleton_method(Lapack, "det", (METHOD)arf_det, 1);
