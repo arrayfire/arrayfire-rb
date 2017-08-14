@@ -51,6 +51,17 @@ class ArrayFire::LAPACKTest < Minitest::Test
     assert_equal lower, res_lower
   end
 
+  def test_solve
+    lhs = ArrayFire::Af_Array.new 2, [2,2], [3,1,1,2]
+    rhs = ArrayFire::Af_Array.new 2, [2,1], [9,8]
+    solution = ArrayFire::Af_Array.new 2, [2,1], [2,3]
+    assert_equal solution, ArrayFire::LAPACK.solve(lhs, rhs)
+  end
+
+  def test_solve_lu
+    # TODO
+  end
+
   def test_inverse
     result = ArrayFire::Af_Array.new 2, [2,2], [0.0258, -0.0113, 0.0328, 0.0064]
     assert(result.approx_equal ArrayFire::LAPACK.inverse(@array));
