@@ -1,6 +1,12 @@
-static VALUE arf_print_array(VALUE self){
-  return Qnil;
+static VALUE arf_print_array(VALUE self, VALUE input_val){
+  afstruct* input;
+
+  Data_Get_Struct(input_val, afstruct, input);
+
+  af_print_array(input->carray);
+  return Qtrue;
 }
+
 static VALUE arf_print_array_gen(VALUE self){
   return Qnil;
 }
