@@ -636,7 +636,7 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
   afstruct* afarray;
   Data_Get_Struct(self, afstruct, afarray);
   if(argc > 0){
-    af_dtype dtype = (argc == 4) ? arf_dtype_from_rbsymbol(argv[3]) : f32;
+    af_dtype dtype = (argc == 4) ? arf_dtype_from_rbsymbol(argv[3]) : f64;
 
     dim_t ndims = (dim_t)FIX2LONG(argv[0]);
     dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
@@ -645,9 +645,9 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
       dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
       count *= dimensions[index];
     }
-    float* host_array = (float*)malloc(count * sizeof(float));
+    double* host_array = (double*)malloc(count * sizeof(double));
     for (dim_t index = 0; index < count; index++) {
-      host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
+      host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
     }
 
     af_create_array(&afarray->carray, host_array, ndims, dimensions, dtype);
@@ -720,14 +720,14 @@ static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val) {
 
   if(left_count != right_count){return Qfalse;}
 
-  float* left_arr = (float*)malloc(left_count * sizeof(float));
+  double* left_arr = (double*)malloc(left_count * sizeof(double));
   af_get_data_ptr(left_arr, left->carray);
 
-  float* right_arr = (float*)malloc(left_count * sizeof(float));
+  double* right_arr = (double*)malloc(left_count * sizeof(double));
   af_get_data_ptr(right_arr, right->carray);
 
   for (dim_t index = 0; index < left_count; index++){
-    float diff = left_arr[index] - right_arr[index];
+    double diff = left_arr[index] - right_arr[index];
     if(diff < 0){diff *= -1;}
     if(diff > 1e-3){
       return Qfalse;
