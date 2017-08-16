@@ -268,7 +268,7 @@ static VALUE arf_median_all(VALUE self, VALUE array_val);
 static VALUE arf_corrcoef(VALUE self, VALUE first_array_val, VALUE second_array_val);
 
 // Util
-static VALUE arf_print_array(VALUE self);
+static VALUE arf_print_array(VALUE self, VALUE input_val);
 static VALUE arf_print_array_gen(VALUE self);
 static VALUE arf_save_array(VALUE self);
 static VALUE arf_read_array_index(VALUE self);
@@ -608,7 +608,7 @@ void Init_arrayfire() {
   rb_define_singleton_method(Statistics, "corrcoef", (METHOD)arf_corrcoef, 2);
 
   Util = rb_define_class_under(ArrayFire, "Util", rb_cObject);
-  rb_define_singleton_method(Util, "print_array", (METHOD)arf_print_array, 0);
+  rb_define_singleton_method(Util, "print_array", (METHOD)arf_print_array, 1);
   rb_define_singleton_method(Util, "print_array_gen", (METHOD)arf_print_array_gen, 0);
   rb_define_singleton_method(Util, "save_array", (METHOD)arf_save_array, 0);
   rb_define_singleton_method(Util, "read_array_index", (METHOD)arf_read_array_index, 0);
