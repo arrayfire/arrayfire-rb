@@ -135,7 +135,7 @@ static VALUE arf_get_device_count(VALUE self);
 static VALUE arf_get_dbl_support(VALUE self, VALUE device);
 static VALUE arf_set_device(VALUE self, VALUE device);
 static VALUE arf_get_device(VALUE self);
-static VALUE arf_sync(VALUE self);
+static VALUE arf_sync(VALUE self, VALUE device_val);
 static VALUE arf_alloc_device(VALUE self);
 static VALUE arf_free_device(VALUE self);
 static VALUE arf_alloc_pinned(VALUE self);
@@ -463,7 +463,7 @@ void Init_arrayfire() {
   rb_define_singleton_method(Device, "get_dbl_support", (METHOD)arf_get_dbl_support, 1);
   rb_define_singleton_method(Device, "set_device", (METHOD)arf_set_device, 1);
   rb_define_singleton_method(Device, "get_device", (METHOD)arf_get_device, 0);
-  rb_define_singleton_method(Device, "sync", (METHOD)arf_sync, 0);
+  rb_define_singleton_method(Device, "sync", (METHOD)arf_sync, 1);
   rb_define_singleton_method(Device, "alloc_device", (METHOD)arf_alloc_device, 0);
   rb_define_singleton_method(Device, "free_device", (METHOD)arf_free_device, 0);
   rb_define_singleton_method(Device, "alloc_pinned", (METHOD)arf_alloc_pinned, 0);
