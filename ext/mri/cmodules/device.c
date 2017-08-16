@@ -43,7 +43,8 @@ static VALUE arf_get_device(VALUE self){
   return INT2NUM(device);
 }
 
-static VALUE arf_sync(VALUE self){
+static VALUE arf_sync(VALUE self, VALUE device_val){
+  af_sync(NUM2INT(device_val));
   return Qnil;
 }
 
