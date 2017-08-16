@@ -7,9 +7,9 @@ static VALUE arf_create_array(int argc, VALUE* argv){
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
-  float* host_array = (float*)malloc(count * sizeof(float));
+  double* host_array = (double*)malloc(count * sizeof(double));
   for (dim_t index = 0; index < count; index++) {
-    host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
+    host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
   af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
@@ -28,9 +28,9 @@ static VALUE arf_create_handle(int argc, VALUE* argv){
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
-  float* host_array = (float*)malloc(count * sizeof(float));
+  double* host_array = (double*)malloc(count * sizeof(double));
   for (dim_t index = 0; index < count; index++) {
-    host_array[index] = (float)NUM2DBL(RARRAY_AREF(argv[2], index));
+    host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
   af_create_handle(&afarray->carray, ndims, dimensions, f32);
@@ -62,7 +62,7 @@ static VALUE arf_get_data_ptr(VALUE self){
   Data_Get_Struct(self, afstruct, input);
 
   af_get_elements(&count, input->carray);
-  float* data = (float*)malloc(count * sizeof(float));
+  double* data = (double*)malloc(count * sizeof(double));
   af_get_data_ptr(data, input->carray);
 
   VALUE* array = ALLOC_N(VALUE, count);
