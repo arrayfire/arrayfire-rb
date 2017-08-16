@@ -96,19 +96,25 @@ static VALUE arf_get_data_ref_count(VALUE self){
 }
 
 static VALUE arf_eval(VALUE self){
-  return Qnil;
+  afstruct* input;
+  Data_Get_Struct(self, afstruct, input);
+  af_eval(input->carray);
+  return Qtrue;
 }
 
 static VALUE arf_eval_multiple(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_set_manual_eval_flag(VALUE self){
+static VALUE arf_set_manual_eval_flag(VALUE self, VALUE flag){
+  af_set_manual_eval_flag(RTEST(flag));
   return Qnil;
 }
 
 static VALUE arf_get_manual_eval_flag(VALUE self){
-  return Qnil;
+  bool flag;
+  af_get_manual_eval_flag(&flag);
+  return flag ? Qtrue : Qfalse;
 }
 
 static VALUE arf_get_elements(VALUE self){
