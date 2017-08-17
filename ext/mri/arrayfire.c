@@ -271,15 +271,15 @@ static VALUE arf_corrcoef(VALUE self, VALUE first_array_val, VALUE second_array_
 // Util
 static VALUE arf_print_array(VALUE self, VALUE input_val);
 static VALUE arf_print_array_gen(VALUE self);
-static VALUE arf_save_array(VALUE self);
+static VALUE arf_save_array(VALUE self, VALUE key_val, VALUE array_val, VALUE fn_val, VALUE append);
 static VALUE arf_read_array_index(VALUE self);
 static VALUE arf_read_array_key(VALUE self);
 static VALUE arf_read_array_key_check(VALUE self);
-static VALUE arf_array_to_string(VALUE self);
+static VALUE arf_array_to_string(VALUE self, VALUE exp_val, VALUE array_val, VALUE precision, VALUE transpose);
 static VALUE arf_example_function(VALUE self);
-static VALUE arf_get_version(VALUE self);
+static VALUE arf_get_version(VALUE self, VALUE major, VALUE minor, VALUE patch);
 static VALUE arf_get_revision(VALUE self);
-static VALUE arf_get_size_of(VALUE self);
+static VALUE arf_get_size_of(VALUE self, VALUE dtype_val);
 
 #define DECL_ELEMENTWISE_RUBY_ACCESSOR(name)    static VALUE arf_ew_##name(VALUE left_val, VALUE right_val);
 #define DECL_UNARY_RUBY_ACCESSOR(name)          static VALUE arf_unary_##name(VALUE self);
@@ -611,15 +611,15 @@ void Init_arrayfire() {
   Util = rb_define_class_under(ArrayFire, "Util", rb_cObject);
   rb_define_singleton_method(Util, "print_array", (METHOD)arf_print_array, 1);
   rb_define_singleton_method(Util, "print_array_gen", (METHOD)arf_print_array_gen, 0);
-  rb_define_singleton_method(Util, "save_array", (METHOD)arf_save_array, 0);
+  rb_define_singleton_method(Util, "save_array", (METHOD)arf_save_array, 4);
   rb_define_singleton_method(Util, "read_array_index", (METHOD)arf_read_array_index, 0);
   rb_define_singleton_method(Util, "read_array_key", (METHOD)arf_read_array_key, 0);
   rb_define_singleton_method(Util, "read_array_key_check", (METHOD)arf_read_array_key_check, 0);
-  rb_define_singleton_method(Util, "array_to_string", (METHOD)arf_array_to_string, 0);
+  rb_define_singleton_method(Util, "array_to_string", (METHOD)arf_array_to_string, 4);
   rb_define_singleton_method(Util, "example_function", (METHOD)arf_example_function, 0);
-  rb_define_singleton_method(Util, "get_version", (METHOD)arf_get_version, 0);
+  rb_define_singleton_method(Util, "get_version", (METHOD)arf_get_version, 3);
   rb_define_singleton_method(Util, "get_revision", (METHOD)arf_get_revision, 0);
-  rb_define_singleton_method(Util, "get_size_of", (METHOD)arf_get_size_of, 0);
+  rb_define_singleton_method(Util, "get_size_of", (METHOD)arf_get_size_of, 1);
 
 }
 
