@@ -189,7 +189,7 @@ af_random_engine_type arf_randome_engine_type_from_rbsymbol(VALUE sym) {
   }
 
   VALUE str = rb_any_to_s(sym);
-  rb_raise(rb_eArgError, "invalid backend type symbol (:%s) specified", RSTRING_PTR(str));
+  rb_raise(rb_eArgError, "invalid engine type symbol (:%s) specified", RSTRING_PTR(str));
 }
 
 af_storage arf_storage_type_from_rbsymbol(VALUE sym){
@@ -208,6 +208,15 @@ af_storage arf_storage_type_from_rbsymbol(VALUE sym){
 const char* get_backend_name(af_backend backend){
   for(std::map<char*, size_t>::value_type& entry : BACKEND_TYPES) {
     if (backend == entry.second) {
+      return entry.first;
+    }
+  }
+  rb_raise(rb_eArgError, "Something went wrong!");
+}
+
+const char* get_random_engine_name(af_random_engine_type engine){
+  for(std::map<char*, size_t>::value_type& entry : RANDOM_ENGINE_TYPES) {
+    if (engine == entry.second) {
       return entry.first;
     }
   }

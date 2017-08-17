@@ -24,6 +24,7 @@ void Init_arrayfire();
 const char* get_backend_name(af_backend backend);
 const char* get_cl_device_name(afcl_device_type device);
 const char* get_cl_platform_name(afcl_platform platform);
+const char* get_random_engine_name(af_random_engine_type engine);
 
 af_backend arf_backend_type_from_rbsymbol(VALUE sym);
 af_dtype arf_dtype_from_rbsymbol(VALUE sym);
@@ -224,18 +225,18 @@ static VALUE arf_is_lapack_available(VALUE self);
 // Random
 static VALUE arf_create_random_engine(VALUE self, VALUE seed_val);
 static VALUE arf_retain_random_engine(VALUE self, VALUE engine_val);
-static VALUE arf_random_engine_set_type(VALUE self);
-static VALUE arf_random_engine_get_type(VALUE self);
+static VALUE arf_random_engine_set_type(VALUE self, VALUE engine_val, VALUE type_val);
+static VALUE arf_random_engine_get_type(VALUE self, VALUE engine_val);
 static VALUE arf_random_uniform(VALUE self, VALUE ndims_val, VALUE dim_val, VALUE engine_val);
 static VALUE arf_random_normal(VALUE self, VALUE ndims_val, VALUE dim_val, VALUE engine_val);
 static VALUE arf_random_engine_set_seed(VALUE self, VALUE engine_val ,VALUE seed_val);
 static VALUE arf_get_default_random_engine(VALUE self);
-static VALUE arf_set_default_random_engine_type(VALUE self);
-static VALUE arf_random_engine_get_seed(VALUE self);
-static VALUE arf_release_random_engine(VALUE self);
+static VALUE arf_set_default_random_engine_type(VALUE self, VALUE type_val);
+static VALUE arf_random_engine_get_seed(VALUE self, VALUE engine_val);
+static VALUE arf_release_random_engine(VALUE self, VALUE engine_val);
 static VALUE arf_randu(VALUE self, VALUE ndims_val, VALUE dim_val);
 static VALUE arf_randn(VALUE self, VALUE ndims_val, VALUE dim_val);
-static VALUE arf_set_seed(VALUE self);
+static VALUE arf_set_seed(VALUE self, VALUE seed);
 static VALUE arf_get_seed(VALUE self);
 
 // Sparse
@@ -564,18 +565,18 @@ void Init_arrayfire() {
   rb_define_alloc_func(Random, arf_engine_alloc);
   rb_define_singleton_method(Random, "create_random_engine", (METHOD)arf_create_random_engine, 1);
   rb_define_singleton_method(Random, "retain_random_engine", (METHOD)arf_retain_random_engine, 1);
-  rb_define_singleton_method(Random, "random_engine_set_type", (METHOD)arf_random_engine_set_type, 0);
-  rb_define_singleton_method(Random, "random_engine_get_type", (METHOD)arf_random_engine_get_type, 0);
+  rb_define_singleton_method(Random, "random_engine_set_type", (METHOD)arf_random_engine_set_type, 2);
+  rb_define_singleton_method(Random, "random_engine_get_type", (METHOD)arf_random_engine_get_type, 1);
   rb_define_singleton_method(Random, "random_uniform", (METHOD)arf_random_uniform, 3);
   rb_define_singleton_method(Random, "random_normal", (METHOD)arf_random_normal, 3);
   rb_define_singleton_method(Random, "random_engine_set_seed", (METHOD)arf_random_engine_set_seed, 2);
   rb_define_singleton_method(Random, "get_default_random_engine", (METHOD)arf_get_default_random_engine, 0);
-  rb_define_singleton_method(Random, "set_default_random_engine_type", (METHOD)arf_set_default_random_engine_type, 0);
-  rb_define_singleton_method(Random, "random_engine_get_seed", (METHOD)arf_random_engine_get_seed, 0);
-  rb_define_singleton_method(Random, "release_random_engine", (METHOD)arf_release_random_engine, 0);
+  rb_define_singleton_method(Random, "set_default_random_engine_type", (METHOD)arf_set_default_random_engine_type, 1);
+  rb_define_singleton_method(Random, "random_engine_get_seed", (METHOD)arf_random_engine_get_seed, 1);
+  rb_define_singleton_method(Random, "release_random_engine", (METHOD)arf_release_random_engine, 1);
   rb_define_singleton_method(Random, "randu", (METHOD)arf_randu, 2);
   rb_define_singleton_method(Random, "randn", (METHOD)arf_randn, 2);
-  rb_define_singleton_method(Random, "set_seed", (METHOD)arf_set_seed, 0);
+  rb_define_singleton_method(Random, "set_seed", (METHOD)arf_set_seed, 1);
   rb_define_singleton_method(Random, "get_seed", (METHOD)arf_get_seed, 0);
 
   Sparse = rb_define_class_under(ArrayFire, "Sparse", rb_cObject);
