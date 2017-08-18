@@ -223,7 +223,7 @@ static VALUE arf_norm(VALUE self, VALUE val);
 static VALUE arf_is_lapack_available(VALUE self);
 
 // Random
-static VALUE arf_create_random_engine(VALUE self, VALUE seed_val);
+static VALUE arf_create_random_engine(VALUE self, VALUE type_val, VALUE seed_val);
 static VALUE arf_retain_random_engine(VALUE self, VALUE engine_val);
 static VALUE arf_random_engine_set_type(VALUE self, VALUE engine_val, VALUE type_val);
 static VALUE arf_random_engine_get_type(VALUE self, VALUE engine_val);
@@ -563,7 +563,7 @@ void Init_arrayfire() {
 
   Random = rb_define_class_under(ArrayFire, "Random", rb_cObject);
   rb_define_alloc_func(Random, arf_engine_alloc);
-  rb_define_singleton_method(Random, "create_random_engine", (METHOD)arf_create_random_engine, 1);
+  rb_define_singleton_method(Random, "create_random_engine", (METHOD)arf_create_random_engine, 2);
   rb_define_singleton_method(Random, "retain_random_engine", (METHOD)arf_retain_random_engine, 1);
   rb_define_singleton_method(Random, "random_engine_set_type", (METHOD)arf_random_engine_set_type, 2);
   rb_define_singleton_method(Random, "random_engine_get_type", (METHOD)arf_random_engine_get_type, 1);

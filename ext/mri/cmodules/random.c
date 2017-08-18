@@ -1,5 +1,7 @@
-static VALUE arf_create_random_engine(VALUE self, VALUE seed_val){
+static VALUE arf_create_random_engine(VALUE self, VALUE type_val, VALUE seed_val){
   afrandomenginestruct* output = ALLOC(afrandomenginestruct);
+  af_random_engine_type rtype = arf_randome_engine_type_from_rbsymbol(type_val);
+
   af_create_random_engine(&output->cengine, AF_RANDOM_ENGINE_DEFAULT, NUM2ULL(seed_val) ) ;
 
   return Data_Wrap_Struct(Random, NULL, arf_engine_free, output);
