@@ -243,13 +243,13 @@ static VALUE arf_get_seed(VALUE self);
 static VALUE arf_create_sparse_array(VALUE self, VALUE shape_array, VALUE values_array, VALUE rowIdx_val, VALUE colIdx_val, VALUE stype_val);
 static VALUE arf_create_sparse_array_from_ptr(VALUE self);
 static VALUE arf_create_sparse_array_from_dense(VALUE self, VALUE dense_val, VALUE stype_val);
-static VALUE arf_sparse_convert_to(VALUE self);
-static VALUE arf_sparse_to_dense(VALUE self);
-static VALUE arf_sparse_get_info(VALUE self);
+static VALUE arf_sparse_convert_to(VALUE self, VALUE input_val, VALUE dest_storage_val);
+static VALUE arf_sparse_to_dense(VALUE self, VALUE sparse_array);
+static VALUE arf_sparse_get_info_func(VALUE self, VALUE values_val, VALUE rowIdx_val, VALUE colIdx_val, VALUE input_val);
 static VALUE arf_sparse_get_values(VALUE self, VALUE input_val);
 static VALUE arf_sparse_get_row_idx(VALUE self, VALUE input_val);
 static VALUE arf_sparse_get_col_idx(VALUE self, VALUE input_val);
-static VALUE arf_sparse_get_nnz(VALUE self);
+static VALUE arf_sparse_get_nnz(VALUE self, VALUE input_val);
 static VALUE arf_sparse_get_storage(VALUE self, VALUE input_val);
 
 // Statistics
@@ -583,13 +583,13 @@ void Init_arrayfire() {
   rb_define_singleton_method(Sparse, "create_sparse_array", (METHOD)arf_create_sparse_array, 5);
   rb_define_singleton_method(Sparse, "create_sparse_array_from_ptr", (METHOD)arf_create_sparse_array_from_ptr, 0);
   rb_define_singleton_method(Sparse, "create_sparse_array_from_dense", (METHOD)arf_create_sparse_array_from_dense, 2);
-  rb_define_singleton_method(Sparse, "sparse_convert_to", (METHOD)arf_sparse_convert_to, 0);
-  rb_define_singleton_method(Sparse, "sparse_to_dense", (METHOD)arf_sparse_to_dense, 0);
-  rb_define_singleton_method(Sparse, "sparse_get_info", (METHOD)arf_sparse_get_info, 0);
+  rb_define_singleton_method(Sparse, "sparse_convert_to", (METHOD)arf_sparse_convert_to, 2);
+  rb_define_singleton_method(Sparse, "sparse_to_dense", (METHOD)arf_sparse_to_dense, 1);
+  rb_define_singleton_method(Sparse, "sparse_get_info_func", (METHOD)arf_sparse_get_info_func, 4);
   rb_define_singleton_method(Sparse, "sparse_get_values", (METHOD)arf_sparse_get_values, 1);
   rb_define_singleton_method(Sparse, "sparse_get_row_idx", (METHOD)arf_sparse_get_row_idx, 1);
   rb_define_singleton_method(Sparse, "sparse_get_col_idx", (METHOD)arf_sparse_get_col_idx, 1);
-  rb_define_singleton_method(Sparse, "sparse_get_nnz", (METHOD)arf_sparse_get_nnz, 0);
+  rb_define_singleton_method(Sparse, "sparse_get_nnz", (METHOD)arf_sparse_get_nnz, 1);
   rb_define_singleton_method(Sparse, "sparse_get_storage", (METHOD)arf_sparse_get_storage, 1);
 
   Statistics = rb_define_class_under(ArrayFire, "Statistics", rb_cObject);
