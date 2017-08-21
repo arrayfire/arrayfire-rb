@@ -7,6 +7,8 @@
 #include <stdio.h>
 #include <math.h>
 #include <map>
+#include "nmatrix.h"
+
 
 /*
  * Project Includes
