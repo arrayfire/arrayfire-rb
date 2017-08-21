@@ -2,8 +2,6 @@
   #define RUBY_ARRAYFIRE_H
 #endif
 
-#include <ruby.h>
-
 typedef struct AF_STRUCT
 {
   af_array carray;
@@ -43,6 +41,9 @@ rb_array_const_ptr(VALUE a)
 #ifdef __cplusplus
 typedef VALUE (*METHOD)(...);
 //}; // end of namespace nm
+
+// Interfaces
+
 #endif
 
 

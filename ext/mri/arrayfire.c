@@ -1,4 +1,3 @@
-#include "arrayfire.h"
 #include <stdio.h>
 #include <math.h>
 
@@ -17,6 +16,9 @@ VALUE Random = Qnil;
 VALUE Sparse = Qnil;
 VALUE Statistics = Qnil;
 VALUE Util = Qnil;
+extern "C++" {
+  VALUE cNMatrix;
+}
 
 // prototypes
 void Init_arrayfire();
@@ -330,6 +332,12 @@ DECL_UNARY_RUBY_ACCESSOR(ceil)
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val);
 static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val);
 
+// Interfaces
+
+static VALUE arf_af_array_to_nmatrix(VALUE self);
+extern VALUE arf_nmatrix_to_af_array_method(VALUE nmatrix);
+afstruct* arf_nmatrix_to_af_array(VALUE nm);
+
 void Init_arrayfire() {
   ArrayFire = rb_define_module("ArrayFire");
 
@@ -410,6 +418,11 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "tgamma", (METHOD)arf_unary_tgamma, 0);
   rb_define_method(Af_Array, "floor", (METHOD)arf_unary_floor, 0);
   rb_define_method(Af_Array, "ceil", (METHOD)arf_unary_ceil, 0);
+
+  rb_define_method(Af_Array, "to_nmatrix", (METHOD)arf_af_array_to_nmatrix, 0);
+
+  cNMatrix = rb_define_class("NMatrix", rb_cObject);
+  rb_define_method(cNMatrix, "to_af_array", (METHOD)arf_nmatrix_to_af_array_method, 0);
 
   Algorithm = rb_define_class_under(ArrayFire, "Algorithm", rb_cObject);
   rb_define_singleton_method(Algorithm, "sum", (METHOD)arf_sum, 2);
@@ -753,3 +766,5 @@ static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val) {
 #include "cmodules/sparse.c"
 #include "cmodules/statistics.c"
 #include "cmodules/util.c"
+
+#include "interfaces/nmatrix.c"

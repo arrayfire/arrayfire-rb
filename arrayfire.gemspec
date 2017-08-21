@@ -21,4 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rake-compiler', '~>0.8'
   gem.add_development_dependency 'rdoc', '~>4.0', '>=4.0.1'
   gem.add_development_dependency "minitest", "~> 5.0"
+
+  gem.add_development_dependency 'nmatrix', '>= 0.2.1'
 end
