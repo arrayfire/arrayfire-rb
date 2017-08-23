@@ -27,7 +27,6 @@ module ArrayFire
 
     def self.cholesky(af_array, is_upper=true)
       out =  ArrayFire::Af_Array.new
-      info = 0
       info = ArrayFire::LAPACK.cholesky_func(out, af_array, is_upper)
       return out, info
     end
