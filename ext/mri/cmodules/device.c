@@ -14,9 +14,19 @@ static VALUE arf_info_string(VALUE self, VALUE bool_val){
   return rb_str_new_cstr(str);
 }
 
-static VALUE arf_device_info(VALUE self){
-  char d_name, d_platform, d_toolkit, d_compute;
-  af_device_info(&d_name, &d_platform, &d_toolkit, &d_compute);
+static VALUE arf_device_info(VALUE self, VALUE name_val, VALUE platform_val, VALUE toolkit_val, VALUE compute_val){
+  char* d_name     = (char*)malloc(sizeof(char) * 64);
+  char* d_platform = (char*)malloc(sizeof(char) * 10);
+  char* d_toolkit  = (char*)malloc(sizeof(char) * 64);
+  char* d_compute  = (char*)malloc(sizeof(char) * 10);
+
+  af_device_info(d_name, d_platform, d_toolkit, d_compute);
+
+  rb_str_cat2(name_val,     d_name);
+  rb_str_cat2(platform_val, d_platform);
+  rb_str_cat2(toolkit_val,  d_toolkit);
+  rb_str_cat2(compute_val,  d_compute);
+
   return Qnil;
 }
 
