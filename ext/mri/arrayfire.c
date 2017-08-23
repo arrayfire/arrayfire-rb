@@ -279,7 +279,7 @@ static VALUE arf_read_array_key(VALUE self);
 static VALUE arf_read_array_key_check(VALUE self);
 static VALUE arf_array_to_string(VALUE self, VALUE exp_val, VALUE array_val, VALUE precision, VALUE transpose);
 static VALUE arf_example_function(VALUE self);
-static VALUE arf_get_version(VALUE self, VALUE major, VALUE minor, VALUE patch);
+static VALUE arf_get_version(VALUE self);
 static VALUE arf_get_revision(VALUE self);
 static VALUE arf_get_size_of(VALUE self, VALUE dtype_val);
 
@@ -630,7 +630,7 @@ void Init_arrayfire() {
   rb_define_singleton_method(Util, "read_array_key_check", (METHOD)arf_read_array_key_check, 0);
   rb_define_singleton_method(Util, "array_to_string", (METHOD)arf_array_to_string, 4);
   rb_define_singleton_method(Util, "example_function", (METHOD)arf_example_function, 0);
-  rb_define_singleton_method(Util, "get_version", (METHOD)arf_get_version, 3);
+  rb_define_singleton_method(Util, "get_version", (METHOD)arf_get_version, 0);
   rb_define_singleton_method(Util, "get_revision", (METHOD)arf_get_revision, 0);
   rb_define_singleton_method(Util, "get_size_of", (METHOD)arf_get_size_of, 1);
 

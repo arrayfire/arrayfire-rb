@@ -49,10 +49,15 @@ static VALUE arf_example_function(VALUE self){
   return Qnil;
 }
 
-static VALUE arf_get_version(VALUE self, VALUE major_val, VALUE minor_val, VALUE patch_val){
+static VALUE arf_get_version(VALUE self){
   int major, minor, patch;
   af_get_version(&major, &minor, &patch);
-  return Qnil;
+
+  VALUE hash = rb_hash_new();
+  rb_hash_aset(hash, rb_str_new_cstr("major"), INT2NUM(major));
+  rb_hash_aset(hash, rb_str_new_cstr("minor"), INT2NUM(minor));
+  rb_hash_aset(hash, rb_str_new_cstr("patch"), INT2NUM(patch));
+  return hash;
 }
 
 static VALUE arf_get_revision(VALUE self){
