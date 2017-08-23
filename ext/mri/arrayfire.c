@@ -74,6 +74,8 @@ static VALUE arf_is_integer(VALUE self);
 static VALUE arf_is_bool(VALUE self);
 static VALUE arf_is_sparse(VALUE self);
 
+static VALUE arf_to_string(VALUE self);
+
 // Algorithm
 static VALUE arf_sum(VALUE self, VALUE array_val, VALUE dim_val);
 static VALUE arf_sum_nan(VALUE self, VALUE array_val, VALUE dim_val, VALUE nan_val);
@@ -374,6 +376,8 @@ void Init_arrayfire() {
   rb_define_method(Af_Array, "is_integer", (METHOD)arf_is_integer, 0);
   rb_define_method(Af_Array, "is_bool", (METHOD)arf_is_bool, 0);
   rb_define_method(Af_Array, "is_sparse", (METHOD)arf_is_sparse, 0);
+
+  rb_define_method(Af_Array, "to_s", (METHOD)arf_to_string, 0);
 
   rb_define_alias(Af_Array, "ndims", "get_numdims");
   rb_define_alias(Af_Array, "dims", "get_dims");
@@ -695,6 +699,18 @@ static void arf_free(afstruct* af)
 static void arf_engine_free(afrandomenginestruct* afrandomengine)
 {
   free(afrandomengine);
+}
+
+
+static VALUE arf_to_string(VALUE self){
+  char* output;
+  afstruct* input;
+
+  Data_Get_Struct(self, afstruct, input);
+  const char* exp = "";
+  af_array_to_string(&output, exp, input->carray, 3, false);
+
+  return rb_str_new_cstr(output);
 }
 
 static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
