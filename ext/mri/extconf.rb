@@ -39,7 +39,7 @@ LIB_DIRS = [
 
 dir_config(extension_name, HEADER_DIRS, LIB_DIRS)
 
-have_library('afcuda')
+have_library('af')
 have_library('cusolver')
 have_library('cudart')
 have_library('cufft')
