@@ -1,13 +1,13 @@
 static VALUE arf_create_array(int argc, VALUE* argv){
   afstruct* afarray = ALLOC(afstruct);
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dimensions = ALLOC_N(dim_t, ndims);
   dim_t count = 1;
   for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
-  double* host_array = (double*)malloc(count * sizeof(double));
+  double* host_array = ALLOC_N(double, count);;
   for (dim_t index = 0; index < count; index++) {
     host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
@@ -22,13 +22,13 @@ static VALUE arf_create_array(int argc, VALUE* argv){
 static VALUE arf_create_handle(int argc, VALUE* argv){
   afstruct* afarray = ALLOC(afstruct);
   dim_t ndims = (dim_t)FIX2LONG(argv[0]);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dimensions = ALLOC_N(dim_t, ndims);
   dim_t count = 1;
   for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
     count *= dimensions[index];
   }
-  double* host_array = (double*)malloc(count * sizeof(double));
+  double* host_array = ALLOC_N(double, count);
   for (dim_t index = 0; index < count; index++) {
     host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
@@ -62,7 +62,7 @@ static VALUE arf_get_data_ptr(VALUE self){
   Data_Get_Struct(self, afstruct, input);
 
   af_get_elements(&count, input->carray);
-  double* data = (double*)malloc(count * sizeof(double));
+  double* data = ALLOC_N(double, count);
   af_get_data_ptr(data, input->carray);
 
   VALUE* array = ALLOC_N(VALUE, count);
@@ -145,7 +145,7 @@ static VALUE arf_get_dims(VALUE self){
   uint ndims;
   af_get_numdims(&ndims, input->carray);
 
-  dim_t* dims = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dims = ALLOC_N(dim_t, ndims);
 
   af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
 

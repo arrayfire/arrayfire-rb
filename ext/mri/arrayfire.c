@@ -657,13 +657,13 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
     af_dtype dtype = (argc == 4) ? arf_dtype_from_rbsymbol(argv[3]) : f64;
 
     dim_t ndims = (dim_t)FIX2LONG(argv[0]);
-    dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+    dim_t* dimensions = ALLOC_N(dim_t, ndims);
     dim_t count = 1;
     for (dim_t index = 0; index < ndims; index++) {
       dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(argv[1], index));
       count *= dimensions[index];
     }
-    double* host_array = (double*)malloc(count * sizeof(double));
+    double* host_array = ALLOC_N(double, count);
     for (dim_t index = 0; index < count; index++) {
       host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
     }
@@ -693,12 +693,12 @@ static VALUE arf_engine_alloc(VALUE klass)
 
 static void arf_free(afstruct* af)
 {
-  free(af);
+  xfree(af);
 }
 
 static void arf_engine_free(afrandomenginestruct* afrandomengine)
 {
-  free(afrandomengine);
+  xfree(afrandomengine);
 }
 
 
@@ -723,8 +723,12 @@ static VALUE arf_eqeq(VALUE left_val, VALUE right_val) {
 
   dim_t count;
   af_get_elements(&count, result->carray);
-  bool* data = (bool*)malloc(count * sizeof(bool));
-  af_get_data_ptr(data, result->carray);
+  bool* data =  ALLOC_N(bool, count);
+  af_err flag = af_get_data_ptr(data, result->carray);
+
+  if(flag != AF_SUCCESS){
+    rb_raise(rb_eArgError, "Something went wrong!");
+  }
 
   for (dim_t index = 0; index < count; index++){
     if(!data[index]){
@@ -750,10 +754,10 @@ static VALUE arf_eqeq_approx(VALUE left_val, VALUE right_val) {
 
   if(left_count != right_count){return Qfalse;}
 
-  double* left_arr = (double*)malloc(left_count * sizeof(double));
+  double* left_arr = ALLOC_N(double, left_count);
   af_get_data_ptr(left_arr, left->carray);
 
-  double* right_arr = (double*)malloc(left_count * sizeof(double));
+  double* right_arr = ALLOC_N(double, left_count);
   af_get_data_ptr(right_arr, right->carray);
 
   for (dim_t index = 0; index < left_count; index++){

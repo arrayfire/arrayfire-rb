@@ -45,7 +45,7 @@ static VALUE arf_random_uniform(VALUE self, VALUE ndims_val, VALUE dim_val, VALU
   Data_Get_Struct(engine_val, afrandomenginestruct, engine);
 
   dim_t ndims = (dim_t)FIX2LONG(ndims_val);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dimensions = ALLOC_N(dim_t, ndims);
   dim_t count = 1;
   for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(dim_val, index));
@@ -63,7 +63,7 @@ static VALUE arf_random_normal(VALUE self, VALUE ndims_val, VALUE dim_val, VALUE
   Data_Get_Struct(engine_val, afrandomenginestruct, engine);
 
   dim_t ndims = (dim_t)FIX2LONG(ndims_val);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dimensions = ALLOC_N(dim_t, ndims);
   dim_t count = 1;
   for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(dim_val, index));
@@ -119,7 +119,7 @@ static VALUE arf_randu(VALUE self, VALUE ndims_val, VALUE dim_val){
   afstruct* out_array = ALLOC(afstruct);
 
   dim_t ndims = (dim_t)FIX2LONG(ndims_val);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dimensions = ALLOC_N(dim_t, ndims);
   dim_t count = 1;
   for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(dim_val, index));
@@ -133,7 +133,7 @@ static VALUE arf_randn(VALUE self, VALUE ndims_val, VALUE dim_val){
   afstruct* out_array = ALLOC(afstruct);
 
   dim_t ndims = (dim_t)FIX2LONG(ndims_val);
-  dim_t* dimensions = (dim_t*)malloc(ndims * sizeof(dim_t));
+  dim_t* dimensions = ALLOC_N(dim_t, ndims);
   dim_t count = 1;
   for (dim_t index = 0; index < ndims; index++) {
     dimensions[index] = (dim_t)FIX2LONG(RARRAY_AREF(dim_val, index));
