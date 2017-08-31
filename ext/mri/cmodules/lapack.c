@@ -9,7 +9,9 @@ static VALUE arf_svd_func(VALUE self, VALUE u_val, VALUE s_val, VALUE vt_val, VA
   Data_Get_Struct(s_val, afstruct, s);
   Data_Get_Struct(vt_val, afstruct, vt);
 
-  af_svd(&u->carray, &s->carray, &vt->carray, input->carray);
+  af_err flag = af_svd(&u->carray, &s->carray, &vt->carray, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Qtrue;
 }
@@ -22,7 +24,9 @@ static VALUE arf_svd_inplace_func(VALUE self, VALUE val){
 
   Data_Get_Struct(val, afstruct, input);
 
-  af_svd_inplace(&u->carray, &s->carray, &vt->carray, input->carray);
+  af_err flag = af_svd_inplace(&u->carray, &s->carray, &vt->carray, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, u);
 }
@@ -57,7 +61,10 @@ static VALUE arf_qr_func(VALUE self, VALUE q_val, VALUE r_val, VALUE tau_val, VA
   Data_Get_Struct(r_val, afstruct, r);
   Data_Get_Struct(tau_val, afstruct, tau);
 
-  af_qr(&q->carray, &r->carray, &tau->carray, input->carray);
+  af_err flag = af_qr(&q->carray, &r->carray, &tau->carray, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return Qfalse;
 }
 
@@ -73,7 +80,9 @@ static VALUE arf_cholesky_func(VALUE self, VALUE output_val, VALUE val, VALUE is
   Data_Get_Struct(val, afstruct, input);
   Data_Get_Struct(output_val, afstruct, output);
 
-  af_cholesky(&output->carray, &info, input->carray, is_upper_val);
+  af_err flag = af_cholesky(&output->carray, &info, input->carray, is_upper_val);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return INT2NUM(info);
 }
@@ -91,9 +100,11 @@ static VALUE arf_solve(VALUE self, VALUE lhs_val, VALUE rhs_val){
   Data_Get_Struct(lhs_val, afstruct, lhs);
   Data_Get_Struct(rhs_val, afstruct, rhs);
 
-  af_solve(&result->carray, lhs->carray, rhs->carray, AF_MAT_NONE);
-  return Data_Wrap_Struct(CLASS_OF(lhs_val), NULL, arf_free, result);
+  af_err flag = af_solve(&result->carray, lhs->carray, rhs->carray, AF_MAT_NONE);
 
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
+  return Data_Wrap_Struct(CLASS_OF(lhs_val), NULL, arf_free, result);
 }
 
 static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_val){
@@ -106,7 +117,10 @@ static VALUE arf_solve_lu(VALUE self, VALUE lhs_val, VALUE rhs_val, VALUE piv_va
   Data_Get_Struct(rhs_val, afstruct, rhs);
   Data_Get_Struct(piv_val, afstruct, piv);
 
-  af_solve_lu(&result->carray, lhs->carray, piv->carray, rhs->carray, AF_MAT_NONE);
+  af_err flag = af_solve_lu(&result->carray, lhs->carray, piv->carray, rhs->carray, AF_MAT_NONE);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return Data_Wrap_Struct(CLASS_OF(lhs_val), NULL, arf_free, result);
 }
 
@@ -116,7 +130,9 @@ static VALUE arf_inverse(VALUE self, VALUE val){
 
   Data_Get_Struct(val, afstruct, matrix);
 
-  af_inverse(&result->carray, matrix->carray, AF_MAT_NONE);
+  af_err flag = af_inverse(&result->carray, matrix->carray, AF_MAT_NONE);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(val), NULL, arf_free, result);
 }
@@ -127,7 +143,10 @@ static VALUE arf_rank(VALUE self, VALUE val){
 
   Data_Get_Struct(val, afstruct, matrix);
 
-  af_rank(&rank, matrix->carray, 0.001);
+  af_err flag = af_rank(&rank, matrix->carray, 0.001);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return UINT2NUM(rank);
 }
 
@@ -137,7 +156,10 @@ static VALUE arf_det(VALUE self, VALUE val){
 
   Data_Get_Struct(val, afstruct, matrix);
 
-  af_det(&det_real, &det_imag, matrix->carray);
+  af_err flag = af_det(&det_real, &det_imag, matrix->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return DBL2NUM(det_real);
 }
 
@@ -147,12 +169,18 @@ static VALUE arf_norm(VALUE self, VALUE val){
   double p = 0;
   double q = 0;
   Data_Get_Struct(val, afstruct, matrix);
-  af_norm(&norm, matrix->carray, AF_NORM_EUCLID, p, q);
+  af_err flag = af_norm(&norm, matrix->carray, AF_NORM_EUCLID, p, q);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return DBL2NUM(norm);
 }
 
 static VALUE arf_is_lapack_available(VALUE self){
   bool output;
-  af_is_lapack_available(&output);
+  af_err flag = af_is_lapack_available(&output);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return output ? Qtrue : Qfalse;
 }

@@ -1,13 +1,14 @@
-#define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                          \
-static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {              \
-  afstruct* left;                                                          \
-  afstruct* right;                                                         \
-  afstruct* result = ALLOC(afstruct);                                      \
-  Data_Get_Struct(left_val, afstruct, left);                               \
-  Data_Get_Struct(right_val, afstruct, right);                             \
-  af_##oper(&result->carray,  left->carray, right->carray, true);          \
-  af_print_array(result->carray);                                          \
-  return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);     \
+#define DEF_ELEMENTWISE_RUBY_ACCESSOR(name, oper)                                \
+static VALUE arf_ew_##name(VALUE left_val, VALUE right_val) {                    \
+  afstruct* left;                                                                \
+  afstruct* right;                                                               \
+  afstruct* result = ALLOC(afstruct);                                            \
+  Data_Get_Struct(left_val, afstruct, left);                                     \
+  Data_Get_Struct(right_val, afstruct, right);                                   \
+  af_err flag = af_##oper(&result->carray,  left->carray, right->carray, true);  \
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);                            \
+  af_print_array(result->carray);                                                \
+  return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);           \
 }
 
 #define DEF_UNARY_RUBY_ACCESSOR(oper, name)                                \
@@ -15,7 +16,8 @@ static VALUE arf_unary_##name(VALUE self) {                                \
   afstruct* obj;                                                           \
   afstruct* result = ALLOC(afstruct);                                      \
   Data_Get_Struct(self, afstruct, obj);                                    \
-  af_##oper(&result->carray, obj->carray);                                 \
+  af_err flag = af_##oper(&result->carray, obj->carray);                   \
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);                      \
   af_print_array(result->carray);                                          \
   return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);         \
 }

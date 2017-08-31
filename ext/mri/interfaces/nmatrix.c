@@ -3,21 +3,27 @@ static VALUE arf_af_array_to_nmatrix(VALUE self) {
   Data_Get_Struct(self, afstruct, input);
   dim_t count;
   uint ndims;
-  af_get_numdims(&ndims, input->carray);
+
+  af_err flag = af_get_numdims(&ndims, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   dim_t* dims = ALLOC_N(dim_t, ndims);
 
-  af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
+  flag = af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   size_t* shape = ALLOC_N(size_t, ndims);
   for (dim_t index = 0; index < ndims; index++){
     shape[index] = (size_t)(dims[index]);
   }
 
-  af_get_elements(&count, input->carray);
+  flag = af_get_elements(&count, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   double* elements = ALLOC_N(double, count);
-  af_get_data_ptr(elements, input->carray);
+
+  flag = af_get_data_ptr(elements, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return rb_nmatrix_dense_create(nm::FLOAT64, shape, ndims, elements, (int)count);
 }
@@ -52,7 +58,9 @@ afstruct* arf_nmatrix_to_af_array(VALUE nm) {
     shape[index] = (size_t)(nmat->shape[index]);
   }
 
-  af_create_array(&output->carray, nmat->elements, nmat->dim, shape, f64);
+  af_err flag = af_create_array(&output->carray, nmat->elements, nmat->dim, shape, f64);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return output;
 }

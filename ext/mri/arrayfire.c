@@ -23,6 +23,8 @@ extern "C++" {
 // prototypes
 void Init_arrayfire();
 
+void arf_handle_exception(af_err error_code);
+
 const char* get_backend_name(af_backend backend);
 const char* get_cl_device_name(afcl_device_type device);
 const char* get_cl_platform_name(afcl_platform platform);
@@ -48,7 +50,7 @@ static VALUE arf_create_handle(int argc, VALUE* argv);
 static VALUE arf_copy_array(VALUE self);
 static VALUE arf_write_array(VALUE self);
 static VALUE arf_get_data_ptr(VALUE self);
-static void arf_release_array(VALUE self);
+static VALUE arf_release_array(VALUE self);
 static VALUE arf_retain_array(VALUE self);
 static VALUE arf_get_data_ref_count(VALUE self);
 static VALUE arf_eval(VALUE self);
@@ -194,8 +196,8 @@ static VALUE arf_upper(VALUE self, VALUE array_val, VALUE dim_val);
 static VALUE arf_select(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE array_b_val);
 static VALUE arf_select_scalar_r(VALUE self, VALUE array_cond_val, VALUE array_a_val, VALUE b_val);
 static VALUE arf_select_scalar_l(VALUE self, VALUE array_cond_val, VALUE a_val, VALUE array_b_val);
-static void arf_replace(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE array_b_val);
-static void arf_replace_scalar(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE b_val);
+static VALUE arf_replace(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE array_b_val);
+static VALUE arf_replace_scalar(VALUE self, VALUE array_input_val, VALUE array_cond_val, VALUE b_val);
 
 // Index
 static VALUE arf_index(VALUE self);
@@ -668,7 +670,9 @@ VALUE arf_init(int argc, VALUE* argv, VALUE self)
       host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
     }
 
-    af_create_array(&afarray->carray, host_array, ndims, dimensions, dtype);
+    af_err flag = af_create_array(&afarray->carray, host_array, ndims, dimensions, dtype);
+
+    if (flag != AF_SUCCESS) arf_handle_exception(flag);
     af_print_array(afarray->carray);
   }
 

@@ -10,7 +10,9 @@ static VALUE arf_matmul(VALUE self, VALUE left_val, VALUE right_val, VALUE left_
   af_mat_prop left_mat_prop = arf_mat_type_from_rbsymbol(left_prop_val);
   af_mat_prop right_mat_prop = arf_mat_type_from_rbsymbol(right_prop_val);
 
-  af_matmul(&result->carray, left->carray, right->carray, left_mat_prop, right_mat_prop);
+  af_err flag = af_matmul(&result->carray, left->carray, right->carray, left_mat_prop, right_mat_prop);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }
@@ -26,7 +28,9 @@ static VALUE arf_dot(VALUE self, VALUE left_val, VALUE right_val, VALUE left_pro
   af_mat_prop left_mat_prop = arf_mat_type_from_rbsymbol(left_prop_val);
   af_mat_prop right_mat_prop = arf_mat_type_from_rbsymbol(right_prop_val);
 
-  af_dot(&result->carray, left->carray, right->carray, left_mat_prop, right_mat_prop);
+  af_err flag = af_dot(&result->carray, left->carray, right->carray, left_mat_prop, right_mat_prop);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(left_val), NULL, arf_free, result);
 }
@@ -37,7 +41,9 @@ static VALUE arf_transpose(VALUE self, VALUE input){
 
   Data_Get_Struct(input, afstruct, obj);
 
-  af_transpose(&result->carray, obj->carray, false);
+  af_err flag = af_transpose(&result->carray, obj->carray, false);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(input), NULL, arf_free, result);
 }
@@ -47,7 +53,9 @@ static VALUE arf_transpose_inplace(VALUE self, VALUE input){
 
   Data_Get_Struct(input, afstruct, obj);
 
-  af_transpose_inplace(obj->carray, false);
+  af_err flag = af_transpose_inplace(obj->carray, false);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(input), NULL, arf_free, obj);
 }

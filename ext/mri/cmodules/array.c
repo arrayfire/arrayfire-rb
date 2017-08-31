@@ -12,8 +12,9 @@ static VALUE arf_create_array(int argc, VALUE* argv){
     host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
-  af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
+  af_err flag = af_create_array(&afarray->carray, host_array, ndims, dimensions, f32);
 
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   af_print_array(afarray->carray);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, afarray);
@@ -33,8 +34,9 @@ static VALUE arf_create_handle(int argc, VALUE* argv){
     host_array[index] = (double)NUM2DBL(RARRAY_AREF(argv[2], index));
   }
 
-  af_create_handle(&afarray->carray, ndims, dimensions, f32);
+  af_err flag = af_create_handle(&afarray->carray, ndims, dimensions, f32);
 
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   af_print_array(afarray->carray);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, afarray);
@@ -46,7 +48,9 @@ static VALUE arf_copy_array(VALUE self){
 
   Data_Get_Struct(self, afstruct, array_val);
 
-  af_copy_array(&result->carray, array_val->carray);
+  af_err flag = af_copy_array(&result->carray, array_val->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, result);
 }
@@ -61,9 +65,13 @@ static VALUE arf_get_data_ptr(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_get_elements(&count, input->carray);
+  af_err flag = af_get_elements(&count, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   double* data = ALLOC_N(double, count);
-  af_get_data_ptr(data, input->carray);
+
+  flag = af_get_data_ptr(data, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   VALUE* array = ALLOC_N(VALUE, count);
   for (dim_t index = 0; index < count; index++){
@@ -73,17 +81,20 @@ static VALUE arf_get_data_ptr(VALUE self){
   return rb_ary_new4(count, array);
 }
 
-static void arf_release_array(VALUE self){
+static VALUE arf_release_array(VALUE self){
   afstruct* input;
   Data_Get_Struct(self, afstruct, input);
-  af_release_array(input->carray);
+  af_err flag = af_release_array(input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+  return Qtrue;
 }
 
 static VALUE arf_retain_array(VALUE self){
   afstruct* input;
   afstruct* output = ALLOC(afstruct);
   Data_Get_Struct(self, afstruct, input);
-  af_retain_array(&output->carray, input->carray);
+  af_err flag = af_retain_array(&output->carray, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   return Data_Wrap_Struct(CLASS_OF(self), NULL, arf_free, output);
 }
 
@@ -91,14 +102,16 @@ static VALUE arf_get_data_ref_count(VALUE self){
   afstruct* input;
   int use_count;
   Data_Get_Struct(self, afstruct, input);
-  af_get_data_ref_count(&use_count, input->carray);
+  af_err flag = af_get_data_ref_count(&use_count, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   return INT2NUM(use_count);
 }
 
 static VALUE arf_eval(VALUE self){
   afstruct* input;
   Data_Get_Struct(self, afstruct, input);
-  af_eval(input->carray);
+  af_err flag = af_eval(input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   return Qtrue;
 }
 
@@ -107,13 +120,15 @@ static VALUE arf_eval_multiple(VALUE self){
 }
 
 static VALUE arf_set_manual_eval_flag(VALUE self, VALUE flag){
-  af_set_manual_eval_flag(RTEST(flag));
-  return Qnil;
+  af_err code = af_set_manual_eval_flag(RTEST(flag));
+  if (code != AF_SUCCESS) arf_handle_exception(code);
+  return Qtrue;
 }
 
 static VALUE arf_get_manual_eval_flag(VALUE self){
   bool flag;
-  af_get_manual_eval_flag(&flag);
+  af_err code =  af_get_manual_eval_flag(&flag);
+  if (code != AF_SUCCESS) arf_handle_exception(code);
   return flag ? Qtrue : Qfalse;
 }
 
@@ -124,7 +139,10 @@ static VALUE arf_get_elements(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_get_elements(&elems, input->carray);
+  af_err flag = af_get_elements(&elems, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return ULONG2NUM(elems);
 }
 
@@ -134,7 +152,10 @@ static VALUE arf_get_type(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_get_type(&type, input->carray);
+  af_err flag = af_get_type(&type, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return Qnil;
 }
 
@@ -143,11 +164,14 @@ static VALUE arf_get_dims(VALUE self){
   Data_Get_Struct(self, afstruct, input);
 
   uint ndims;
-  af_get_numdims(&ndims, input->carray);
+
+  af_err flag = af_get_numdims(&ndims, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   dim_t* dims = ALLOC_N(dim_t, ndims);
 
-  af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
+  flag = af_get_dims(&dims[0], &dims[1], &dims[2], &dims[3], input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   VALUE* array = ALLOC_N(VALUE, ndims);
   for (dim_t index = 0; index < ndims; index++){
@@ -163,7 +187,10 @@ static VALUE arf_get_numdims(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_get_numdims(&result, input->carray);
+  af_err flag = af_get_numdims(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return UINT2NUM(result);
 }
 
@@ -173,7 +200,10 @@ static VALUE arf_is_empty(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_empty(&result, input->carray);
+  af_err flag = af_is_empty(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -183,7 +213,10 @@ static VALUE arf_is_scalar(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_scalar(&result, input->carray);
+  af_err flag = af_is_scalar(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -193,7 +226,10 @@ static VALUE arf_is_row(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_row(&result, input->carray);
+  af_err flag = af_is_row(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -203,7 +239,10 @@ static VALUE arf_is_column(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_column(&result, input->carray);
+  af_err flag = af_is_column(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -213,7 +252,10 @@ static VALUE arf_is_vector(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_vector(&result, input->carray);
+  af_err flag = af_is_vector(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -223,7 +265,10 @@ static VALUE arf_is_complex(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_complex(&result, input->carray);
+  af_err flag = af_is_complex(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -233,7 +278,10 @@ static VALUE arf_is_real(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_real(&result, input->carray);
+  af_err flag = af_is_real(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -243,7 +291,10 @@ static VALUE arf_is_double(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_double(&result, input->carray);
+  af_err flag = af_is_double(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -253,7 +304,10 @@ static VALUE arf_is_single(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_single(&result, input->carray);
+  af_err flag = af_is_single(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -263,7 +317,10 @@ static VALUE arf_is_realfloating(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_realfloating(&result, input->carray);
+  af_err flag = af_is_realfloating(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -273,7 +330,10 @@ static VALUE arf_is_floating(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_floating(&result, input->carray);
+  af_err flag = af_is_floating(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -283,7 +343,10 @@ static VALUE arf_is_integer(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_integer(&result, input->carray);
+  af_err flag = af_is_integer(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -293,7 +356,10 @@ static VALUE arf_is_bool(VALUE self){
 
   Data_Get_Struct(self, afstruct, input);
 
-  af_is_bool(&result, input->carray);
+  af_err flag = af_is_bool(&result, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
 
@@ -304,6 +370,8 @@ static VALUE arf_is_sparse(VALUE self){
   Data_Get_Struct(self, afstruct, input);
 
   //FIXME
-  af_is_bool(&result, input->carray);
+  af_err flag = af_is_bool(&result, input->carray);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
+
   return result ? Qtrue : Qfalse;
 }
