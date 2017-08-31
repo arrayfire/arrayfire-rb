@@ -13,7 +13,9 @@ static VALUE arf_create_sparse_array(VALUE self, VALUE shape_array, VALUE values
   dim_t nRows = (dim_t)FIX2LONG(RARRAY_AREF(shape_array, 0));
   dim_t nCols = (dim_t)FIX2LONG(RARRAY_AREF(shape_array, 1));
 
-  af_create_sparse_array(&output->carray, nRows, nCols, values->carray, rowIdx->carray, colIdx->carray, stype);
+  af_err flag = af_create_sparse_array(&output->carray, nRows, nCols, values->carray, rowIdx->carray, colIdx->carray, stype);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   af_print_array(output->carray);
 
@@ -32,7 +34,9 @@ static VALUE arf_create_sparse_array_from_dense(VALUE self, VALUE dense_val, VAL
 
   af_storage stype = arf_storage_type_from_rbsymbol(stype_val);
 
-  af_create_sparse_array_from_dense(&output->carray, dense->carray, stype);
+  af_err flag = af_create_sparse_array_from_dense(&output->carray, dense->carray, stype);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
@@ -45,7 +49,9 @@ static VALUE arf_sparse_convert_to(VALUE self, VALUE input_val, VALUE dest_stora
 
   af_storage dest_storage = arf_storage_type_from_rbsymbol(dest_storage_val);
 
-  af_sparse_convert_to(&output->carray, input->carray, dest_storage);
+  af_err flag = af_sparse_convert_to(&output->carray, input->carray, dest_storage);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
@@ -56,7 +62,9 @@ static VALUE arf_sparse_to_dense(VALUE self, VALUE sparse_array){
 
   Data_Get_Struct(sparse_array, afstruct, sparse);
 
-  af_sparse_to_dense(&dense->carray, sparse->carray);
+  af_err flag = af_sparse_to_dense(&dense->carray, sparse->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, dense);
 }
@@ -73,7 +81,9 @@ static VALUE arf_sparse_get_info_func(VALUE self, VALUE values_val, VALUE rowIdx
   Data_Get_Struct(rowIdx_val, afstruct, rowIdx);
   Data_Get_Struct(colIdx_val, afstruct, colIdx);
 
-  af_sparse_get_info( &values->carray, &rowIdx->carray, &colIdx->carray, &stype, input->carray );
+  af_err flag = af_sparse_get_info( &values->carray, &rowIdx->carray, &colIdx->carray, &stype, input->carray );
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return rb_str_new_cstr(STORAGE_TYPES[stype]);
 }
@@ -83,7 +93,10 @@ static VALUE arf_sparse_get_values(VALUE self, VALUE input_val){
   afstruct* input;
 
   Data_Get_Struct(input_val, afstruct, input);
-  af_sparse_get_values(&output->carray, input->carray);
+
+  af_err flag = af_sparse_get_values(&output->carray, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
@@ -93,7 +106,10 @@ static VALUE arf_sparse_get_row_idx(VALUE self, VALUE input_val){
   afstruct* input;
 
   Data_Get_Struct(input_val, afstruct, input);
-  af_sparse_get_row_idx(&output->carray, input->carray);
+
+  af_err flag = af_sparse_get_row_idx(&output->carray, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
@@ -103,7 +119,10 @@ static VALUE arf_sparse_get_col_idx(VALUE self, VALUE input_val){
   afstruct* input;
 
   Data_Get_Struct(input_val, afstruct, input);
-  af_sparse_get_col_idx(&output->carray, input->carray);
+
+  af_err flag = af_sparse_get_col_idx(&output->carray, input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return Data_Wrap_Struct(Af_Array, NULL, arf_free, output);
 }
@@ -113,7 +132,10 @@ static VALUE arf_sparse_get_nnz(VALUE self, VALUE input_val){
   afstruct* input;
 
   Data_Get_Struct(input_val, afstruct, input);
-  af_sparse_get_nnz( &out, input);
+
+  af_err flag = af_sparse_get_nnz( &out, input);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return ULL2NUM(out);
 }
@@ -123,7 +145,10 @@ static VALUE arf_sparse_get_storage(VALUE self, VALUE input_val){
   Data_Get_Struct(input_val, afstruct, input);
 
   af_storage storage;
-  af_sparse_get_storage(&storage , input->carray);
+
+  af_err flag = af_sparse_get_storage(&storage , input->carray);
+
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
 
   return rb_str_new_cstr(STORAGE_TYPES[storage]);
 }

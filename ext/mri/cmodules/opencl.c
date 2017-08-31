@@ -29,7 +29,8 @@ static VALUE arf_get_queue(VALUE self){
 
 static VALUE arf_get_device_id(VALUE self){
   cl_device_id id;
-  afcl_get_device_id(&id);
+  af_err flag = afcl_get_device_id(&id);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   return Qnil;
 }
 
@@ -51,13 +52,15 @@ static VALUE arf_delete_device_context(VALUE self){
 
 static VALUE arf_get_device_type(VALUE self){
   afcl_device_type device;
-  afcl_get_device_type(&device);
+  af_err flag = afcl_get_device_type(&device);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   return rb_str_new_cstr(get_cl_device_name(device));
 }
 
 static VALUE arf_get_platform(VALUE self){
   afcl_platform platform;
-  afcl_get_platform(&platform);
+  af_err flag = afcl_get_platform(&platform);
+  if (flag != AF_SUCCESS) arf_handle_exception(flag);
   return rb_str_new_cstr(get_cl_platform_name(platform));
 }
 

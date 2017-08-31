@@ -101,6 +101,15 @@ const char* const STORAGE_TYPES[ARF_NUM_STORAGE_TYPES] = {
   "AF_STORAGE_COO",                                  ///< Storage type is COO
 };
 
+void arf_handle_exception(af_err error_code){
+  for(std::map<char*, size_t>::value_type& entry : ERROR_TYPES) {
+    if (error_code == entry.second) {
+      rb_raise(rb_eArgError, entry.first);
+      break;
+    }
+  }
+}
+
 af_dtype arf_dtype_from_rbsymbol(VALUE sym) {
   ID sym_id = SYM2ID(sym);
 
