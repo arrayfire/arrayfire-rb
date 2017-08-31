@@ -15,10 +15,10 @@ static VALUE arf_info_string(VALUE self, VALUE bool_val){
 }
 
 static VALUE arf_device_info(VALUE self, VALUE name_val, VALUE platform_val, VALUE toolkit_val, VALUE compute_val){
-  char* d_name     = (char*)malloc(sizeof(char) * 64);
-  char* d_platform = (char*)malloc(sizeof(char) * 10);
-  char* d_toolkit  = (char*)malloc(sizeof(char) * 64);
-  char* d_compute  = (char*)malloc(sizeof(char) * 10);
+  char* d_name     = ALLOC_N(char, sizeof(char) * 64);
+  char* d_platform = ALLOC_N(char, sizeof(char) * 10);
+  char* d_toolkit  = ALLOC_N(char, sizeof(char) * 64);
+  char* d_compute  = ALLOC_N(char, sizeof(char) * 10);
 
   af_device_info(d_name, d_platform, d_toolkit, d_compute);
 

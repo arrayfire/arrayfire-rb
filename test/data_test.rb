@@ -11,7 +11,7 @@ class ArrayFire::DataTest < Minitest::Test
 
   def test_constant
     result = ArrayFire::Af_Array.new 2, [3,3], [4, 4, 4, 4, 4, 4, 4, 4, 4]
-    assert_equal result, ArrayFire::Data.constant( 2, [2,2], 4 );
+    assert_equal result, ArrayFire::Data.constant( 2, [3,3], 4 );
   end
 
   def test_constant_complex
