@@ -6,7 +6,9 @@ class ArrayFire::ArithTest < Minitest::Test
     @a = ArrayFire::Af_Array.new 2, [2,2],[1,2,3,4]
     @b = ArrayFire::Af_Array.new 2, [2,2],[2,4,6,8]
     @elements = [10, -11, 48, 21, 65, 0, 1, -7, 112]
+    @elements_h = [1, -1, 0, 1, 1, 0.4, -0.7, 1, 0.9]
     @af_array =  ArrayFire::Af_Array.new 2, [3,3], @elements
+    @af_array_h =  ArrayFire::Af_Array.new 2, [3,3], @elements_h
   end
 
   def test_addition
@@ -28,11 +30,19 @@ class ArrayFire::ArithTest < Minitest::Test
     assert_equal c, @b / @a
   end
 
-  [:sin, :cos, :tan, :sinh, :cosh, :tanh].each do |method|
+  [:sin, :cos, :tan].each do |method|
     define_method("test_#{method}") do
       x = @elements.map{ |e| Math.send(method, e) }
       res_arr =  ArrayFire::Af_Array.new 2, [3,3], x
       assert res_arr.approx_equal @af_array.send method
+    end
+  end
+
+  [:sinh, :cosh, :tanh].each do |method|
+    define_method("test_#{method}") do
+      x = @elements_h.map{ |e| Math.send(method, e) }
+      res_arr =  ArrayFire::Af_Array.new 2, [3,3], x
+      assert res_arr.approx_equal @af_array_h.send method
     end
   end
 
