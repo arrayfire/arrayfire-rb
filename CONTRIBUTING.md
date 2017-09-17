@@ -33,8 +33,16 @@ Key areas of code contributions include:
 
 You can also contribute to ArrayFire by helping out projects that use ArrayFire! For our part, in addition to the ArrayFire library we are also in the process of adding native bindings for numerous language. We currently support
 
+- [D](https://github.com/arrayfire/arrayfire-d)
+- [Fortran](https://github.com/arrayfire/arrayfire-fortran)
+- [Go](https://github.com/arrayfire/arrayfire-go)
 - [Java](https://github.com/arrayfire/arrayfire_java)
+- [Javascript](https://github.com/arrayfire/arrayfire-js)
+- [Lisp](https://github.com/arrayfire/arrayfire-lisp)
+- [Lua](https://github.com/arrayfire/arrayfire-lua)
+- [Python](https://github.com/arrayfire/arrayfire-python)
 - [R](https://github.com/arrayfire/arrayfire_r)
-- [Fortran](https://github.com/arrayfire/arrayfire_fortran)
+- [Ruby](https://github.com/arrayfire/arrayfire-rb)
+- [Rust](https://github.com/arrayfire/arrayfire-rust)
 
 If you are experienced in any of these languages, you can help us improve these language bindings. If you prefer a different language that is not in the list, dive in and create a new repo!
