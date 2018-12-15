@@ -14,7 +14,7 @@ Ruby bindings are a work in progress and are not production ready yet.
 
 ```sh
 git clone https://github.com/arrayfire/arrayfire-rb
-cd arrayfire/
+cd arrayfire-rb/
 gem install bundler
 bundle install
 rake compile
